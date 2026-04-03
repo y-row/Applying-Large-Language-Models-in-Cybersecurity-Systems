@@ -1,0 +1,8 @@
+{
+  "body": "Suspicious link detected! Click here: https://example.com/scan",
+  "subject": "Warning: Your account is compromised",
+  "label": "phishing",
+  "sender": "security@malicious-domain.net",
+  "urls": 1,
+  "incident_id": "SYN-007"
+}

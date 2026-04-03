@@ -1,0 +1,20 @@
+Loading model: Qwen/Qwen3.5-2B
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   8%|▊         | 25/320 [00:00<00:01, 244.40it/s]Loading weights:  37%|███▋      | 117/320 [00:00<00:00, 632.51it/s]Loading weights:  57%|█████▋    | 181/320 [00:00<00:00, 569.32it/s]Loading weights:  75%|███████▍  | 239/320 [00:00<00:00, 533.16it/s]Loading weights:  92%|█████████▏| 293/320 [00:00<00:00, 496.29it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 510.77it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[Attempt 1] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+[Attempt 2] generating 1 record for label=phishing
+  -> accepted (phishing)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_phishing.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_001.json
+
+=== Preview ===
+{
+  "body": "URGENT: Your Apple ID password has been reset due to suspicious login attempts. Please click here to verify: https://app.apple.com/secure/verify your credentials immediately to prevent unauthorized access. Our support team is available 24/7 at support@apple.com. If you do not request this within 24 hours, your account will be permanently locked and all associated data will be purged. Do not reply to this message. Click here: https://www.apple.com/verify now. Safe browsing tips: update your browser, avoid clicking links from unknown senders, and never share your passwords. Thank you for your cooperation.",
+  "subject": "Urgent: Apple ID Password Reset Required",
+  "label": "phishing",
+  "sender": "Apple Support <noreply@apple.com>",
+  "urls": 2,
+  "incident_id": "SYN-001"
+}

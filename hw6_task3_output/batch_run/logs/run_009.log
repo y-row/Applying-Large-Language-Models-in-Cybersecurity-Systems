@@ -1,0 +1,20 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   7%|▋         | 23/320 [00:00<00:01, 228.93it/s]Loading weights:  36%|███▋      | 116/320 [00:00<00:00, 639.99it/s]Loading weights:  57%|█████▋    | 181/320 [00:00<00:00, 557.08it/s]Loading weights:  74%|███████▍  | 238/320 [00:00<00:00, 534.40it/s]Loading weights:  92%|█████████▏| 293/320 [00:00<00:00, 513.51it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 522.29it/s]
+[Attempt 1] generating 1 record for label=phishing
+  -> invalid schema, skipped
+[Attempt 2] generating 1 record for label=phishing
+  -> accepted (phishing)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_phishing.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_009.json
+
+=== Preview ===
+{
+  "body": "Dear User, your account will be frozen for non-payment. Click here: https://phishing-site.com/pay now! Contact support 1-800-777-8000. If you think this is a scam, reply to this email.",
+  "subject": "URGENT: Payment required now",
+  "label": "phishing",
+  "sender": "Phishing Bot",
+  "urls": 1,
+  "incident_id": "SYN-009"
+}

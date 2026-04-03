@@ -1,0 +1,34 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   6%|▋         | 20/320 [00:00<00:01, 197.95it/s]Loading weights:  35%|███▌      | 113/320 [00:00<00:00, 622.38it/s]Loading weights:  58%|█████▊    | 186/320 [00:00<00:00, 667.32it/s]Loading weights:  79%|███████▉  | 253/320 [00:00<00:00, 592.14it/s]Loading weights:  98%|█████████▊| 314/320 [00:00<00:00, 540.13it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 556.40it/s]
+[Attempt 1] generating 1 record for label=safe
+  -> failed: Could not find JSON object in model output.
+  -> raw output preview:
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Task:** Generate exactly ONE synthetic email in valid JSON format for a phishing email detection dataset.
+    *   **Output Format:** Valid JSON (single line or pretty-printed, but must be parseable).
+    *   **Constraints:**
+        *   Exactly one JSON object.
+        *   No markdown, code fences, explanations, notes, or thinking text.
+        *   Must be parseable by Python `json.loads`.
+        *   Five required fields: `body`, `subject`, `label`, `sender`, `urls`.
+        *   `label`: "safe" (per instructions: "Use only 'phishing' or 'safe'"). Wait, looking closely at the prompt: "Generate exactly ONE synthetic email... Output schema: ... "label": "safe" ...". Then later: "label: must be exactly 'safe'. Use only 'phishing' or 'safe'". Since the prompt says "Generate exactly ONE synthetic email" and then specifies the output schema in the first paragraph, I need to check if I should generate phishing or safe.
+        
+[Attempt 2] generating 1 record for label=safe
+  -> accepted (safe)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_safe.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_020.json
+
+=== Preview ===
+{
+  "body": "Hello Team, You have received an invoice for your May 2024 project deliverables. Please review the attached document and confirm the final payment amount by Monday afternoon.\n\nIf you did not receive this email, please click here to verify your inbox settings immediately. Do not open any attachments from unknown senders.\n\nFor any questions regarding this financial update, please contact your internal helpdesk at support@company-compliance.local.\n\nRegards,\nFinance Department <finance@company-compliance.local>\n",
+  "subject": "May 2024 Invoice for Project Deliverables",
+  "label": "safe",
+  "sender": "finance@company-compliance.local",
+  "urls": 0,
+  "incident_id": "SYN-020"
+}

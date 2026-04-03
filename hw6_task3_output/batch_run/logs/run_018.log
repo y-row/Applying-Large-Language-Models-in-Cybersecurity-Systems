@@ -1,0 +1,29 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   7%|▋         | 22/320 [00:00<00:01, 218.78it/s]Loading weights:  28%|██▊       | 89/320 [00:00<00:00, 450.77it/s]Loading weights:  46%|████▌     | 147/320 [00:00<00:00, 499.69it/s]Loading weights:  62%|██████▏   | 197/320 [00:00<00:00, 489.69it/s]Loading weights:  77%|███████▋  | 246/320 [00:00<00:00, 474.39it/s]Loading weights:  92%|█████████▏| 294/320 [00:00<00:00, 469.96it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 464.73it/s]
+[Attempt 1] generating 1 record for label=safe
+  -> invalid schema, skipped
+[Attempt 2] generating 1 record for label=safe
+  -> failed: Could not find JSON object in model output.
+  -> raw output preview:
+<think>
+
+</think>
+
+{
+  "body": "Dear valued customer, this is an automated response regarding your recent subscription inquiry. We noticed a technical issue with your payment gateway and require immediate verification to proceed with your renewal. Please check your account settings at the URL below to update your payment method securely. You can also contact our support team via the phone number listed in the signature for further assistance. We appreciate your patience as we work to resolve this matter with you quickly. If you have already used this link, please ignore this message, but we encourage you to check your inbox for any related alerts. Sincerely, The Customer Success Team. For questions about this issue, please reply to this email or visit our website to reset your password. Do not share your credentials with anyone, as this message is solely for your account status update. We are committed to maintaining high standards of service and security for all our users. If you do n
+[Attempt 3] generating 1 record for label=safe
+  -> accepted (safe)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_safe.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_018.json
+
+=== Preview ===
+{
+  "body": "Dear Valued Customer,\n\nWe are writing to inform you that your recent purchase has been temporarily delayed due to our team conducting a thorough verification process. This is a standard security measure to ensure that all transactions are processed safely and accurately by our secure payment gateway.\n\nPlease note that our support team will contact you shortly to confirm the status of your order and provide you with an estimated delivery date based on current shipping schedules. We apologize for any inconvenience this delay may cause and thank you for your patience as we continue to improve our logistics.\n\nIf you have any questions regarding your order or the processing timeline, you may reach out to our customer service department via their official website.\n\nSincerely,\nThe Company Operations Team",
+  "subject": "Order Processing Delay Notice",
+  "label": "safe",
+  "sender": "noreply@company-support.com",
+  "urls": 0,
+  "incident_id": "SYN-018"
+}

@@ -1,0 +1,8 @@
+{
+  "body": "Subject: Urgent: Your Account Security Check Required Immediately\n\nDear Customer,\n\nWe noticed unusual activity on your login credentials and require immediate verification to protect your data. Please click here immediately: http://www.secure-payments.com/bypass-verify-portal\n\nDo not share your password or click any links. This is a routine safety update for all users in your department.\n\nIf you have already clicked this link, please do nothing and contact IT Support directly.\n\nRegards,\nThe IT Security Team <security@company-portal.com>",
+  "subject": "Urgent: Your Account Security Check Required Immediately",
+  "label": "phishing",
+  "sender": "security@company-portal.com",
+  "urls": 1,
+  "incident_id": "SYN-005"
+}

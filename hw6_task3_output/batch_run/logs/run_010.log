@@ -1,0 +1,39 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   7%|▋         | 22/320 [00:00<00:01, 219.89it/s]Loading weights:  29%|██▉       | 94/320 [00:00<00:00, 480.44it/s]Loading weights:  48%|████▊     | 152/320 [00:00<00:00, 517.68it/s]Loading weights:  64%|██████▍   | 204/320 [00:00<00:00, 517.61it/s]Loading weights:  80%|████████  | 256/320 [00:00<00:00, 509.49it/s]Loading weights:  96%|█████████▌| 307/320 [00:00<00:00, 495.72it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 489.63it/s]
+[Attempt 1] generating 1 record for label=safe
+  -> failed: local variable 'args' referenced before assignment
+  -> raw output preview:
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Task:** Generate exactly ONE synthetic email in valid JSON format.
+    *   **Output Schema:** `{"body": "string", "subject": "string", "label": "safe", "sender": "string", "urls": 0}`
+    *   **Constraints:**
+        *   Exactly one JSON object.
+        *   No markdown, code fences, explanations, or thinking text.
+        *   Must be parseable by Python `json.loads`.
+        *   Specific fields: `body`, `subject`, `label`, `sender`, `urls`.
+        *   `label` must be exactly "safe" (based on the schema definition and the instruction).
+        *   `urls` must be a non-negative integer.
+        *   `body` must be 80 to 220 words.
+        *   If `label` is "phishing", use social engineering signals (but since `label` is specified as "safe", I must follow the safe rule).
+        *   `sender` must be realistic.
+        *   Internal consistency: The number of URLs in the body must match the `urls` count.
+        *   Format: V
+[Attempt 2] generating 1 record for label=safe
+  -> accepted (safe)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_safe.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_010.json
+
+=== Preview ===
+{
+  "body": "Dear Customer, please note that your scheduled project meeting with the engineering team has been rescheduled due to a technical outage affecting our servers. You are kindly reminded that this will impact the planned launch timeline by 48 hours. We apologize for any inconvenience and appreciate your patience as we work to restore full functionality to the system. Our support team has been notified and is reviewing the status updates immediately.",
+  "subject": "Meeting Rescheduled Due to Server Outage",
+  "label": "safe",
+  "sender": "support@internal-project.com",
+  "urls": 0,
+  "incident_id": "SYN-010"
+}

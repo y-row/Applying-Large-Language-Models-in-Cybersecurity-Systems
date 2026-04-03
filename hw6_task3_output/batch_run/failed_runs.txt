@@ -1,0 +1,4 @@
+run=12 label=safe incident_id=SYN-012 log=./hw6_task3_output/batch_run/logs/run_012.log
+run=13 label=phishing incident_id=SYN-013 log=./hw6_task3_output/batch_run/logs/run_013.log
+run=16 label=safe incident_id=SYN-016 log=./hw6_task3_output/batch_run/logs/run_016.log
+run=19 label=phishing incident_id=SYN-019 log=./hw6_task3_output/batch_run/logs/run_019.log

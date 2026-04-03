@@ -1,0 +1,8 @@
+{
+  "body": "Your account status has changed due to suspicious login attempts. We recommend immediately resetting your password to secure your Microsoft 365 subscription. If you did not initiate this change, please contact your administrator within 24 hours. Our automated systems may have flagged this activity as a potential security breach. Please click the link below to verify your identity and update your credentials securely. Do not share your password with anyone, including IT support staff or your employer. Missing this step could expose your corporate data to unauthorized access. The link below is valid only for one-time verification. Please click to proceed now: https://portal.msn.com/security-verify-7h3x9k. We are committed to protecting your information and will review your account shortly. If you have already clicked the link, please disregard this message and contact your IT helpdesk directly.",
+  "subject": "Critical Alert: Unauthorized Login Detected on Your Microsoft 365 Account",
+  "label": "phishing",
+  "sender": "IT Security Team <security@company-protection.net>",
+  "urls": 1,
+  "incident_id": "SYN-015"
+}

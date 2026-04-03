@@ -1,0 +1,88 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   7%|▋         | 22/320 [00:00<00:01, 216.62it/s]Loading weights:  28%|██▊       | 88/320 [00:00<00:00, 466.05it/s]Loading weights:  46%|████▋     | 148/320 [00:00<00:00, 519.09it/s]Loading weights:  62%|██████▎   | 200/320 [00:00<00:00, 514.79it/s]Loading weights:  79%|███████▉  | 253/320 [00:00<00:00, 518.12it/s]Loading weights:  96%|█████████▌| 306/320 [00:00<00:00, 516.70it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 495.58it/s]
+[Attempt 1] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+[Attempt 2] generating 1 record for label=phishing
+  -> invalid schema, skipped
+[Attempt 3] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+  -> raw output preview:
+<think>
+
+</think>
+
+{
+  "body": "URGENT: Your login credentials are being requested immediately. Please verify your account details by clicking here: http://secure-login.example.com/verify or http://www.paylater.net/reset. If you have already submitted this request, your information may be compromised. Click here: http://mail.company.com/security-alert now. Do not share these links. Reply to this email. If you do not receive a confirmation within 24 hours, your account has been blocked permanently. Contact support at 800-555-0199. Secure your device now. This is an automated alert. Verify your status at http://portal.bank.com/status-check now. Do not trust the sender. Click here to reset your password: http://auth.system.org/update. This message is from IT Support. Do not reply. Check your files for malware. Verify your identity at http://verify.id.net/now. If you have already received this, your data is at risk. Contact us for help. Check your browser history. Click here to update your
+[Attempt 4] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+[Attempt 5] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+  -> raw output preview:
+<think>
+Okay, let's tackle this task. The user wants me to generate exactly one synthetic email in JSON format for a phishing detection dataset. I need to follow the provided schema and rules carefully.
+
+First, I need to recall the schema: the object must have body, subject, label, sender, and urls. The label must be either "phishing" or "safe". Since the user specified the label must be exactly "phishing" in the example, but the generation rules mention that for "phishing" emails, I should use believable social engineering signals like urgency, payment pressure, etc. So I should ensure the content supports that.
+
+Looking at the reference phishing example, the body mentions fake rewards, like getting paid for surveys, focus groups, and movie trailers. It also includes some placeholder text that looks like a spam link. The sender is "- Label: phishing", but the actual sender field in the output should be a realistic email address. Wait, the reference example's sender is "- Label: phishi
+[Attempt 6] generating 1 record for label=phishing
+  -> invalid schema, skipped
+[Attempt 7] generating 1 record for label=phishing
+  -> invalid schema, skipped
+[Attempt 8] generating 1 record for label=phishing
+  -> invalid schema, skipped
+[Attempt 9] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+[Attempt 10] generating 1 record for label=phishing
+  -> invalid schema, skipped
+[Attempt 11] generating 1 record for label=phishing
+  -> invalid schema, skipped
+[Attempt 12] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+  -> raw output preview:
+<think>
+
+</think>
+
+{
+  "body": "Dear Valued Customer, We are writing to inform you that your recent payment for the enterprise subscription service has not been processed correctly. Our automated system indicates a failed transaction and requires immediate attention to prevent further service disruption. Please do not ignore this notice as we will contact you again shortly to resolve this issue. The amount you owe for your annual contract is $1,299.99. You have 24 hours to pay your account balance or your access to the premium features may be terminated without refund. We have initiated a recovery process for your funds and wish to inform you that no further charges will be applied until the payment is confirmed.\n\nPlease contact our dedicated recovery team at 1-800-555-0199 or visit our secure portal to make a payment of $1,299.99. Failure to pay may result in legal action and potential restrictions on your account. We apologize for this inconvenience and appreciate your understandin
+[Attempt 13] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+  -> raw output preview:
+<think>
+
+</think>
+
+{
+  "body": "URGENT: Your Microsoft 365 account requires immediate action. Please click here to verify your email address or update your login credentials. Failure to do so will result in suspension of your cloud services and possible data breach. Do not respond to this message directly. Please contact IT Support directly at support@microsoft.com or call 1-800-555-0199 for immediate assistance. This message is from an authorized administrator. If you have already clicked any link in this email, please disregard it immediately and contact your IT department for help. We appreciate your cooperation in maintaining our secure environment.",
+  "subject": "URGENT: Your Microsoft 365 account requires immediate action",
+  "label": "phishing",
+  "sender": "IT Admin <admin@microsoft-support.net>",
+  "urls": 1
+}
+[Attempt 14] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+[Attempt 15] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+  -> raw output preview:
+<think>
+
+</think>
+
+{
+  "body": "Dear Valued Customer,\n\nWe are contacting you regarding a critical system outage affecting your account. Our technical team is working around the clock to resolve the issue quickly. Please check your inbox for the official notification at the URL below. If you do not receive it within the next few hours, this may be a sign that your account has been compromised by malicious actors. \n\nTo protect your identity and prevent further financial loss, please immediately click the link to verify your credentials. We understand this is urgent, but security is our top priority. Failure to comply could result in permanent account suspension and legal action. Our support team has been notified of your request and is working diligently to restore full service. Please reply to this email to confirm your account recovery status. We appreciate your cooperation in maintaining the integrity of our platform. If you require assistance, contact our 24-hour support line at 
+[Attempt 16] generating 1 record for label=phishing
+  -> accepted (phishing)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_phishing.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_007.json
+
+=== Preview ===
+{
+  "body": "Suspicious link detected! Click here: https://example.com/scan",
+  "subject": "Warning: Your account is compromised",
+  "label": "phishing",
+  "sender": "security@malicious-domain.net",
+  "urls": 1,
+  "incident_id": "SYN-007"
+}

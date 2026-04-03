@@ -1,0 +1,20 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   0%|          | 1/320 [00:00<00:34,  9.26it/s]Loading weights:  25%|██▍       | 79/320 [00:00<00:00, 445.99it/s]Loading weights:  42%|████▏     | 133/320 [00:00<00:00, 486.04it/s]Loading weights:  57%|█████▊    | 184/320 [00:00<00:00, 494.64it/s]Loading weights:  73%|███████▎  | 234/320 [00:00<00:00, 467.01it/s]Loading weights:  88%|████████▊ | 283/320 [00:00<00:00, 474.20it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 448.85it/s]
+[Attempt 1] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+[Attempt 2] generating 1 record for label=phishing
+  -> accepted (phishing)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_phishing.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_011.json
+
+=== Preview ===
+{
+  "body": "Dear [USER NAME], You have received a scam notification about a missing payment. You will be notified via email.",
+  "subject": "URGENT: Missing Payment Alert",
+  "label": "phishing",
+  "sender": "noreply@example.com",
+  "urls": 0,
+  "incident_id": "SYN-011"
+}

@@ -1,0 +1,20 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   7%|▋         | 23/320 [00:00<00:01, 228.95it/s]Loading weights:  30%|██▉       | 95/320 [00:00<00:00, 507.34it/s]Loading weights:  48%|████▊     | 152/320 [00:00<00:00, 524.99it/s]Loading weights:  64%|██████▍   | 205/320 [00:00<00:00, 502.44it/s]Loading weights:  80%|████████  | 256/320 [00:00<00:00, 492.10it/s]Loading weights:  96%|█████████▌| 306/320 [00:00<00:00, 491.92it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 485.12it/s]
+[Attempt 1] generating 1 record for label=safe
+  -> invalid schema, skipped
+[Attempt 2] generating 1 record for label=safe
+  -> accepted (safe)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_safe.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_002.json
+
+=== Preview ===
+{
+  "body": "Dear Valued Customer, Your account balance has been temporarily reduced due to an unusual charge detected on your payment processor. To prevent further unauthorized transactions, we require immediate verification of your identity. Please click the secure link below to confirm your request and restore your account status. If you did not authorize this transaction, please contact our fraud prevention team immediately at fraud@secure-example.com or call 1-800-555-0199. We take security seriously and will expedite your review within 24 hours. Do not share your password or any personal information via email. This message is from our automated security system. Stay vigilant and monitor your banking alerts closely. If you suspect any issues, reach out to support immediately. We appreciate your patience as we resolve this matter swiftly. Thank you for your cooperation.\n\nClick here: https://secure-example.com/security-verify-action https://secure-example.com/investigate-balance-change https://secure-example.com/call-support-now",
+  "subject": "Account balance reduced: verify immediately",
+  "label": "safe",
+  "sender": "security@secure-example.com",
+  "urls": 3,
+  "incident_id": "SYN-002"
+}

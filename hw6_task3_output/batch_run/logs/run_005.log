@@ -1,0 +1,18 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   8%|▊         | 25/320 [00:00<00:01, 248.63it/s]Loading weights:  30%|██▉       | 95/320 [00:00<00:00, 512.74it/s]Loading weights:  54%|█████▍    | 172/320 [00:00<00:00, 627.52it/s]Loading weights:  74%|███████▍  | 238/320 [00:00<00:00, 633.92it/s]Loading weights:  94%|█████████▍| 302/320 [00:00<00:00, 572.71it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 563.31it/s]
+[Attempt 1] generating 1 record for label=phishing
+  -> accepted (phishing)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_phishing.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_005.json
+
+=== Preview ===
+{
+  "body": "Subject: Urgent: Your Account Security Check Required Immediately\n\nDear Customer,\n\nWe noticed unusual activity on your login credentials and require immediate verification to protect your data. Please click here immediately: http://www.secure-payments.com/bypass-verify-portal\n\nDo not share your password or click any links. This is a routine safety update for all users in your department.\n\nIf you have already clicked this link, please do nothing and contact IT Support directly.\n\nRegards,\nThe IT Security Team <security@company-portal.com>",
+  "subject": "Urgent: Your Account Security Check Required Immediately",
+  "label": "phishing",
+  "sender": "security@company-portal.com",
+  "urls": 1,
+  "incident_id": "SYN-005"
+}

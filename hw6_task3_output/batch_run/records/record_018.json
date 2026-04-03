@@ -1,0 +1,8 @@
+{
+  "body": "Dear Valued Customer,\n\nWe are writing to inform you that your recent purchase has been temporarily delayed due to our team conducting a thorough verification process. This is a standard security measure to ensure that all transactions are processed safely and accurately by our secure payment gateway.\n\nPlease note that our support team will contact you shortly to confirm the status of your order and provide you with an estimated delivery date based on current shipping schedules. We apologize for any inconvenience this delay may cause and thank you for your patience as we continue to improve our logistics.\n\nIf you have any questions regarding your order or the processing timeline, you may reach out to our customer service department via their official website.\n\nSincerely,\nThe Company Operations Team",
+  "subject": "Order Processing Delay Notice",
+  "label": "safe",
+  "sender": "noreply@company-support.com",
+  "urls": 0,
+  "incident_id": "SYN-018"
+}

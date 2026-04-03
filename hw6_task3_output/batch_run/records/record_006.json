@@ -1,0 +1,8 @@
+{
+  "body": "Dear valued member, your account has been temporarily locked due to suspicious activity. If you did not request this, please click the following link immediately to verify your identity: http://www.suspect-login.fakeportal.com. We want to restore your access securely. If this email is not from IT, please delete it from your inbox. \n\nPlease update your password and enable 2FA within 24 hours. Our support team is available 9am to 5pm EST. Contact us at help@company-recovery.net for further assistance. Do not share your password with anyone. This message is an automated alert from the IT department.",
+  "subject": "Account Security Alert",
+  "label": "safe",
+  "sender": "help@company-recovery.net",
+  "urls": 1,
+  "incident_id": "SYN-006"
+}

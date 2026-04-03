@@ -1,0 +1,8 @@
+{
+  "body": "Hello Team, You have received an invoice for your May 2024 project deliverables. Please review the attached document and confirm the final payment amount by Monday afternoon.\n\nIf you did not receive this email, please click here to verify your inbox settings immediately. Do not open any attachments from unknown senders.\n\nFor any questions regarding this financial update, please contact your internal helpdesk at support@company-compliance.local.\n\nRegards,\nFinance Department <finance@company-compliance.local>\n",
+  "subject": "May 2024 Invoice for Project Deliverables",
+  "label": "safe",
+  "sender": "finance@company-compliance.local",
+  "urls": 0,
+  "incident_id": "SYN-020"
+}

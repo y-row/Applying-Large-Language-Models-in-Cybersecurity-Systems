@@ -1,0 +1,8 @@
+{
+  "body": "Dear Customer, please note that your scheduled project meeting with the engineering team has been rescheduled due to a technical outage affecting our servers. You are kindly reminded that this will impact the planned launch timeline by 48 hours. We apologize for any inconvenience and appreciate your patience as we work to restore full functionality to the system. Our support team has been notified and is reviewing the status updates immediately.",
+  "subject": "Meeting Rescheduled Due to Server Outage",
+  "label": "safe",
+  "sender": "support@internal-project.com",
+  "urls": 0,
+  "incident_id": "SYN-010"
+}

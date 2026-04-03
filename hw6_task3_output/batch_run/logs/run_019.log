@@ -1,0 +1,28 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   8%|▊         | 26/320 [00:00<00:01, 255.64it/s]Loading weights:  31%|███▏      | 100/320 [00:00<00:00, 529.85it/s]Loading weights:  50%|█████     | 160/320 [00:00<00:00, 560.34it/s]Loading weights:  68%|██████▊   | 216/320 [00:00<00:00, 533.83it/s]Loading weights:  84%|████████▍ | 270/320 [00:00<00:00, 510.85it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 498.87it/s]
+[Attempt 1] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+[Attempt 2] generating 1 record for label=phishing
+  -> failed: Could not find JSON object in model output.
+[Attempt 3] generating 1 record for label=phishing
+  -> failed: Expecting property name enclosed in double quotes: line 1 column 57 (char 56)
+  -> raw output preview:
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Task:** Generate exactly ONE synthetic email record in valid JSON format.
+    *   **Output Format:** Valid JSON (`{ "body": "...", "subject": "...", "label": "phishing", ... }`).
+    *   **Constraints:**
+        *   Exactly one JSON object, no markdown, no explanations, no thinking text.
+        *   Must parseable by `json.loads()`.
+        *   Fields: `body` (string), `subject` (string), `label` ("phishing" or "safe"), `sender` (string), `urls` (integer).
+        *   Content requirements:
+            *   `body`: 80 to 220 words, realistic, specific context based on label.
+            *   `subject`: Urgency, invoice, password reset, account alert, meeting, shipment, or routine business language (based on label).
+            *   `sender`: Realistic name/email.
+            *   `urls`: Count must match the actual URL count inside the `body`.
+        *   Reference Style: The reference examples show specific formatting quirks
+[Attempt 4] generating 1 record for label=phishing

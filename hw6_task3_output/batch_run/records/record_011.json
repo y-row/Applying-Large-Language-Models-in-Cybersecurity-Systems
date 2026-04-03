@@ -1,0 +1,8 @@
+{
+  "body": "Dear [USER NAME], You have received a scam notification about a missing payment. You will be notified via email.",
+  "subject": "URGENT: Missing Payment Alert",
+  "label": "phishing",
+  "sender": "noreply@example.com",
+  "urls": 0,
+  "incident_id": "SYN-011"
+}

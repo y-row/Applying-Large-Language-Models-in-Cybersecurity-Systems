@@ -1,0 +1,130 @@
+[
+  {
+    "body": "URGENT: Your Apple ID password has been reset due to suspicious login attempts. Please click here to verify: https://app.apple.com/secure/verify your credentials immediately to prevent unauthorized access. Our support team is available 24/7 at support@apple.com. If you do not request this within 24 hours, your account will be permanently locked and all associated data will be purged. Do not reply to this message. Click here: https://www.apple.com/verify now. Safe browsing tips: update your browser, avoid clicking links from unknown senders, and never share your passwords. Thank you for your cooperation.",
+    "subject": "Urgent: Apple ID Password Reset Required",
+    "label": "phishing",
+    "sender": "Apple Support <noreply@apple.com>",
+    "urls": 2,
+    "incident_id": "SYN-001"
+  },
+  {
+    "body": "Dear Valued Customer, Your account balance has been temporarily reduced due to an unusual charge detected on your payment processor. To prevent further unauthorized transactions, we require immediate verification of your identity. Please click the secure link below to confirm your request and restore your account status. If you did not authorize this transaction, please contact our fraud prevention team immediately at fraud@secure-example.com or call 1-800-555-0199. We take security seriously and will expedite your review within 24 hours. Do not share your password or any personal information via email. This message is from our automated security system. Stay vigilant and monitor your banking alerts closely. If you suspect any issues, reach out to support immediately. We appreciate your patience as we resolve this matter swiftly. Thank you for your cooperation.\n\nClick here: https://secure-example.com/security-verify-action https://secure-example.com/investigate-balance-change https://secure-example.com/call-support-now",
+    "subject": "Account balance reduced: verify immediately",
+    "label": "safe",
+    "sender": "security@secure-example.com",
+    "urls": 3,
+    "incident_id": "SYN-002"
+  },
+  {
+    "body": "Dear valued customer,\n\nWe are writing to inform you about a potential security breach affecting your account.\n\nYour password has been reset, and your login credentials have been compromised. To ensure the safety of your financial data, please click the link below to verify your identity immediately:\n\nhttp://www.silverstate.co.sy@search.ph-search.ph/search.php?id=sicosyl\n\nOnce verified, you will receive a confirmation email shortly.\n\nPlease do not share your passwords with anyone, including IT support or our support team.\n\nIf you have already clicked this link, please disregard it as it is a warning message designed to harvest your information.\n\nRegards,\n\nIT Support <it-support@company.com>",
+    "subject": "Account security alert - password reset required",
+    "label": "phishing",
+    "sender": "it-support@company.com",
+    "urls": 1,
+    "incident_id": "SYN-003"
+  },
+  {
+    "body": "Hi Alex,\n\nWe are writing to confirm that your team has been successfully onboarded to the new project dashboard since your last meeting last Tuesday. The resources have been deployed, and we are currently monitoring the metrics closely. If you have any questions about the new interface or workflow, please refer to the attached handbooks or contact the IT support team directly at 2-800-555-0199.\n\nWe expect to see positive growth in your quarterly metrics by the end of this quarter. Please verify your login credentials if you haven't already. No action is required from your side, and we appreciate your continued partnership with the company.\n\nBest regards,\n\nSarah Jenkins\n\nProject Manager\n\nSales & Operations Division",
+    "subject": "Your quarterly metrics have been released and verified",
+    "label": "safe",
+    "sender": "sales@acme-enterprise.com",
+    "urls": 0,
+    "incident_id": "SYN-004"
+  },
+  {
+    "body": "Subject: Urgent: Your Account Security Check Required Immediately\n\nDear Customer,\n\nWe noticed unusual activity on your login credentials and require immediate verification to protect your data. Please click here immediately: http://www.secure-payments.com/bypass-verify-portal\n\nDo not share your password or click any links. This is a routine safety update for all users in your department.\n\nIf you have already clicked this link, please do nothing and contact IT Support directly.\n\nRegards,\nThe IT Security Team <security@company-portal.com>",
+    "subject": "Urgent: Your Account Security Check Required Immediately",
+    "label": "phishing",
+    "sender": "security@company-portal.com",
+    "urls": 1,
+    "incident_id": "SYN-005"
+  },
+  {
+    "body": "Dear valued member, your account has been temporarily locked due to suspicious activity. If you did not request this, please click the following link immediately to verify your identity: http://www.suspect-login.fakeportal.com. We want to restore your access securely. If this email is not from IT, please delete it from your inbox. \n\nPlease update your password and enable 2FA within 24 hours. Our support team is available 9am to 5pm EST. Contact us at help@company-recovery.net for further assistance. Do not share your password with anyone. This message is an automated alert from the IT department.",
+    "subject": "Account Security Alert",
+    "label": "safe",
+    "sender": "help@company-recovery.net",
+    "urls": 1,
+    "incident_id": "SYN-006"
+  },
+  {
+    "body": "Suspicious link detected! Click here: https://example.com/scan",
+    "subject": "Warning: Your account is compromised",
+    "label": "phishing",
+    "sender": "security@malicious-domain.net",
+    "urls": 1,
+    "incident_id": "SYN-007"
+  },
+  {
+    "body": "Dear valued member,\n\nYour order #48291 has arrived successfully. We have shipped the item to your address and an email has been sent containing the tracking number. Please check your spam folder just in case.\n\nIf you do not see the email within 48 hours, please reply to this message with your order number and we will investigate further. Our delivery team is working hard to ensure everyone gets their packages on time.\n\nThank you for being a great customer. Stay tuned for special offers later this quarter.\n\nSincerely,\nThe Tech Support Team",
+    "subject": "Your order #48291 has arrived successfully",
+    "label": "safe",
+    "sender": "tech-support@company.com",
+    "urls": 0,
+    "incident_id": "SYN-008"
+  },
+  {
+    "body": "Dear User, your account will be frozen for non-payment. Click here: https://phishing-site.com/pay now! Contact support 1-800-777-8000. If you think this is a scam, reply to this email.",
+    "subject": "URGENT: Payment required now",
+    "label": "phishing",
+    "sender": "Phishing Bot",
+    "urls": 1,
+    "incident_id": "SYN-009"
+  },
+  {
+    "body": "Dear Customer, please note that your scheduled project meeting with the engineering team has been rescheduled due to a technical outage affecting our servers. You are kindly reminded that this will impact the planned launch timeline by 48 hours. We apologize for any inconvenience and appreciate your patience as we work to restore full functionality to the system. Our support team has been notified and is reviewing the status updates immediately.",
+    "subject": "Meeting Rescheduled Due to Server Outage",
+    "label": "safe",
+    "sender": "support@internal-project.com",
+    "urls": 0,
+    "incident_id": "SYN-010"
+  },
+  {
+    "body": "Dear [USER NAME], You have received a scam notification about a missing payment. You will be notified via email.",
+    "subject": "URGENT: Missing Payment Alert",
+    "label": "phishing",
+    "sender": "noreply@example.com",
+    "urls": 0,
+    "incident_id": "SYN-011"
+  },
+  {
+    "body": "Dear valued member, we wanted to inform you that your recent order #49281 has been processed successfully and is expected to arrive within the next 24 hours. Please ensure you have your shipping details handy. For any questions, please contact our support team at help@support-giant-website.xyz. We appreciate your patience as we continue to improve our delivery services. Reply if you have any specific inquiries.",
+    "subject": "Your recent order #49281 has been processed successfully",
+    "label": "safe",
+    "sender": "support-giant-website.xyz",
+    "urls": 0,
+    "incident_id": "SYN-014"
+  },
+  {
+    "body": "Your account status has changed due to suspicious login attempts. We recommend immediately resetting your password to secure your Microsoft 365 subscription. If you did not initiate this change, please contact your administrator within 24 hours. Our automated systems may have flagged this activity as a potential security breach. Please click the link below to verify your identity and update your credentials securely. Do not share your password with anyone, including IT support staff or your employer. Missing this step could expose your corporate data to unauthorized access. The link below is valid only for one-time verification. Please click to proceed now: https://portal.msn.com/security-verify-7h3x9k. We are committed to protecting your information and will review your account shortly. If you have already clicked the link, please disregard this message and contact your IT helpdesk directly.",
+    "subject": "Critical Alert: Unauthorized Login Detected on Your Microsoft 365 Account",
+    "label": "phishing",
+    "sender": "IT Security Team <security@company-protection.net>",
+    "urls": 1,
+    "incident_id": "SYN-015"
+  },
+  {
+    "body": "URGENT: Your login credentials have been compromised by unauthorized access. We urgently request immediate verification to prevent data theft affecting your corporate account.\n\nClick the following link to securely reset your password and regain full control of your email and CRM systems:\nhttps://secure-login.purple-bank.io/codes\n\nIMPORTANT: This email is a security alert from a trusted vendor. Do not share your actual passwords or click any external links. If you did not request this verification, please reply immediately with your account ID.\n\nIf you suspect a security breach, contact your IT support team directly via phone to confirm your account details. We value your privacy and security.\n\nPlease verify this email by replying to this message and following the secure link provided. This message is verified and contains no spam.\n\nIf this message appears unexpectedly, please delete it and contact the sender at security@secure-payment-protection.com to verify their legitimacy. Do not open attachments or click unknown links.\n\nStay safe and secure. Your account remains under active monitoring. If you receive spam, report it immediately to spamteam@legit-security-monitor.com.",
+    "subject": "Urgent: Account Security Alert - Password Reset Required",
+    "label": "phishing",
+    "sender": "IT Support <it-support@legit-security-monitor.com>",
+    "urls": 1,
+    "incident_id": "SYN-017"
+  },
+  {
+    "body": "Dear Valued Customer,\n\nWe are writing to inform you that your recent purchase has been temporarily delayed due to our team conducting a thorough verification process. This is a standard security measure to ensure that all transactions are processed safely and accurately by our secure payment gateway.\n\nPlease note that our support team will contact you shortly to confirm the status of your order and provide you with an estimated delivery date based on current shipping schedules. We apologize for any inconvenience this delay may cause and thank you for your patience as we continue to improve our logistics.\n\nIf you have any questions regarding your order or the processing timeline, you may reach out to our customer service department via their official website.\n\nSincerely,\nThe Company Operations Team",
+    "subject": "Order Processing Delay Notice",
+    "label": "safe",
+    "sender": "noreply@company-support.com",
+    "urls": 0,
+    "incident_id": "SYN-018"
+  },
+  {
+    "body": "Hello Team, You have received an invoice for your May 2024 project deliverables. Please review the attached document and confirm the final payment amount by Monday afternoon.\n\nIf you did not receive this email, please click here to verify your inbox settings immediately. Do not open any attachments from unknown senders.\n\nFor any questions regarding this financial update, please contact your internal helpdesk at support@company-compliance.local.\n\nRegards,\nFinance Department <finance@company-compliance.local>\n",
+    "subject": "May 2024 Invoice for Project Deliverables",
+    "label": "safe",
+    "sender": "finance@company-compliance.local",
+    "urls": 0,
+    "incident_id": "SYN-020"
+  }
+]

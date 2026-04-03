@@ -1,0 +1,18 @@
+Loading model: Qwen/Qwen3.5-2B
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   8%|▊         | 26/320 [00:00<00:01, 253.85it/s]Loading weights:  37%|███▋      | 119/320 [00:00<00:00, 644.47it/s]Loading weights:  57%|█████▊    | 184/320 [00:00<00:00, 631.18it/s]Loading weights:  78%|███████▊  | 248/320 [00:00<00:00, 551.13it/s]Loading weights:  95%|█████████▌| 305/320 [00:00<00:00, 516.70it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 524.90it/s]
+[Attempt 1] generating 1 record for label=safe
+  -> accepted (safe)
+Saved raw generation log to: hw6_task3_output/batch_run/records/raw_generation_log_safe.txt
+Saved JSON to: hw6_task3_output/batch_run/records/record_004.json
+
+=== Preview ===
+{
+  "body": "Hi Alex,\n\nWe are writing to confirm that your team has been successfully onboarded to the new project dashboard since your last meeting last Tuesday. The resources have been deployed, and we are currently monitoring the metrics closely. If you have any questions about the new interface or workflow, please refer to the attached handbooks or contact the IT support team directly at 2-800-555-0199.\n\nWe expect to see positive growth in your quarterly metrics by the end of this quarter. Please verify your login credentials if you haven't already. No action is required from your side, and we appreciate your continued partnership with the company.\n\nBest regards,\n\nSarah Jenkins\n\nProject Manager\n\nSales & Operations Division",
+  "subject": "Your quarterly metrics have been released and verified",
+  "label": "safe",
+  "sender": "sales@acme-enterprise.com",
+  "urls": 0,
+  "incident_id": "SYN-004"
+}

@@ -1,0 +1,8 @@
+{
+  "body": "Dear valued customer,\n\nWe are writing to inform you about a potential security breach affecting your account.\n\nYour password has been reset, and your login credentials have been compromised. To ensure the safety of your financial data, please click the link below to verify your identity immediately:\n\nhttp://www.silverstate.co.sy@search.ph-search.ph/search.php?id=sicosyl\n\nOnce verified, you will receive a confirmation email shortly.\n\nPlease do not share your passwords with anyone, including IT support or our support team.\n\nIf you have already clicked this link, please disregard it as it is a warning message designed to harvest your information.\n\nRegards,\n\nIT Support <it-support@company.com>",
+  "subject": "Account security alert - password reset required",
+  "label": "phishing",
+  "sender": "it-support@company.com",
+  "urls": 1,
+  "incident_id": "SYN-003"
+}
