@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-011",
+    "original_record": {
+      "body": "Dear [USER NAME], You have received a scam notification about a missing payment. You will be notified via email.",
+      "subject": "URGENT: Missing Payment Alert",
+      "label": "phishing",
+      "sender": "noreply@example.com",
+      "urls": 0,
+      "incident_id": "SYN-011"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 3,
+        "label_consistency": 3,
+        "sender_plausibility": 3,
+        "url_consistency": 2,
+        "realism_and_quality": 3,
+        "phishing_signal_clarity": 4
+      },
+      "overall_feedback": "The email uses a common phishing tactic of creating a sense of urgency with a 'missing payment' notification. The sender is a generic noreply address, which is suspicious. While the phishing signal is clear, the email could benefit from more specific details. The URL field is 0, which is not helpful.",
+      "needs_refine": true
+    },
+    "was_refined": true,
+    "final_record": {
+      "body": "Dear [USER NAME], We are writing to inform you that our system detected a potential issue with a recent payment. To ensure the security of your account, we have sent you this notification. Please review the details and take appropriate action. We appreciate your cooperation.",
+      "subject": "URGENT: Payment Notification",
+      "label": "phishing",
+      "sender": "noreply@example.com",
+      "urls": 0,
+      "incident_id": "SYN-011"
+    },
+    "status": "refined",
+    "error": ""
+  }
+]

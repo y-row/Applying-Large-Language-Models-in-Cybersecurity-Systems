@@ -1,0 +1,43 @@
+terminate called after throwing an instance of 'c10::Error'
+  what():  Inferred operator schema for a C++ kernel function doesn't match the expected function schema.
+  operator: aten::sinc.out
+  expected schema: aten::sinc.out() -> Tensor(a!)
+    registered at /pytorch/build/aten/src/ATen/RegisterSchema.cpp:6
+  inferred schema: (Tensor _0, Tensor _1) -> Tensor _0
+    registered at /pytorch/torch/csrc/autograd/generated/ADInplaceOrViewType_0.cpp:5013
+  reason: The number of arguments is different. 0 vs 2.
+Exception raised from checkSchema at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:98 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x9d (0x7f16022bffdd in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libc10.so)
+frame #1: c10::detail::torchCheckFail(char const*, char const*, unsigned int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) + 0xc3 (0x7f1602255561 in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libc10.so)
+frame #2: <unknown function> + 0x1c50cf3 (0x7f164166bcf3 in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10::impl::OperatorEntry::registerKernel(c10::Dispatcher const&, std::optional<c10::DispatchKey>, c10::KernelFunction, std::optional<c10::impl::CppSignature>, std::unique_ptr<c10::FunctionSchema, std::default_delete<c10::FunctionSchema> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x418 (0x7f164166e688 in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #4: c10::Dispatcher::registerImpl(c10::OperatorName, std::optional<c10::DispatchKey>, c10::KernelFunction, std::optional<c10::impl::CppSignature>, std::unique_ptr<c10::FunctionSchema, std::default_delete<c10::FunctionSchema> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x10e (0x7f16416618de in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #5: torch::Library::_impl(char const*, torch::CppFunction&&, torch::_RegisterOrVerify) & + 0x36f (0x7f16416a26ff in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #6: <unknown function> + 0x5b589f9 (0x7f16455739f9 in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #7: <unknown function> + 0x5b72df2 (0x7f164558ddf2 in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #8: <unknown function> + 0x18ea4e6 (0x7f16413054e6 in /mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #9: <unknown function> + 0x11b9a (0x7f1720049b9a in /lib64/ld-linux-x86-64.so.2)
+frame #10: <unknown function> + 0x11ca1 (0x7f1720049ca1 in /lib64/ld-linux-x86-64.so.2)
+frame #11: _dl_catch_exception + 0xe5 (0x7f171fe12ba5 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #12: <unknown function> + 0x160cf (0x7f172004e0cf in /lib64/ld-linux-x86-64.so.2)
+frame #13: _dl_catch_exception + 0x88 (0x7f171fe12b48 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #14: <unknown function> + 0x1560a (0x7f172004d60a in /lib64/ld-linux-x86-64.so.2)
+frame #15: <unknown function> + 0x134c (0x7f171fff934c in /lib/x86_64-linux-gnu/libdl.so.2)
+frame #16: _dl_catch_exception + 0x88 (0x7f171fe12b48 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #17: _dl_catch_error + 0x33 (0x7f171fe12c13 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #18: <unknown function> + 0x1b59 (0x7f171fff9b59 in /lib/x86_64-linux-gnu/libdl.so.2)
+frame #19: dlopen + 0x4a (0x7f171fff93da in /lib/x86_64-linux-gnu/libdl.so.2)
+frame #20: python() [0x5cebc6]
+frame #21: python() [0x5ce604]
+frame #22: python() [0x4fe6b4]
+<omitting python frames>
+frame #35: python() [0x4fdc94]
+frame #39: python() [0x596192]
+frame #41: python() [0x59d3ed]
+frame #42: python() [0x4fe6b4]
+frame #53: python() [0x4fdc94]
+frame #57: python() [0x596192]
+frame #59: python() [0x5c72d7]
+frame #60: python() [0x5c2420]
+frame #61: python() [0x4598b9]
+

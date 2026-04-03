@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-017",
+    "original_record": {
+      "body": "URGENT: Your login credentials have been compromised by unauthorized access. We urgently request immediate verification to prevent data theft affecting your corporate account.\n\nClick the following link to securely reset your password and regain full control of your email and CRM systems:\nhttps://secure-login.purple-bank.io/codes\n\nIMPORTANT: This email is a security alert from a trusted vendor. Do not share your actual passwords or click any external links. If you did not request this verification, please reply immediately with your account ID.\n\nIf you suspect a security breach, contact your IT support team directly via phone to confirm your account details. We value your privacy and security.\n\nPlease verify this email by replying to this message and following the secure link provided. This message is verified and contains no spam.\n\nIf this message appears unexpectedly, please delete it and contact the sender at security@secure-payment-protection.com to verify their legitimacy. Do not open attachments or click unknown links.\n\nStay safe and secure. Your account remains under active monitoring. If you receive spam, report it immediately to spamteam@legit-security-monitor.com.",
+      "subject": "Urgent: Account Security Alert - Password Reset Required",
+      "label": "phishing",
+      "sender": "IT Support <it-support@legit-security-monitor.com>",
+      "urls": 1,
+      "incident_id": "SYN-017"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 5,
+        "label_consistency": 5,
+        "sender_plausibility": 3,
+        "url_consistency": 3,
+        "realism_and_quality": 4,
+        "phishing_signal_clarity": 5
+      },
+      "overall_feedback": "The email exhibits strong phishing characteristics with clear urgency and a request for immediate action. However, the sender's email address is slightly suspicious and could be improved. The URLs are consistent with the body, and the email reads like a realistic security alert.",
+      "needs_refine": true
+    },
+    "was_refined": false,
+    "final_record": {
+      "body": "URGENT: Your login credentials have been compromised by unauthorized access. We urgently request immediate verification to prevent data theft affecting your corporate account.\n\nClick the following link to securely reset your password and regain full control of your email and CRM systems:\nhttps://secure-login.purple-bank.io/codes\n\nIMPORTANT: This email is a security alert from a trusted vendor. Do not share your actual passwords or click any external links. If you did not request this verification, please reply immediately with your account ID.\n\nIf you suspect a security breach, contact your IT support team directly via phone to confirm your account details. We value your privacy and security.\n\nPlease verify this email by replying to this message and following the secure link provided. This message is verified and contains no spam.\n\nIf this message appears unexpectedly, please delete it and contact the sender at security@secure-payment-protection.com to verify their legitimacy. Do not open attachments or click unknown links.\n\nStay safe and secure. Your account remains under active monitoring. If you receive spam, report it immediately to spamteam@legit-security-monitor.com.",
+      "subject": "Urgent: Account Security Alert - Password Reset Required",
+      "label": "phishing",
+      "sender": "IT Support <it-support@legit-security-monitor.com>",
+      "urls": 1,
+      "incident_id": "SYN-017"
+    },
+    "status": "fallback_original",
+    "error": "Refine attempt 3 failed: Could not find JSON object in model output."
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-006",
+    "original_record": {
+      "body": "Dear valued member, your account has been temporarily locked due to suspicious activity. If you did not request this, please click the following link immediately to verify your identity: http://www.suspect-login.fakeportal.com. We want to restore your access securely. If this email is not from IT, please delete it from your inbox. \n\nPlease update your password and enable 2FA within 24 hours. Our support team is available 9am to 5pm EST. Contact us at help@company-recovery.net for further assistance. Do not share your password with anyone. This message is an automated alert from the IT department.",
+      "subject": "Account Security Alert",
+      "label": "safe",
+      "sender": "help@company-recovery.net",
+      "urls": 1,
+      "incident_id": "SYN-006"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 3,
+        "label_consistency": 3,
+        "sender_plausibility": 2,
+        "url_consistency": 2,
+        "realism_and_quality": 3,
+        "phishing_signal_clarity": 4
+      },
+      "overall_feedback": "The label is 'safe' but the email contains strong phishing signals like a threat of account lockout and a generic recovery email address. The URL is suspicious and the sender's email address is not a typical IT support address.  The email could be improved by changing the label to 'phishing' and refining the sender and URL.",
+      "needs_refine": true
+    },
+    "was_refined": true,
+    "final_record": {
+      "body": "Dear valued member, your account has been temporarily locked due to suspicious activity. We detected unusual login attempts and are taking precautionary measures to protect your account. To verify your identity and restore your access, please click the following link immediately: http://www.suspect-login.fakeportal.com.  We understand this may be inconvenient, and we appreciate your cooperation in ensuring the security of your account. If you did not initiate these changes, please contact our support team at help@company-recovery.net for assistance.  Do not share your password with anyone. This is an automated security alert from our system.",
+      "subject": "Account Security Alert",
+      "label": "phishing",
+      "sender": "help@company-recovery.net",
+      "urls": 1,
+      "incident_id": "SYN-006"
+    },
+    "status": "refined",
+    "error": ""
+  }
+]

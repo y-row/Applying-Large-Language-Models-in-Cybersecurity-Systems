@@ -1,0 +1,10 @@
+[
+  {
+    "body": "Dear valued member, your account has been temporarily locked due to suspicious activity. We detected unusual login attempts and are taking precautionary measures to protect your account. To verify your identity and restore your access, please click the following link immediately: http://www.suspect-login.fakeportal.com.  We understand this may be inconvenient, and we appreciate your cooperation in ensuring the security of your account. If you did not initiate these changes, please contact our support team at help@company-recovery.net for assistance.  Do not share your password with anyone. This is an automated security alert from our system.",
+    "subject": "Account Security Alert",
+    "label": "phishing",
+    "sender": "help@company-recovery.net",
+    "urls": 1,
+    "incident_id": "SYN-006"
+  }
+]

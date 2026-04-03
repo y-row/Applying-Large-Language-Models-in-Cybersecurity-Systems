@@ -1,0 +1,7 @@
+Loading refine model: google/gemma-3-4b-it
+Using CUDA_VISIBLE_DEVICES=0
+Loading weights:   0%|          | 0/883 [00:00<?, ?it/s]Loading weights:   0%|          | 4/883 [00:00<00:22, 39.14it/s]Loading weights:   6%|▋         | 56/883 [00:00<00:02, 301.54it/s]Loading weights:  11%|█         | 95/883 [00:00<00:02, 318.63it/s]Loading weights:  15%|█▍        | 132/883 [00:00<00:02, 331.47it/s]Loading weights:  19%|█▉        | 166/883 [00:00<00:02, 333.13it/s]Loading weights:  23%|██▎       | 200/883 [00:00<00:02, 319.60it/s]Loading weights:  28%|██▊       | 244/883 [00:00<00:01, 355.69it/s]Loading weights:  32%|███▏      | 280/883 [00:00<00:01, 347.84it/s]Loading weights:  37%|███▋      | 330/883 [00:00<00:01, 390.74it/s]Loading weights:  42%|████▏     | 370/883 [00:01<00:01, 379.63it/s]Loading weights:  47%|████▋     | 419/883 [00:01<00:01, 404.75it/s]Loading weights:  57%|█████▋    | 505/883 [00:01<00:00, 534.76it/s]Loading weights:  79%|███████▉  | 701/883 [00:01<00:00, 950.21it/s]Loading weights: 100%|██████████| 883/883 [00:01<00:00, 599.43it/s]
+[Refine 6/16] SYN-006
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Saved refined JSON to: /mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_output/refine_batch_run/records/record_006.json
+Saved refine report to: /mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_output/refine_batch_run/records/record_006_report.json

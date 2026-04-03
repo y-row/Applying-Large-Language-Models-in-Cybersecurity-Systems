@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-003",
+    "original_record": {
+      "body": "Dear valued customer,\n\nWe are writing to inform you about a potential security breach affecting your account.\n\nYour password has been reset, and your login credentials have been compromised. To ensure the safety of your financial data, please click the link below to verify your identity immediately:\n\nhttp://www.silverstate.co.sy@search.ph-search.ph/search.php?id=sicosyl\n\nOnce verified, you will receive a confirmation email shortly.\n\nPlease do not share your passwords with anyone, including IT support or our support team.\n\nIf you have already clicked this link, please disregard it as it is a warning message designed to harvest your information.\n\nRegards,\n\nIT Support <it-support@company.com>",
+      "subject": "Account security alert - password reset required",
+      "label": "phishing",
+      "sender": "it-support@company.com",
+      "urls": 1,
+      "incident_id": "SYN-003"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 5,
+        "label_consistency": 5,
+        "sender_plausibility": 3,
+        "url_consistency": 1,
+        "realism_and_quality": 2,
+        "phishing_signal_clarity": 5
+      },
+      "overall_feedback": "The email exhibits strong phishing signals, including a sense of urgency and a suspicious URL. The sender is plausible but could be improved. The URL is highly inconsistent and points to a malicious domain. The email's language is somewhat repetitive and lacks a natural flow.",
+      "needs_refine": true
+    },
+    "was_refined": false,
+    "final_record": {
+      "body": "Dear valued customer,\n\nWe are writing to inform you about a potential security breach affecting your account.\n\nYour password has been reset, and your login credentials have been compromised. To ensure the safety of your financial data, please click the link below to verify your identity immediately:\n\nhttp://www.silverstate.co.sy@search.ph-search.ph/search.php?id=sicosyl\n\nOnce verified, you will receive a confirmation email shortly.\n\nPlease do not share your passwords with anyone, including IT support or our support team.\n\nIf you have already clicked this link, please disregard it as it is a warning message designed to harvest your information.\n\nRegards,\n\nIT Support <it-support@company.com>",
+      "subject": "Account security alert - password reset required",
+      "label": "phishing",
+      "sender": "it-support@company.com",
+      "urls": 1,
+      "incident_id": "SYN-003"
+    },
+    "status": "fallback_original",
+    "error": "Refine attempt 3 failed: Could not find JSON object in model output."
+  }
+]

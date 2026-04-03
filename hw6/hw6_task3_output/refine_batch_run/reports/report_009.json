@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-009",
+    "original_record": {
+      "body": "Dear User, your account will be frozen for non-payment. Click here: https://phishing-site.com/pay now! Contact support 1-800-777-8000. If you think this is a scam, reply to this email.",
+      "subject": "URGENT: Payment required now",
+      "label": "phishing",
+      "sender": "Phishing Bot",
+      "urls": 1,
+      "incident_id": "SYN-009"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 1,
+        "label_consistency": 1,
+        "sender_plausibility": 1,
+        "url_consistency": 1,
+        "realism_and_quality": 1,
+        "phishing_signal_clarity": 1
+      },
+      "overall_feedback": "The email clearly indicates a phishing attempt with a suspicious URL and a generic sender. The 'If you think this is a scam' statement is a common tactic used by phishers. The schema compliance is low due to the 'urls' field being an integer.",
+      "needs_refine": true
+    },
+    "was_refined": true,
+    "final_record": {
+      "body": "Dear User, your account will be frozen for non-payment. Please update your payment information immediately by clicking here: https://phishing-site.com/pay now! If you have any questions, contact our support team at 1-800-777-8000.",
+      "subject": "URGENT: Payment required now",
+      "label": "phishing",
+      "sender": "Phishing Bot",
+      "urls": 1,
+      "incident_id": "SYN-009"
+    },
+    "status": "refined",
+    "error": ""
+  }
+]

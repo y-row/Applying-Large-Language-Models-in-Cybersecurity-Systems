@@ -1,0 +1,10 @@
+[
+  {
+    "body": "Dear User, your account will be frozen for non-payment. Please update your payment information immediately by clicking here: https://phishing-site.com/pay now! If you have any questions, contact our support team at 1-800-777-8000.",
+    "subject": "URGENT: Payment required now",
+    "label": "phishing",
+    "sender": "Phishing Bot",
+    "urls": 1,
+    "incident_id": "SYN-009"
+  }
+]

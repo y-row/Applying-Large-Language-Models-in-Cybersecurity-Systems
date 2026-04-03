@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-001",
+    "original_record": {
+      "body": "URGENT: Your Apple ID password has been reset due to suspicious login attempts. Please click here to verify: https://app.apple.com/secure/verify your credentials immediately to prevent unauthorized access. Our support team is available 24/7 at support@apple.com. If you do not request this within 24 hours, your account will be permanently locked and all associated data will be purged. Do not reply to this message. Click here: https://www.apple.com/verify now. Safe browsing tips: update your browser, avoid clicking links from unknown senders, and never share your passwords. Thank you for your cooperation.",
+      "subject": "Urgent: Apple ID Password Reset Required",
+      "label": "phishing",
+      "sender": "Apple Support <noreply@apple.com>",
+      "urls": 2,
+      "incident_id": "SYN-001"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 5,
+        "label_consistency": 5,
+        "sender_plausibility": 5,
+        "url_consistency": 3,
+        "realism_and_quality": 3,
+        "phishing_signal_clarity": 5
+      },
+      "overall_feedback": "The email exhibits classic phishing characteristics: urgency, threat of account lock, and multiple URLs. The sender is plausible, but the presence of two URLs is a weakness. The phishing signals are clear and well-articulated.",
+      "needs_refine": true
+    },
+    "was_refined": true,
+    "final_record": {
+      "body": "URGENT: Your Apple ID password has been reset due to suspicious login attempts. We detected unusual activity and have temporarily secured your account. To restore access, please click here to verify your credentials: https://app.apple.com/secure/verify. Our support team is available 24/7 at support@apple.com. If you did not initiate this password reset, please contact us immediately. Do not reply to this message. Click here: https://www.apple.com/verify to confirm your identity. Safe browsing tips: keep your password secure, update your browser regularly, and be cautious of suspicious emails.",
+      "subject": "Urgent: Apple ID Security Alert",
+      "label": "phishing",
+      "sender": "Apple Support <noreply@apple.com>",
+      "urls": 2,
+      "incident_id": "SYN-001"
+    },
+    "status": "refined",
+    "error": ""
+  }
+]

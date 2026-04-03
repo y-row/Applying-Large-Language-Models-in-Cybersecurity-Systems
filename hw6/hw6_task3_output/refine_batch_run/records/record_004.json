@@ -1,0 +1,10 @@
+[
+  {
+    "body": "Hi Alex,\n\nWe are writing to confirm that your team has been successfully onboarded to the new project dashboard since your last meeting last Tuesday. The resources have been deployed, and we are currently monitoring the metrics closely. If you have any questions about the new interface or workflow, please refer to the attached handbooks or contact the IT support team directly at 2-800-555-0199.\n\nWe expect to see positive growth in your quarterly metrics by the end of this quarter. Please verify your login credentials if you haven't already. No action is required from your side, and we appreciate your continued partnership with the company.\n\nBest regards,\n\nSarah Jenkins\n\nProject Manager\n\nSales & Operations Division",
+    "subject": "Your quarterly metrics have been released and verified",
+    "label": "safe",
+    "sender": "sales@acme-enterprise.com",
+    "urls": 0,
+    "incident_id": "SYN-004"
+  }
+]

@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_refine.py", line 9, in <module>
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+  File "/mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/transformers/__init__.py", line 30, in <module>
+    from . import dependency_versions_check
+  File "/mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/transformers/dependency_versions_check.py", line 16, in <module>
+    from .utils.versions import require_version, require_version_core
+  File "/mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/transformers/utils/__init__.py", line 34, in <module>
+    from .chat_template_utils import DocstringParsingException, TypeHintParsingException, get_json_schema
+  File "/mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/transformers/utils/chat_template_utils.py", line 47, in <module>
+    if is_vision_available():
+  File "/mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1170, in is_vision_available
+    import PIL.Image  # noqa: F401
+  File "/mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/PIL/Image.py", line 48, in <module>
+    from . import (
+  File "/mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/site-packages/PIL/ExifTags.py", line 21, in <module>
+    class Base(IntEnum):
+  File "/mnt/NAS/VENV/user-conda/joe/miniconda3/envs/datasets/lib/python3.10/enum.py", line 276, in __new__
+    for member_name in classdict._member_names:
+RuntimeError: dictionary changed size during iteration

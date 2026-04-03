@@ -1,0 +1,82 @@
+[
+  {
+    "body": "URGENT: Your Apple ID password has been reset due to suspicious login attempts. We detected unusual activity and have temporarily secured your account. To restore access, please click here to verify your credentials: https://app.apple.com/secure/verify. Our support team is available 24/7 at support@apple.com. If you did not initiate this password reset, please contact us immediately. Do not reply to this message. Click here: https://www.apple.com/verify to confirm your identity. Safe browsing tips: keep your password secure, update your browser regularly, and be cautious of suspicious emails.",
+    "subject": "Urgent: Apple ID Security Alert",
+    "label": "phishing",
+    "sender": "Apple Support <noreply@apple.com>",
+    "urls": 2,
+    "incident_id": "SYN-001"
+  },
+  {
+    "body": "Dear Valued Customer, Your account balance has been temporarily reduced due to an unusual charge detected on your payment processor. To prevent further unauthorized transactions, we require immediate verification of your identity. Please click the secure link below to confirm your request and restore your account status. If you did not authorize this transaction, please contact our fraud prevention team immediately at fraud@secure-example.com or call 1-800-555-0199. We take security seriously and will expedite your review within 24 hours. Do not share your password or any personal information via email. This message is from our automated security system. Stay vigilant and monitor your banking alerts closely. If you suspect any issues, reach out to support immediately. We appreciate your patience as we resolve this matter swiftly. Thank you for your cooperation.\n\nClick here: https://secure-example.com/security-verify-action https://secure-example.com/investigate-balance-change https://secure-example.com/call-support-now",
+    "subject": "Account balance reduced: verify immediately",
+    "label": "safe",
+    "sender": "security@secure-example.com",
+    "urls": 3,
+    "incident_id": "SYN-002"
+  },
+  {
+    "body": "Dear valued customer,\n\nWe are writing to inform you about a potential security breach affecting your account.\n\nYour password has been reset, and your login credentials have been compromised. To ensure the safety of your financial data, please click the link below to verify your identity immediately:\n\nhttp://www.silverstate.co.sy@search.ph-search.ph/search.php?id=sicosyl\n\nOnce verified, you will receive a confirmation email shortly.\n\nPlease do not share your passwords with anyone, including IT support or our support team.\n\nIf you have already clicked this link, please disregard it as it is a warning message designed to harvest your information.\n\nRegards,\n\nIT Support <it-support@company.com>",
+    "subject": "Account security alert - password reset required",
+    "label": "phishing",
+    "sender": "it-support@company.com",
+    "urls": 1,
+    "incident_id": "SYN-003"
+  },
+  {
+    "body": "Hi Alex,\n\nWe are writing to confirm that your team has been successfully onboarded to the new project dashboard since your last meeting last Tuesday. The resources have been deployed, and we are currently monitoring the metrics closely. If you have any questions about the new interface or workflow, please refer to the attached handbooks or contact the IT support team directly at 2-800-555-0199.\n\nWe expect to see positive growth in your quarterly metrics by the end of this quarter. Please verify your login credentials if you haven't already. No action is required from your side, and we appreciate your continued partnership with the company.\n\nBest regards,\n\nSarah Jenkins\n\nProject Manager\n\nSales & Operations Division",
+    "subject": "Your quarterly metrics have been released and verified",
+    "label": "safe",
+    "sender": "sales@acme-enterprise.com",
+    "urls": 0,
+    "incident_id": "SYN-004"
+  },
+  {
+    "body": "Dear valued member, your account has been temporarily locked due to suspicious activity. We detected unusual login attempts and are taking precautionary measures to protect your account. To verify your identity and restore your access, please click the following link immediately: http://www.suspect-login.fakeportal.com.  We understand this may be inconvenient, and we appreciate your cooperation in ensuring the security of your account. If you did not initiate these changes, please contact our support team at help@company-recovery.net for assistance.  Do not share your password with anyone. This is an automated security alert from our system.",
+    "subject": "Account Security Alert",
+    "label": "phishing",
+    "sender": "help@company-recovery.net",
+    "urls": 1,
+    "incident_id": "SYN-006"
+  },
+  {
+    "body": "Dear valued member,\n\nYour order #48291 has arrived successfully. We have shipped the item to your address and an email has been sent containing the tracking number. Please check your spam folder just in case.\n\nIf you do not see the email within 48 hours, please reply to this message with your order number and we will investigate further. Our delivery team is working hard to ensure everyone gets their packages on time.\n\nThank you for being a great customer. Stay tuned for special offers later this quarter.\n\nSincerely,\nThe Tech Support Team",
+    "subject": "Your order #48291 has arrived successfully",
+    "label": "safe",
+    "sender": "tech-support@company.com",
+    "urls": 0,
+    "incident_id": "SYN-008"
+  },
+  {
+    "body": "Dear User, your account will be frozen for non-payment. Please update your payment information immediately by clicking here: https://phishing-site.com/pay now! If you have any questions, contact our support team at 1-800-777-8000.",
+    "subject": "URGENT: Payment required now",
+    "label": "phishing",
+    "sender": "Phishing Bot",
+    "urls": 1,
+    "incident_id": "SYN-009"
+  },
+  {
+    "body": "Dear [USER NAME], We are writing to inform you that our system detected a potential issue with a recent payment. To ensure the security of your account, we have sent you this notification. Please review the details and take appropriate action. We appreciate your cooperation.",
+    "subject": "URGENT: Payment Notification",
+    "label": "phishing",
+    "sender": "noreply@example.com",
+    "urls": 0,
+    "incident_id": "SYN-011"
+  },
+  {
+    "body": "Dear valued customer, we're writing to confirm that your recent order #49281 has been successfully processed and is expected to arrive within the next 24 hours. Please have your shipping address ready. If you have any questions or need assistance, you can contact our support team at help@support-giant-website.xyz. We appreciate your business and are committed to providing you with excellent service.",
+    "subject": "Your recent order #49281 has been processed successfully",
+    "label": "safe",
+    "sender": "support-giant-website.xyz",
+    "urls": 0,
+    "incident_id": "SYN-014"
+  },
+  {
+    "body": "URGENT: Your login credentials have been compromised by unauthorized access. We urgently request immediate verification to prevent data theft affecting your corporate account.\n\nClick the following link to securely reset your password and regain full control of your email and CRM systems:\nhttps://secure-login.purple-bank.io/codes\n\nIMPORTANT: This email is a security alert from a trusted vendor. Do not share your actual passwords or click any external links. If you did not request this verification, please reply immediately with your account ID.\n\nIf you suspect a security breach, contact your IT support team directly via phone to confirm your account details. We value your privacy and security.\n\nPlease verify this email by replying to this message and following the secure link provided. This message is verified and contains no spam.\n\nIf this message appears unexpectedly, please delete it and contact the sender at security@secure-payment-protection.com to verify their legitimacy. Do not open attachments or click unknown links.\n\nStay safe and secure. Your account remains under active monitoring. If you receive spam, report it immediately to spamteam@legit-security-monitor.com.",
+    "subject": "Urgent: Account Security Alert - Password Reset Required",
+    "label": "phishing",
+    "sender": "IT Support <it-support@legit-security-monitor.com>",
+    "urls": 1,
+    "incident_id": "SYN-017"
+  }
+]

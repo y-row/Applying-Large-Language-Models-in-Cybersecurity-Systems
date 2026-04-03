@@ -1,0 +1,10 @@
+[
+  {
+    "body": "URGENT: Your Apple ID password has been reset due to suspicious login attempts. We detected unusual activity and have temporarily secured your account. To restore access, please click here to verify your credentials: https://app.apple.com/secure/verify. Our support team is available 24/7 at support@apple.com. If you did not initiate this password reset, please contact us immediately. Do not reply to this message. Click here: https://www.apple.com/verify to confirm your identity. Safe browsing tips: keep your password secure, update your browser regularly, and be cautious of suspicious emails.",
+    "subject": "Urgent: Apple ID Security Alert",
+    "label": "phishing",
+    "sender": "Apple Support <noreply@apple.com>",
+    "urls": 2,
+    "incident_id": "SYN-001"
+  }
+]

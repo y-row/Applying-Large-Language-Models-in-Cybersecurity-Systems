@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-008",
+    "original_record": {
+      "body": "Dear valued member,\n\nYour order #48291 has arrived successfully. We have shipped the item to your address and an email has been sent containing the tracking number. Please check your spam folder just in case.\n\nIf you do not see the email within 48 hours, please reply to this message with your order number and we will investigate further. Our delivery team is working hard to ensure everyone gets their packages on time.\n\nThank you for being a great customer. Stay tuned for special offers later this quarter.\n\nSincerely,\nThe Tech Support Team",
+      "subject": "Your order #48291 has arrived successfully",
+      "label": "safe",
+      "sender": "tech-support@company.com",
+      "urls": 0,
+      "incident_id": "SYN-008"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 5,
+        "label_consistency": 3,
+        "sender_plausibility": 4,
+        "url_consistency": 2,
+        "realism_and_quality": 4,
+        "phishing_signal_clarity": 2
+      },
+      "overall_feedback": "The email is labeled as 'safe', but the instruction to check the spam folder is a common phishing tactic. The URLs field is 0, which is not helpful. The sender is plausible, but the email could be more natural.",
+      "needs_refine": true
+    },
+    "was_refined": false,
+    "final_record": {
+      "body": "Dear valued member,\n\nYour order #48291 has arrived successfully. We have shipped the item to your address and an email has been sent containing the tracking number. Please check your spam folder just in case.\n\nIf you do not see the email within 48 hours, please reply to this message with your order number and we will investigate further. Our delivery team is working hard to ensure everyone gets their packages on time.\n\nThank you for being a great customer. Stay tuned for special offers later this quarter.\n\nSincerely,\nThe Tech Support Team",
+      "subject": "Your order #48291 has arrived successfully",
+      "label": "safe",
+      "sender": "tech-support@company.com",
+      "urls": 0,
+      "incident_id": "SYN-008"
+    },
+    "status": "fallback_original",
+    "error": "Refine attempt 3 failed: Refined record failed validation."
+  }
+]

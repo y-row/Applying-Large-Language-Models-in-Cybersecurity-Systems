@@ -5,6 +5,7 @@ This project contains the code and outputs for an HW6 email security workflow. I
 1. Building a simplified phishing email knowledge base from a Hugging Face dataset
 2. Running a small retrieval + generation demo for email analysis
 3. Generating synthetic email records in JSON format for phishing detection experiments
+4. Refining generated task 3 records with a Gemma-based evaluation workflow
 
 ## Project Structure
 
@@ -18,6 +19,7 @@ hw6_email_pipeline/
 │   ├── task1_knowledge_base.md
 │   └── task1_simplified_dataset.csv
 ├── hw6_task3.py
+├── hw6_task3_refine.py
 ├── hw6_task3_output/
 │   └── ...
 └── run_hw6_task3_batch.sh
@@ -46,6 +48,11 @@ hw6_email_pipeline/
 - `run_hw6_task3_batch.sh`
   Runs `hw6_task3.py` multiple times in separate processes to reduce the chance of runtime crashes during repeated generation.
 
+- `hw6_task3_refine.py`
+  Loads the task 3 output JSON, sends each record to a Gemma refine agent, applies a rubric-based evaluation, and writes:
+  - a refined JSON dataset
+  - a refine report with rubric scores and feedback
+
 ## Task 1: Build the Knowledge Base
 
 Run:
@@ -64,7 +71,7 @@ Outputs:
 Run:
 
 ```bash
-python hw6.py
+python hw6_task2.py
 ```
 
 This script builds a small vector store from sample records, retrieves the most relevant records for a query, and asks a Qwen model to produce a short structured answer.
@@ -115,6 +122,36 @@ Batch outputs:
 - failed run summary:
   - `hw6_task3_output/batch_run/failed_runs.txt`
 
+### Refine Workflow
+
+Run:
+
+```bash
+python hw6_task3_refine.py
+```
+
+Default input:
+
+- `hw6_task3_output/batch_run/synthetic_emails.json`
+
+Default outputs:
+
+- refined dataset:
+  - `hw6_task3_output/batch_run/synthetic_emails_refine.json`
+- refine report:
+  - `hw6_task3_output/batch_run/synthetic_emails_refine_report.json`
+
+The refine agent uses a rubric to score each record on:
+
+- schema compliance
+- label consistency
+- sender plausibility
+- URL consistency
+- realism and writing quality
+- phishing signal clarity
+
+It then asks Gemma to generate an improved version of the record and saves the updated JSON separately.
+
 ## Environment Notes
 
 This project depends on your local Python environment. In particular:
@@ -122,6 +159,7 @@ This project depends on your local Python environment. In particular:
 - `hw6_task1.py` needs packages such as `pandas`, `pyarrow`, and `huggingface_hub`
 - `hw6.py` needs `langchain`, `faiss`, `transformers`, and embedding dependencies
 - `hw6_task3.py` needs `torch` and `transformers`
+- `hw6_task3_refine.py` needs `torch` and `transformers`, and by default uses `google/gemma-3-4b-it`
 
 If you run `hw6_task3.py` repeatedly in one long Python process, some model/runtime combinations may become unstable. The batch shell script avoids that by launching a fresh Python process for each generated sample.
 

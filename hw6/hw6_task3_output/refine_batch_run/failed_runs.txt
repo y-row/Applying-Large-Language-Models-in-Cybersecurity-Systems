@@ -1,0 +1,6 @@
+record_index=4 log=/mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_output/refine_batch_run/logs/run_005.log
+record_index=6 log=/mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_output/refine_batch_run/logs/run_007.log
+record_index=9 log=/mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_output/refine_batch_run/logs/run_010.log
+record_index=12 log=/mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_output/refine_batch_run/logs/run_013.log
+record_index=14 log=/mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_output/refine_batch_run/logs/run_015.log
+record_index=15 log=/mnt/NAS/home/joe/hw6_email_pipeline/hw6/hw6_task3_output/refine_batch_run/logs/run_016.log

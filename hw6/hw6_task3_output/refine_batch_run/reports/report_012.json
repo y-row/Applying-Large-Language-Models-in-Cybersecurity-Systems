@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-014",
+    "original_record": {
+      "body": "Dear valued member, we wanted to inform you that your recent order #49281 has been processed successfully and is expected to arrive within the next 24 hours. Please ensure you have your shipping details handy. For any questions, please contact our support team at help@support-giant-website.xyz. We appreciate your patience as we continue to improve our delivery services. Reply if you have any specific inquiries.",
+      "subject": "Your recent order #49281 has been processed successfully",
+      "label": "safe",
+      "sender": "support-giant-website.xyz",
+      "urls": 0,
+      "incident_id": "SYN-014"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 5,
+        "label_consistency": 5,
+        "sender_plausibility": 4,
+        "url_consistency": 3,
+        "realism_and_quality": 5,
+        "phishing_signal_clarity": 5
+      },
+      "overall_feedback": "This email appears to be a legitimate order confirmation. The sender is plausible, the language is natural, and there are no obvious phishing signals. The URL is not present in the body, which could be a minor issue.",
+      "needs_refine": false
+    },
+    "was_refined": true,
+    "final_record": {
+      "body": "Dear valued customer, we're writing to confirm that your recent order #49281 has been successfully processed and is expected to arrive within the next 24 hours. Please have your shipping address ready. If you have any questions or need assistance, you can contact our support team at help@support-giant-website.xyz. We appreciate your business and are committed to providing you with excellent service.",
+      "subject": "Your recent order #49281 has been processed successfully",
+      "label": "safe",
+      "sender": "support-giant-website.xyz",
+      "urls": 0,
+      "incident_id": "SYN-014"
+    },
+    "status": "refined",
+    "error": ""
+  }
+]

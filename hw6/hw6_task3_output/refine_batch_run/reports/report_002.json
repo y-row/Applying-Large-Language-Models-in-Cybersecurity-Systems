@@ -1,0 +1,36 @@
+[
+  {
+    "incident_id": "SYN-002",
+    "original_record": {
+      "body": "Dear Valued Customer, Your account balance has been temporarily reduced due to an unusual charge detected on your payment processor. To prevent further unauthorized transactions, we require immediate verification of your identity. Please click the secure link below to confirm your request and restore your account status. If you did not authorize this transaction, please contact our fraud prevention team immediately at fraud@secure-example.com or call 1-800-555-0199. We take security seriously and will expedite your review within 24 hours. Do not share your password or any personal information via email. This message is from our automated security system. Stay vigilant and monitor your banking alerts closely. If you suspect any issues, reach out to support immediately. We appreciate your patience as we resolve this matter swiftly. Thank you for your cooperation.\n\nClick here: https://secure-example.com/security-verify-action https://secure-example.com/investigate-balance-change https://secure-example.com/call-support-now",
+      "subject": "Account balance reduced: verify immediately",
+      "label": "safe",
+      "sender": "security@secure-example.com",
+      "urls": 3,
+      "incident_id": "SYN-002"
+    },
+    "judge_result": {
+      "rubric_scores": {
+        "schema_compliance": 5,
+        "label_consistency": 3,
+        "sender_plausibility": 4,
+        "url_consistency": 3,
+        "realism_and_quality": 4,
+        "phishing_signal_clarity": 3
+      },
+      "overall_feedback": "The email is labeled as 'safe' but contains several red flags, including multiple URLs and a sense of urgency. The sender is plausible, but the email could be more natural. The URLs are inconsistent and should be checked.",
+      "needs_refine": true
+    },
+    "was_refined": false,
+    "final_record": {
+      "body": "Dear Valued Customer, Your account balance has been temporarily reduced due to an unusual charge detected on your payment processor. To prevent further unauthorized transactions, we require immediate verification of your identity. Please click the secure link below to confirm your request and restore your account status. If you did not authorize this transaction, please contact our fraud prevention team immediately at fraud@secure-example.com or call 1-800-555-0199. We take security seriously and will expedite your review within 24 hours. Do not share your password or any personal information via email. This message is from our automated security system. Stay vigilant and monitor your banking alerts closely. If you suspect any issues, reach out to support immediately. We appreciate your patience as we resolve this matter swiftly. Thank you for your cooperation.\n\nClick here: https://secure-example.com/security-verify-action https://secure-example.com/investigate-balance-change https://secure-example.com/call-support-now",
+      "subject": "Account balance reduced: verify immediately",
+      "label": "safe",
+      "sender": "security@secure-example.com",
+      "urls": 3,
+      "incident_id": "SYN-002"
+    },
+    "status": "fallback_original",
+    "error": "Refine attempt 3 failed: Could not find JSON object in model output."
+  }
+]
