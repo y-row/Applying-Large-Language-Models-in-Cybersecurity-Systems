@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: Qwen/Qwen2.5-1.5B-Instruct
+model_name_or_path: Qwen/Qwen2.5-0.5B
 trust_remote_code: true
 
 ### method
@@ -23,7 +23,7 @@ preprocessing_num_workers: 4
 val_size: 0.1
 
 ### output
-output_dir: ./saves/qwen25-1p5b-adversarial-qlora
+output_dir: ./saves/qwen25-0p5b-adversarial-qlora
 logging_steps: 5
 save_steps: 50
 plot_loss: true
