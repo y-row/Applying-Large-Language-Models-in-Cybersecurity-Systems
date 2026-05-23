@@ -1,0 +1,45 @@
+### model
+model_name_or_path: Qwen/Qwen2.5-1.5B-Instruct
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_target: all
+lora_rank: 16
+lora_alpha: 32
+lora_dropout: 0.05
+quantization_bit: 4
+quantization_method: bitsandbytes
+
+### dataset
+dataset_dir: ./data
+dataset: adversarial_safety_train
+template: qwen
+cutoff_len: 2048
+overwrite_cache: true
+preprocessing_num_workers: 4
+val_size: 0.1
+
+### output
+output_dir: ./saves/qwen25-1p5b-adversarial-qlora
+logging_steps: 5
+save_steps: 50
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 2.0e-4
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+
+### eval
+per_device_eval_batch_size: 2
+eval_strategy: steps
+eval_steps: 50

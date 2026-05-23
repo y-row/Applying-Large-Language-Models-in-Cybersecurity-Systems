@@ -1,0 +1,11 @@
+{
+  "adversarial_safety_train": {
+    "file_name": "adversarial_safety_train.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  }
+}
