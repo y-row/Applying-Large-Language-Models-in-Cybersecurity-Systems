@@ -1,0 +1,86 @@
+{
+  "dataset_summary": "The sample contains Sysmon process access, registry modification, image load, DNS, and Windows Filtering Platform network events. Process creation EventID 1 and Security 4688 are not present in the sample distribution.",
+  "available_event_types": [
+    {
+      "event_type": "process_access",
+      "evidence": "Sysmon EventID 10 rows include SourceImage, TargetImage, SourceProcessId, TargetProcessId, GrantedAccess, and Process accessed messages.",
+      "support_level": "high",
+      "likely_fields": ["EventID", "UtcTime", "Hostname", "SourceImage", "TargetImage", "SourceProcessId", "TargetProcessId", "GrantedAccess", "Message"],
+      "sample_event_ids": ["10"]
+    },
+    {
+      "event_type": "network_connection",
+      "evidence": "Windows Filtering Platform rows include EventID 5154, 5156, and 5158 with SourceAddress, SourcePort, DestAddress, DestPort, Protocol, and Application.",
+      "support_level": "medium",
+      "likely_fields": ["EventID", "SourceAddress", "SourcePort", "DestAddress", "DestPort", "Protocol", "Application", "Message"],
+      "sample_event_ids": ["5154", "5156", "5158"]
+    },
+    {
+      "event_type": "registry_modification",
+      "evidence": "Sysmon EventID 12 and 13 rows include TargetObject, EventType, Image, ProcessId, and registry messages.",
+      "support_level": "medium",
+      "likely_fields": ["EventID", "UtcTime", "Hostname", "Image", "ProcessId", "TargetObject", "EventType", "Details", "Message"],
+      "sample_event_ids": ["12", "13"]
+    }
+  ],
+  "recommended_tasks": [
+    {
+      "task_name": "extract_process_access",
+      "priority": 100,
+      "reason": "EventID 10 process access is the dominant supported event type and includes source/target process evidence.",
+      "target_event_types": ["process_access"],
+      "task_keywords": ["process accessed", "source image", "target image", "source process", "target process", "granted access", "EventID 10"],
+      "required_fields": [
+        "timestamp",
+        "host",
+        "user",
+        "event_id",
+        "event_type",
+        "process_name",
+        "process_path",
+        "command_line",
+        "parent_process_name",
+        "parent_command_line",
+        "process_id",
+        "parent_process_id",
+        "source_ip",
+        "dest_ip",
+        "dest_port",
+        "raw_message",
+        "source_line"
+      ]
+    },
+    {
+      "task_name": "extract_network_connection",
+      "priority": 80,
+      "reason": "The sample contains WFP bind/listen/connect events with address and port fields.",
+      "target_event_types": ["network_connection"],
+      "task_keywords": ["network connection", "source address", "destination address", "dest port", "source port", "protocol", "EventID 5156", "EventID 5158", "EventID 5154"],
+      "required_fields": [
+        "timestamp",
+        "host",
+        "user",
+        "event_id",
+        "event_type",
+        "process_name",
+        "process_path",
+        "command_line",
+        "parent_process_name",
+        "parent_command_line",
+        "process_id",
+        "parent_process_id",
+        "source_ip",
+        "dest_ip",
+        "dest_port",
+        "raw_message",
+        "source_line"
+      ]
+    }
+  ],
+  "not_recommended_tasks": [
+    {
+      "task_name": "extract_process_creation",
+      "reason": "The sample event_id_distribution does not include Sysmon EventID 1 or Security 4688 process creation events."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stage 1 Dataset Profile",
+  "type": "object",
+  "required": ["dataset_name", "format", "description"],
+  "properties": {
+    "dataset_name": {"type": "string"},
+    "scenario": {"type": ["string", "null"]},
+    "format": {"type": "string"},
+    "description": {"type": "string"},
+    "time_field_candidates": {"type": "array", "items": {"type": "string"}},
+    "event_id_field_candidates": {"type": "array", "items": {"type": "string"}},
+    "host_field_candidates": {"type": "array", "items": {"type": "string"}},
+    "user_field_candidates": {"type": "array", "items": {"type": "string"}},
+    "message_field_candidates": {"type": "array", "items": {"type": "string"}},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}
+

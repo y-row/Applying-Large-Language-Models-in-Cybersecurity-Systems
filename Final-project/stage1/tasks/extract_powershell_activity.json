@@ -1,0 +1,35 @@
+{
+  "task_name": "extract_powershell_activity",
+  "goal": "Extract PowerShell-related activity from security logs.",
+  "target_event_types": ["powershell_activity"],
+  "task_keywords": [
+    "powershell",
+    "powershell.exe",
+    "command line",
+    "encodedcommand",
+    "target image",
+    "image",
+    "dns query",
+    "network connection"
+  ],
+  "required_fields": [
+    "timestamp",
+    "host",
+    "user",
+    "event_id",
+    "event_type",
+    "process_name",
+    "process_path",
+    "command_line",
+    "parent_process_name",
+    "parent_command_line",
+    "process_id",
+    "parent_process_id",
+    "source_ip",
+    "dest_ip",
+    "dest_port",
+    "raw_message",
+    "source_line"
+  ],
+  "output_format": "jsonl"
+}

@@ -1,0 +1,2 @@
+{"@timestamp":"2020-09-21T18:58:29.000Z","event":{"code":"1"},"host":{"name":"WORKSTATION-1"},"user":{"name":"alice"},"winlog":{"event_data":{"Image":"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe","CommandLine":"powershell.exe -NoProfile -EncodedCommand AAAA","ParentImage":"C:\\Windows\\explorer.exe","ParentCommandLine":"explorer.exe","ProcessId":"1234","ParentProcessId":"456","UtcTime":"2020-09-21 18:58:29.000"}},"message":"Process Create: powershell.exe"}
+

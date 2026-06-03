@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stage 1 Task Spec",
+  "type": "object",
+  "required": ["task_name", "goal", "target_event_types", "required_fields", "output_format"],
+  "properties": {
+    "task_name": {"type": "string"},
+    "goal": {"type": "string"},
+    "target_event_types": {"type": "array", "items": {"type": "string"}},
+    "required_fields": {"type": "array", "items": {"type": "string"}},
+    "output_format": {"const": "jsonl"}
+  },
+  "additionalProperties": true
+}
+

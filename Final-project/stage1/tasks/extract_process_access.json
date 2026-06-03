@@ -1,0 +1,45 @@
+{
+  "task_name": "extract_process_access",
+  "goal": "Extract process access events from security logs, including source and target process relationships.",
+  "target_event_types": ["process_access"],
+  "task_keywords": [
+    "process accessed",
+    "source image",
+    "target image",
+    "source process",
+    "target process",
+    "source_process",
+    "target_process",
+    "granted access",
+    "call trace",
+    "EventID 10"
+  ],
+  "required_fields": [
+    "timestamp",
+    "host",
+    "user",
+    "event_id",
+    "event_type",
+    "source_process_name",
+    "source_process_path",
+    "source_process_id",
+    "source_thread_id",
+    "target_process_name",
+    "target_process_path",
+    "target_process_id",
+    "granted_access",
+    "call_trace",
+    "raw_message",
+    "source_line"
+  ],
+  "field_aliases": {
+    "SourceImage": "source_process_path",
+    "SourceProcessId": "source_process_id",
+    "SourceThreadId": "source_thread_id",
+    "TargetImage": "target_process_path",
+    "TargetProcessId": "target_process_id",
+    "GrantedAccess": "granted_access",
+    "CallTrace": "call_trace"
+  },
+  "output_format": "jsonl"
+}

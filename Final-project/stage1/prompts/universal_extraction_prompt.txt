@@ -1,0 +1,76 @@
+You are generating a parser-free, Sieve-style extraction program for security logs.
+
+Return Python 3 source code only. Do not include markdown fences or explanations.
+
+MANDATORY CLI CONTRACT
+- The generated program must run exactly like:
+  python generated_code.py --input INPUT --output OUTPUT
+- Implement --input and --output with argparse.
+- Read the complete file at --input, not only the sample rows.
+- Write candidate events as JSONL to the path given by --output.
+- Do not rely on printing event data to stdout. Progress messages are allowed, but event records must be written to --output.
+- Do not write, edit, create, or delete any file except the requested --output file.
+- Use only the Python standard library.
+
+INFERRED DATASET CONTEXT
+This context was inferred from deterministic inspection of the input samples.
+It is not a parser, and it is the primary dataset context for this run.
+Do not assume a fixed dataset. Infer field paths and extraction logic from
+the sample rows and inferred context.
+{inferred_format_summary}
+
+OPTIONAL USER-PROVIDED HINTS
+This section may be empty. Treat sample rows and inferred context as the
+source of truth if hints disagree with the data.
+{optional_user_hints}
+
+EXTRACTION TASK
+The task defines what to extract across datasets.
+{task_spec}
+
+CANDIDATE EVENT SCHEMA
+Every emitted JSON object should follow this schema as closely as possible.
+If a required task field is not extractable for a matching event, include the key with null.
+Always include source_line as the 1-based input line number.
+{candidate_event_schema}
+
+IDENTITY FIELD SEMANTICS
+- event_uid is assigned by Stage 1 during normalization. Generated extractors should not invent it.
+- event_id is the source log event type ID, such as Windows/Sysmon EventID 10, 4688, or 1.
+- source_event_id is the source log record, session, request, or connection identifier, such as Zeek uid, cloud request_id, or record_id.
+- Do not put Zeek uid, connection uid, request_id, or record_id into event_id unless the task explicitly says that field is the event type ID.
+- If the source record only has a record/session/request identifier and no event type ID, emit source_event_id and set event_id to null.
+- Preserve event-type-specific fields from the task and samples, including source_port, protocol, service, conn_state, mitre_attack_tactics, source_process_*, target_process_*, and granted_access when present.
+- For network connection aliases, map src_ip to source_ip, src_port to source_port, and uid/request_id/record_id to source_event_id.
+
+EVENT-TYPE FIELD SEMANTICS
+- Generated extractors may normalize source field names into canonical fields only when source and target semantics are equivalent.
+- For process_creation events, process_* and parent_process_* mean newly created child process and creating parent process.
+- For process_access events, preserve accessing-process versus accessed-process semantics:
+  - Accessing/source process fields map to source_process_*.
+  - Accessed/target process fields map to target_process_*.
+  - Access rights map to granted_access.
+  - Call stack fields map to call_trace.
+- Do not map a process_access source process to parent_process_* unless the event is actually process_creation.
+- When uncertain, preserve original source fields as additional properties instead of forcing them into incorrect canonical fields.
+
+SAMPLE ROWS
+Use these selected rows to infer dataset-specific field paths and event patterns.
+They may not contain every target event type. Do not hardcode that the full
+input contains only these rows, and do not restrict extraction only to EventIDs
+seen in these samples. Scan the complete --input file for records matching the
+task intent.
+```jsonl
+{sample_rows}
+```
+
+IMPLEMENTATION REQUIREMENTS
+- Generate robust Python code that handles missing fields defensively.
+- Support JSON/NDJSON inputs when the inferred context or samples indicate JSON-like logs.
+- For process creation tasks, process creation generally means a newly created process with process image/path, command line, parent process, process id, user, host, and timestamp when available.
+- Preserve raw evidence in raw_message when possible.
+- Emit one JSON object per candidate event, one object per line.
+- Use null for missing optional values.
+- Do not import third-party packages.
+- Do not shell out or use subprocess.
+- The same universal prompt must work for Mordor, ATLASv2, BOTS, SSH, and similar security logs by changing only the task spec and sampled input.

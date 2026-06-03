@@ -1,0 +1,13 @@
+{
+  "dataset_name": "OTRF_Mordor",
+  "scenario": null,
+  "format": "ndjson",
+  "description": "Winlogbeat JSON logs from Windows/Sysmon telemetry.",
+  "time_field_candidates": ["@timestamp", "winlog.event_data.UtcTime", "timestamp"],
+  "event_id_field_candidates": ["event.code", "winlog.event_id", "winlog.event_data.EventID"],
+  "host_field_candidates": ["host.name", "winlog.computer_name", "computer_name"],
+  "user_field_candidates": ["user.name", "winlog.event_data.User", "winlog.event_data.SubjectUserName"],
+  "message_field_candidates": ["message", "winlog.event_data.CommandLine"],
+  "notes": "Each line is one JSON object. Missing fields are common. Use these hints to infer extraction logic from samples, not as a complete parser."
+}
+

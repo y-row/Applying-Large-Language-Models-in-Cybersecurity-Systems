@@ -1,0 +1,13 @@
+{
+  "dataset_name": "ATLASv2",
+  "scenario": null,
+  "format": "mixed_json_logs",
+  "description": "Windows Security Auditing, Sysmon, DNS, and browser telemetry from ATLAS attack engagements.",
+  "time_field_candidates": ["@timestamp", "timestamp", "UtcTime", "TimeCreated"],
+  "event_id_field_candidates": ["event.code", "winlog.event_id", "EventRecordID", "EventID"],
+  "host_field_candidates": ["host.name", "computer_name", "Computer"],
+  "user_field_candidates": ["user.name", "SubjectUserName", "TargetUserName"],
+  "message_field_candidates": ["message", "CommandLine", "Image"],
+  "notes": "Backup profile draft only. Use samples to infer exact field paths for a concrete ATLASv2 run."
+}
+

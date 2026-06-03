@@ -1,0 +1,2 @@
+{"timestamp":"2020-09-21T18:58:29.000Z","host":"WORKSTATION-1","user":"alice","event_id":"1","event_type":"process_creation","process_name":"powershell.exe","process_path":"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe","command_line":"powershell.exe -NoProfile -EncodedCommand AAAA","parent_process_name":"explorer.exe","parent_command_line":"explorer.exe","process_id":"1234","parent_process_id":"456","source_ip":null,"dest_ip":null,"dest_port":null,"raw_message":"Process Create: powershell.exe","source_line":1}
+

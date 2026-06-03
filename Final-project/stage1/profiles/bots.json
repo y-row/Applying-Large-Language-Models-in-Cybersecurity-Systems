@@ -1,0 +1,13 @@
+{
+  "dataset_name": "Splunk_BOTS",
+  "scenario": null,
+  "format": "mixed_siem_exports",
+  "description": "Multi-source SIEM/Splunk security logs, potentially including Windows, firewall, web, IDS, and application telemetry.",
+  "time_field_candidates": ["_time", "timestamp", "time", "@timestamp"],
+  "event_id_field_candidates": ["EventCode", "event.code", "sourcetype", "source"],
+  "host_field_candidates": ["host", "ComputerName", "dest", "src"],
+  "user_field_candidates": ["user", "User", "Account_Name", "src_user"],
+  "message_field_candidates": ["_raw", "message", "CommandLine", "process"],
+  "notes": "Backup profile draft only. BOTS uses heterogeneous sourcetypes, so sample rows and inferred summaries should drive extraction."
+}
+

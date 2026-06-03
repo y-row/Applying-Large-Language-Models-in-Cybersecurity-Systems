@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stage 1 Normalized Log",
+  "type": "object",
+  "required": ["event_uid", "dataset", "scenario", "source_file", "source_line", "text_for_embedding"],
+  "properties": {
+    "event_uid": {"type": "string"},
+    "dataset": {"type": ["string", "null"]},
+    "scenario": {"type": ["string", "null"]},
+    "source_file": {"type": "string"},
+    "source_line": {"type": ["integer", "string", "null"]},
+    "text_for_embedding": {"type": "string"}
+  },
+  "additionalProperties": true
+}

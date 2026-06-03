@@ -1,0 +1,26 @@
+{
+  "task_name": "extract_suspicious_powershell",
+  "goal": "Extract suspicious PowerShell execution events, including encoded commands and unusual command-line flags.",
+  "target_event_types": ["suspicious_powershell"],
+  "required_fields": [
+    "timestamp",
+    "host",
+    "user",
+    "event_id",
+    "event_type",
+    "process_name",
+    "process_path",
+    "command_line",
+    "parent_process_name",
+    "parent_command_line",
+    "process_id",
+    "parent_process_id",
+    "source_ip",
+    "dest_ip",
+    "dest_port",
+    "raw_message",
+    "source_line"
+  ],
+  "output_format": "jsonl"
+}
+

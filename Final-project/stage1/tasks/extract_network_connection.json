@@ -1,0 +1,53 @@
+{
+  "task_name": "extract_network_connection",
+  "goal": "Extract network connection events from security logs.",
+  "target_event_types": ["network_connection"],
+  "required_fields": [
+    "timestamp",
+    "host",
+    "user",
+    "event_id",
+    "source_event_id",
+    "event_type",
+    "process_name",
+    "process_path",
+    "command_line",
+    "parent_process_name",
+    "parent_command_line",
+    "process_id",
+    "parent_process_id",
+    "source_ip",
+    "source_port",
+    "dest_ip",
+    "dest_port",
+    "protocol",
+    "service",
+    "conn_state",
+    "raw_message",
+    "source_line"
+  ],
+  "task_keywords": [
+    "network connection",
+    "source ip",
+    "source port",
+    "src_ip",
+    "src_port",
+    "dest ip",
+    "dest port",
+    "protocol",
+    "service",
+    "conn_state",
+    "uid",
+    "request_id",
+    "record_id",
+    "source_event_id"
+  ],
+  "field_aliases": {
+    "src_ip": "source_ip",
+    "src_port": "source_port",
+    "uid": "source_event_id",
+    "request_id": "source_event_id",
+    "record_id": "source_event_id"
+  },
+  "output_format": "jsonl"
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stage 1 Candidate Event",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "host",
+    "user",
+    "event_id",
+    "event_type",
+    "process_name",
+    "process_path",
+    "command_line",
+    "parent_process_name",
+    "parent_command_line",
+    "process_id",
+    "parent_process_id",
+    "source_ip",
+    "dest_ip",
+    "dest_port",
+    "raw_message",
+    "source_line"
+  ],
+  "properties": {
+    "timestamp": {"type": ["string", "number", "null"]},
+    "host": {"type": ["string", "null"]},
+    "user": {"type": ["string", "null"]},
+    "event_uid": {
+      "type": ["string", "null"],
+      "description": "Stage 1 generated evidence identifier, usually assigned during normalization."
+    },
+    "event_id": {"type": ["string", "number", "null"]},
+    "source_event_id": {
+      "type": ["string", "number", "null"],
+      "description": "Source log record, session, request, or connection identifier such as Zeek uid, cloud request_id, or record_id."
+    },
+    "event_type": {"type": ["string", "null"]},
+    "process_name": {"type": ["string", "null"]},
+    "process_path": {"type": ["string", "null"]},
+    "command_line": {"type": ["string", "null"]},
+    "parent_process_name": {"type": ["string", "null"]},
+    "parent_command_line": {"type": ["string", "null"]},
+    "process_id": {"type": ["string", "number", "null"]},
+    "parent_process_id": {"type": ["string", "number", "null"]},
+    "source_ip": {"type": ["string", "null"]},
+    "source_port": {"type": ["string", "number", "null"]},
+    "dest_ip": {"type": ["string", "null"]},
+    "dest_port": {"type": ["string", "number", "null"]},
+    "protocol": {"type": ["string", "number", "null"]},
+    "service": {"type": ["string", "null"]},
+    "conn_state": {"type": ["string", "null"]},
+    "mitre_attack_tactics": {"type": ["string", "array", "null"]},
+    "raw_message": {"type": ["string", "null"]},
+    "source_line": {"type": ["integer", "string", "null"]}
+  },
+  "additionalProperties": true
+}

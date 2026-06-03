@@ -1,0 +1,34 @@
+{
+  "task_name": "extract_registry_modification",
+  "goal": "Extract registry modification events from security logs.",
+  "target_event_types": ["registry_modification"],
+  "task_keywords": [
+    "registry value set",
+    "registry object",
+    "target object",
+    "setvalue",
+    "createkey",
+    "EventID 12",
+    "EventID 13"
+  ],
+  "required_fields": [
+    "timestamp",
+    "host",
+    "user",
+    "event_id",
+    "event_type",
+    "process_name",
+    "process_path",
+    "command_line",
+    "parent_process_name",
+    "parent_command_line",
+    "process_id",
+    "parent_process_id",
+    "source_ip",
+    "dest_ip",
+    "dest_port",
+    "raw_message",
+    "source_line"
+  ],
+  "output_format": "jsonl"
+}

@@ -1,0 +1,28 @@
+{
+  "dataset_summary": "The sample contains Zeek-like network connection rows with source and destination IPs, ports, protocol, connection state, UIDs, and MITRE tactic labels. No process creation fields or Windows EventID 1/4688 evidence are present.",
+  "available_event_types": [
+    {
+      "event_type": "network_connection",
+      "evidence": "Rows include src_ip, dest_ip, dest_port, protocol, conn_state, uid, and datetime fields.",
+      "support_level": "high",
+      "likely_fields": ["datetime", "src_ip", "dest_ip", "dest_port", "protocol", "conn_state", "uid"],
+      "sample_event_ids": ["conn"]
+    }
+  ],
+  "recommended_tasks": [
+    {
+      "task_name": "extract_network_connection",
+      "priority": 100,
+      "reason": "Network connection evidence is directly represented in every Zeek-like row and is useful for Stage 2 grouping.",
+      "target_event_types": ["network_connection"],
+      "task_keywords": ["network connection", "source ip", "source port", "dest ip", "dest port", "protocol", "service", "conn_state", "uid", "source_event_id"],
+      "required_fields": ["timestamp", "source_ip", "source_port", "dest_ip", "dest_port", "protocol", "service", "conn_state", "source_event_id", "raw_message", "source_line"]
+    }
+  ],
+  "not_recommended_tasks": [
+    {
+      "task_name": "extract_process_creation",
+      "reason": "No process creation fields, Sysmon EventID 1, or Security 4688 evidence are present."
+    }
+  ]
+}
