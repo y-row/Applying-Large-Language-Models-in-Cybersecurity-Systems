@@ -1,0 +1,30 @@
+{
+  "input_summary": {
+    "input_log_count": 9000,
+    "valid_log_count": 9000,
+    "invalid_log_count": 0
+  },
+  "clustering_summary": {
+    "algorithm": "DBSCAN",
+    "metric": "cosine",
+    "eps": 0.01,
+    "min_samples": 10,
+    "number_of_clusters": 6,
+    "noise_count": 3234,
+    "noise_ratio": 0.3593,
+    "cluster_size_distribution": {
+      "cluster_000": 5311,
+      "cluster_001": 256,
+      "cluster_002": 55,
+      "cluster_003": 112,
+      "cluster_004": 12,
+      "cluster_005": 20,
+      "noise": 3234
+    }
+  },
+  "quality_metrics": {
+    "silhouette_score": 0.3974711000919342,
+    "davies_bouldin_index": 1.0890254553965482
+  },
+  "evaluation_notes": []
+}

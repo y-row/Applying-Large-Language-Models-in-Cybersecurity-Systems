@@ -1,14 +1,5 @@
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-
-.Python
-.venv/
-venv/
-env/
-
-.DS_Store
 
 # data/ (too big)
 **/stage2_input.jsonl

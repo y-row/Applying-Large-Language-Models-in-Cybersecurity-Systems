@@ -1,0 +1,28 @@
+{
+  "input_summary": {
+    "input_log_count": 1533064,
+    "valid_log_count": 1533064,
+    "invalid_log_count": 0
+  },
+  "clustering_summary": {
+    "algorithm": "DBSCAN",
+    "metric": "cosine",
+    "eps": 0.05,
+    "min_samples": 30,
+    "number_of_clusters": 1,
+    "noise_count": 843,
+    "noise_ratio": 0.0005,
+    "cluster_size_distribution": {
+      "cluster_000": 1532221,
+      "noise": 843
+    }
+  },
+  "quality_metrics": {
+    "silhouette_score": null,
+    "davies_bouldin_index": null
+  },
+  "evaluation_notes": [
+    "Less than two valid clusters after excluding noise label -1.",
+    "[WARNING] noise_ratio < 0.05 (eps may be too large, mixing benign and malicious logs)"
+  ]
+}

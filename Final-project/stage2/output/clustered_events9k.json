@@ -1,0 +1,958 @@
+[
+  {
+    "cluster_id": "cluster_000",
+    "total_count": 5311,
+    "time_range": {
+      "start": "2022-01-09T00:00:37.204Z",
+      "end": "2022-02-10T03:59:50.080Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E007018",
+        "timestamp": "2022-01-09T00:00:37.204Z",
+        "text": "At 2022-01-09T00:00:37.204Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Ck0yhW1hZfykPN1hRf | process=None | command=None | parent=None | source=143.88.255.10:46257 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007018@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9322"
+      },
+      {
+        "log_id": "E004958",
+        "timestamp": "2022-01-09T00:03:08.453Z",
+        "text": "At 2022-01-09T00:03:08.453Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CAhh7k3YIze9sTxtwj | process=None | command=None | parent=None | source=143.88.255.10:37766 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004958@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7262"
+      },
+      {
+        "log_id": "E007021",
+        "timestamp": "2022-01-09T00:06:40.203Z",
+        "text": "At 2022-01-09T00:06:40.203Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cx9hX42WE6L5h39gH5 | process=None | command=None | parent=None | source=143.88.255.10:47975 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007021@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9325"
+      },
+      {
+        "log_id": "E007269",
+        "timestamp": "2022-01-09T00:11:12.452Z",
+        "text": "At 2022-01-09T00:11:12.452Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cg1qczbO57PtgDgol | process=None | command=None | parent=None | source=143.88.255.10:40138 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007269@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9573"
+      },
+      {
+        "log_id": "E003624",
+        "timestamp": "2022-01-09T00:13:43.703Z",
+        "text": "At 2022-01-09T00:13:43.703Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CP0xVg1zK7mZGq60gc | process=None | command=None | parent=None | source=143.88.255.10:53673 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003624@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5928"
+      },
+      {
+        "log_id": "E005431",
+        "timestamp": "2022-01-09T00:18:15.953Z",
+        "text": "At 2022-01-09T00:18:15.953Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CZsEmc4y4ZhRUJDGJf | process=None | command=None | parent=None | source=143.88.255.10:47680 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005431@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7735"
+      },
+      {
+        "log_id": "E004493",
+        "timestamp": "2022-01-09T00:21:17.453Z",
+        "text": "At 2022-01-09T00:21:17.453Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CPHaNx3sR6YXMS8y5c | process=None | command=None | parent=None | source=143.88.255.10:39553 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004493@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6797"
+      },
+      {
+        "log_id": "E005043",
+        "timestamp": "2022-01-09T00:22:48.204Z",
+        "text": "At 2022-01-09T00:22:48.204Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CV4xVr4jx9xNn0cMX6 | process=None | command=None | parent=None | source=143.88.255.10:42103 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005043@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7347"
+      },
+      {
+        "log_id": "E005751",
+        "timestamp": "2022-01-09T00:31:52.705Z",
+        "text": "At 2022-01-09T00:31:52.705Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CT2mf63GXWiudK2E83 | process=None | command=None | parent=None | source=143.88.255.10:41514 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005751@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8055"
+      },
+      {
+        "log_id": "E005917",
+        "timestamp": "2022-01-09T00:32:22.953Z",
+        "text": "At 2022-01-09T00:32:22.953Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CPDTAFcbv9fEkjJX6 | process=None | command=None | parent=None | source=143.88.255.10:33711 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005917@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8221"
+      },
+      {
+        "log_id": "E007125",
+        "timestamp": "2022-01-09T00:43:28.457Z",
+        "text": "At 2022-01-09T00:43:28.457Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CCxZdB3jyl1KIitP8c | process=None | command=None | parent=None | source=143.88.255.10:56077 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007125@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9429"
+      },
+      {
+        "log_id": "E002959",
+        "timestamp": "2022-01-09T00:49:58.286Z",
+        "text": "At 2022-01-09T00:49:58.286Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CkUR8d3zdwQC3bru64 | process=None | command=None | parent=None | source=143.88.11.10:46306 | dest=8.8.8.8:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002959@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5263"
+      },
+      {
+        "log_id": "E005928",
+        "timestamp": "2022-01-09T01:10:41.958Z",
+        "text": "At 2022-01-09T01:10:41.958Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CDQOHB2D1eMSjQQyR6 | process=None | command=None | parent=None | source=143.88.255.10:43288 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005928@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8232"
+      },
+      {
+        "log_id": "E003848",
+        "timestamp": "2022-01-09T01:14:43.958Z",
+        "text": "At 2022-01-09T01:14:43.958Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3gI8qJpmToCDBjii | process=None | command=None | parent=None | source=143.88.255.10:58931 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003848@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6152"
+      },
+      {
+        "log_id": "E003976",
+        "timestamp": "2022-01-09T01:24:18.708Z",
+        "text": "At 2022-01-09T01:24:18.708Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3P7lp3gXZjbG69Mtl | process=None | command=None | parent=None | source=143.88.255.10:58352 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003976@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6280"
+      },
+      {
+        "log_id": "E004560",
+        "timestamp": "2022-01-09T01:24:48.959Z",
+        "text": "At 2022-01-09T01:24:48.959Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C74G464vYOD28lEk1b | process=None | command=None | parent=None | source=143.88.255.10:36536 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004560@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6864"
+      },
+      {
+        "log_id": "E006789",
+        "timestamp": "2022-01-09T01:28:20.706Z",
+        "text": "At 2022-01-09T01:28:20.706Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CK1CII3mNZyNOKJLOi | process=None | command=None | parent=None | source=143.88.255.10:48381 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E006789@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9093"
+      },
+      {
+        "log_id": "E003704",
+        "timestamp": "2022-01-09T01:33:23.207Z",
+        "text": "At 2022-01-09T01:33:23.207Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CAKlwg3g05J4kRST7d | process=None | command=None | parent=None | source=143.88.255.10:34067 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003704@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6008"
+      },
+      {
+        "log_id": "E005481",
+        "timestamp": "2022-01-09T01:34:23.709Z",
+        "text": "At 2022-01-09T01:34:23.709Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CkZEtc4IPCqrJVmbs6 | process=None | command=None | parent=None | source=143.88.255.10:37899 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005481@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7785"
+      },
+      {
+        "log_id": "E006123",
+        "timestamp": "2022-01-09T01:46:29.711Z",
+        "text": "At 2022-01-09T01:46:29.711Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CW4iqi2xskD1n79ZVc | process=None | command=None | parent=None | source=143.88.255.10:58254 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E006123@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8427"
+      },
+      {
+        "log_id": "E003232",
+        "timestamp": "2022-01-09T01:53:02.957Z",
+        "text": "At 2022-01-09T01:53:02.957Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CL2K2f3fvs7ZS8ZPM9 | process=None | command=None | parent=None | source=143.88.255.10:38774 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003232@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5536"
+      },
+      {
+        "log_id": "E004735",
+        "timestamp": "2022-01-09T01:53:02.959Z",
+        "text": "At 2022-01-09T01:53:02.959Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C0LMlz3hyWO1VtWCjj | process=None | command=None | parent=None | source=143.88.255.10:43823 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004735@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7039"
+      },
+      {
+        "log_id": "E004443",
+        "timestamp": "2022-01-09T02:04:38.710Z",
+        "text": "At 2022-01-09T02:04:38.710Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CpC76F3iP3Lds5vD45 | process=None | command=None | parent=None | source=143.88.255.10:34329 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004443@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6747"
+      },
+      {
+        "log_id": "E005401",
+        "timestamp": "2022-01-09T02:06:09.461Z",
+        "text": "At 2022-01-09T02:06:09.461Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C0JY1Y2ZeKp7Lbs0Bj | process=None | command=None | parent=None | source=143.88.255.10:49378 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005401@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7705"
+      },
+      {
+        "log_id": "E005828",
+        "timestamp": "2022-01-09T02:23:48.210Z",
+        "text": "At 2022-01-09T02:23:48.210Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C89Fax1v9JpJIXUoWi | process=None | command=None | parent=None | source=143.88.255.10:35135 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005828@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8132"
+      },
+      {
+        "log_id": "E005593",
+        "timestamp": "2022-01-09T02:25:18.960Z",
+        "text": "At 2022-01-09T02:25:18.960Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CCr3iF3dlDqj7Yntr5 | process=None | command=None | parent=None | source=143.88.255.10:54082 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005593@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7897"
+      },
+      {
+        "log_id": "E007516",
+        "timestamp": "2022-01-09T02:28:20.462Z",
+        "text": "At 2022-01-09T02:28:20.462Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CEEY6YbNOJ1sf3ev9 | process=None | command=None | parent=None | source=143.88.255.10:52084 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007516@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9820"
+      },
+      {
+        "log_id": "E002743",
+        "timestamp": "2022-01-09T02:40:56.338Z",
+        "text": "At 2022-01-09T02:40:56.338Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C2akGN2ZJQwY5gbA09 | process=None | command=None | parent=None | source=0.0.0.0:68 | dest=255.255.255.255:67 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002743@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5047"
+      },
+      {
+        "log_id": "E005999",
+        "timestamp": "2022-01-09T02:53:02.713Z",
+        "text": "At 2022-01-09T02:53:02.713Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CsLOLT2xo3udp4aBYg | process=None | command=None | parent=None | source=143.88.255.10:50591 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005999@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8303"
+      },
+      {
+        "log_id": "E004218",
+        "timestamp": "2022-01-09T02:57:04.709Z",
+        "text": "At 2022-01-09T02:57:04.709Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C9IoC5k0gFTLroATg | process=None | command=None | parent=None | source=143.88.255.10:35185 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004218@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6522"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "0.0.0.0",
+        "10.0.10.1",
+        "143.88.0.18",
+        "143.88.0.42",
+        "143.88.11.1",
+        "143.88.11.10",
+        "143.88.11.11",
+        "143.88.11.12",
+        "143.88.11.13",
+        "143.88.11.255",
+        "143.88.255.10",
+        "143.88.5.1",
+        "143.88.5.12",
+        "172.28.128.255",
+        "172.28.128.3",
+        "192.112.36.4",
+        "192.203.230.10",
+        "192.33.4.12",
+        "192.36.148.17",
+        "192.5.5.241",
+        "192.58.128.30",
+        "193.0.14.129",
+        "198.41.0.4",
+        "198.97.190.53",
+        "199.7.83.42",
+        "199.7.91.13",
+        "199.9.14.201",
+        "202.12.27.33",
+        "224.0.0.251",
+        "224.0.0.252",
+        "255.255.255.255",
+        "8.8.4.4",
+        "8.8.8.8"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_001",
+    "total_count": 256,
+    "time_range": {
+      "start": "2022-02-10T03:58:50.008Z",
+      "end": "2022-02-10T03:58:50.008Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E000513",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000513@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1281"
+      },
+      {
+        "log_id": "E000514",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000514@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1282"
+      },
+      {
+        "log_id": "E000515",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000515@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1283"
+      },
+      {
+        "log_id": "E000516",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000516@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1284"
+      },
+      {
+        "log_id": "E000517",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000517@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1285"
+      },
+      {
+        "log_id": "E000518",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000518@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1286"
+      },
+      {
+        "log_id": "E000519",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000519@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1287"
+      },
+      {
+        "log_id": "E000520",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000520@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1288"
+      },
+      {
+        "log_id": "E000521",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000521@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1289"
+      },
+      {
+        "log_id": "E000522",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000522@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1290"
+      },
+      {
+        "log_id": "E000523",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000523@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1291"
+      },
+      {
+        "log_id": "E000524",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000524@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1292"
+      },
+      {
+        "log_id": "E000525",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000525@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1293"
+      },
+      {
+        "log_id": "E000526",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000526@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1294"
+      },
+      {
+        "log_id": "E000527",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000527@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1295"
+      },
+      {
+        "log_id": "E000528",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000528@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1296"
+      },
+      {
+        "log_id": "E000529",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000529@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1297"
+      },
+      {
+        "log_id": "E000530",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000530@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1298"
+      },
+      {
+        "log_id": "E000531",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000531@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1299"
+      },
+      {
+        "log_id": "E000532",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000532@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1300"
+      },
+      {
+        "log_id": "E000533",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000533@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1301"
+      },
+      {
+        "log_id": "E000534",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000534@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1302"
+      },
+      {
+        "log_id": "E000535",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000535@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1303"
+      },
+      {
+        "log_id": "E000536",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000536@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1304"
+      },
+      {
+        "log_id": "E000537",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000537@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1305"
+      },
+      {
+        "log_id": "E000538",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000538@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1306"
+      },
+      {
+        "log_id": "E000539",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000539@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1307"
+      },
+      {
+        "log_id": "E000540",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000540@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1308"
+      },
+      {
+        "log_id": "E000541",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000541@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1309"
+      },
+      {
+        "log_id": "E000542",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000542@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1310"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "143.88.5.1",
+        "143.88.5.12"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_002",
+    "total_count": 55,
+    "time_range": {
+      "start": "2022-01-11T00:35:25.161Z",
+      "end": "2022-01-14T10:14:20.966Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E002494",
+        "timestamp": "2022-01-11T00:35:25.161Z",
+        "text": "At 2022-01-11T00:35:25.161Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Csc8eG31QlhT0tEUxg | process=None | command=None | parent=None | source=143.88.11.10:51750 | dest=169.254.169.254:80 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002494@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4798"
+      },
+      {
+        "log_id": "E002328",
+        "timestamp": "2022-01-11T10:46:05.039Z",
+        "text": "At 2022-01-11T10:46:05.039Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CmdBJQ2f63ZluIZhw5 | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:9500 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002328@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4632"
+      },
+      {
+        "log_id": "E002336",
+        "timestamp": "2022-01-11T10:46:05.339Z",
+        "text": "At 2022-01-11T10:46:05.339Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CH6HZs3hAhfH5dTsX2 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:3369 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002336@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4640"
+      },
+      {
+        "log_id": "E002344",
+        "timestamp": "2022-01-11T10:46:06.641Z",
+        "text": "At 2022-01-11T10:46:06.641Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C9fLz14NmPi0IDZCk1 | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:306 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002344@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4648"
+      },
+      {
+        "log_id": "E002323",
+        "timestamp": "2022-01-11T10:46:07.142Z",
+        "text": "At 2022-01-11T10:46:07.142Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CHlYR04K6AyoJo0BM2 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:1035 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002323@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4627"
+      },
+      {
+        "log_id": "E002329",
+        "timestamp": "2022-01-11T10:46:07.542Z",
+        "text": "At 2022-01-11T10:46:07.542Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CM5Mtqrvn9s32Tn46 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:1805 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002329@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4633"
+      },
+      {
+        "log_id": "E002324",
+        "timestamp": "2022-01-11T10:46:09.045Z",
+        "text": "At 2022-01-11T10:46:09.045Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C4gjli1V7Zd9qlFvkk | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:1034 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002324@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4628"
+      },
+      {
+        "log_id": "E002332",
+        "timestamp": "2022-01-11T10:46:10.747Z",
+        "text": "At 2022-01-11T10:46:10.747Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Ck428E273DM86afS1k | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:10215 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002332@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4636"
+      },
+      {
+        "log_id": "E002325",
+        "timestamp": "2022-01-11T10:46:11.348Z",
+        "text": "At 2022-01-11T10:46:11.348Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CHfJm72DEsy9gzs1Qa | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:1213 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002325@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4629"
+      },
+      {
+        "log_id": "E002326",
+        "timestamp": "2022-01-11T10:46:12.850Z",
+        "text": "At 2022-01-11T10:46:12.850Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cu6ofM1FtpM595Jag | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:37 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002326@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4630"
+      },
+      {
+        "log_id": "E002346",
+        "timestamp": "2022-01-11T10:46:12.950Z",
+        "text": "At 2022-01-11T10:46:12.950Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CkJX4C4Zw7LGXLNF83 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:79 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002346@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4650"
+      },
+      {
+        "log_id": "E002321",
+        "timestamp": "2022-01-11T10:46:14.452Z",
+        "text": "At 2022-01-11T10:46:14.452Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C8C1p13HHevK3Ju4w4 | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:222 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002321@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4625"
+      },
+      {
+        "log_id": "E002341",
+        "timestamp": "2022-01-11T10:46:16.855Z",
+        "text": "At 2022-01-11T10:46:16.855Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C6Th5FQTusKjdS67k | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:5962 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002341@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4645"
+      },
+      {
+        "log_id": "E002338",
+        "timestamp": "2022-01-11T10:46:19.559Z",
+        "text": "At 2022-01-11T10:46:19.559Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cx6aJK1YqseFL0g8T8 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:2119 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002338@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4642"
+      },
+      {
+        "log_id": "E002446",
+        "timestamp": "2022-01-11T10:47:55.282Z",
+        "text": "At 2022-01-11T10:47:55.282Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CQA1pr4WPhKMf4mAre | process=None | command=None | parent=None | source=143.88.11.10:55184 | dest=143.88.11.1:7937 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002446@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4750"
+      },
+      {
+        "log_id": "E002427",
+        "timestamp": "2022-01-11T10:47:55.783Z",
+        "text": "At 2022-01-11T10:47:55.783Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CYCjfhqDF06gJ8X8k | process=None | command=None | parent=None | source=143.88.11.10:47212 | dest=143.88.11.1:27353 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002427@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4731"
+      },
+      {
+        "log_id": "E002458",
+        "timestamp": "2022-01-11T10:47:56.383Z",
+        "text": "At 2022-01-11T10:47:56.383Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cdv5Si1ryX4ZiyQqAg | process=None | command=None | parent=None | source=143.88.11.10:51438 | dest=143.88.11.1:8193 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002458@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4762"
+      },
+      {
+        "log_id": "E002448",
+        "timestamp": "2022-01-11T10:48:00.986Z",
+        "text": "At 2022-01-11T10:48:00.986Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CzWY723z4USUCTEAEd | process=None | command=None | parent=None | source=143.88.11.10:39420 | dest=143.88.11.1:6009 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002448@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4752"
+      },
+      {
+        "log_id": "E002454",
+        "timestamp": "2022-01-11T10:48:05.888Z",
+        "text": "At 2022-01-11T10:48:05.888Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CbMJNGa0VC6kNzc91 | process=None | command=None | parent=None | source=143.88.11.10:45544 | dest=143.88.11.1:8400 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002454@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4758"
+      },
+      {
+        "log_id": "E002452",
+        "timestamp": "2022-01-11T10:48:06.488Z",
+        "text": "At 2022-01-11T10:48:06.488Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C90VUN1Gdtkjo8TDtj | process=None | command=None | parent=None | source=143.88.11.10:42966 | dest=143.88.11.1:7000 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002452@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4756"
+      },
+      {
+        "log_id": "E002438",
+        "timestamp": "2022-01-11T10:48:07.489Z",
+        "text": "At 2022-01-11T10:48:07.489Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C4QzjB4zxCZUAlwJ0g | process=None | command=None | parent=None | source=143.88.11.10:53150 | dest=143.88.11.1:7512 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002438@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4742"
+      },
+      {
+        "log_id": "E002423",
+        "timestamp": "2022-01-11T10:53:45.632Z",
+        "text": "At 2022-01-11T10:53:45.632Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3b7ye2KwggIV6BgKg | process=None | command=None | parent=None | source=143.88.11.10:50916 | dest=143.88.11.1:143 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002423@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4727"
+      },
+      {
+        "log_id": "E002457",
+        "timestamp": "2022-01-11T10:53:47.033Z",
+        "text": "At 2022-01-11T10:53:47.033Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CFYOn710b8YXaS6Y6f | process=None | command=None | parent=None | source=143.88.11.10:34536 | dest=143.88.11.1:2161 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002457@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4761"
+      },
+      {
+        "log_id": "E002455",
+        "timestamp": "2022-01-11T10:53:49.234Z",
+        "text": "At 2022-01-11T10:53:49.234Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3JmGW3K9fOvmwPMc3 | process=None | command=None | parent=None | source=143.88.11.10:59956 | dest=143.88.11.1:3322 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002455@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4759"
+      },
+      {
+        "log_id": "E002420",
+        "timestamp": "2022-01-11T10:53:49.834Z",
+        "text": "At 2022-01-11T10:53:49.834Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CM95xU2NdESRiqbNRa | process=None | command=None | parent=None | source=143.88.11.10:47456 | dest=143.88.11.1:2605 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002420@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4724"
+      },
+      {
+        "log_id": "E002447",
+        "timestamp": "2022-01-11T10:53:50.935Z",
+        "text": "At 2022-01-11T10:53:50.935Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CcZj9rhIGlXTqejkl | process=None | command=None | parent=None | source=143.88.11.10:32888 | dest=143.88.11.1:27000 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002447@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4751"
+      },
+      {
+        "log_id": "E002432",
+        "timestamp": "2022-01-11T10:53:53.837Z",
+        "text": "At 2022-01-11T10:53:53.837Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7b6Xt490Tvb0Y9ki2 | process=None | command=None | parent=None | source=143.88.11.10:38230 | dest=143.88.11.1:3880 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002432@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4736"
+      },
+      {
+        "log_id": "E002440",
+        "timestamp": "2022-01-11T10:53:56.938Z",
+        "text": "At 2022-01-11T10:53:56.938Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CN6pRt3mS8QWDrfCHh | process=None | command=None | parent=None | source=143.88.11.10:40362 | dest=143.88.11.1:3689 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002440@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4744"
+      },
+      {
+        "log_id": "E002414",
+        "timestamp": "2022-01-11T10:53:58.039Z",
+        "text": "At 2022-01-11T10:53:58.039Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CyfOBF8j9OX73eu7e | process=None | command=None | parent=None | source=143.88.11.10:56540 | dest=143.88.11.1:5060 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002414@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4718"
+      },
+      {
+        "log_id": "E002399",
+        "timestamp": "2022-01-14T08:44:55.109Z",
+        "text": "At 2022-01-14T08:44:55.109Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C8fa5K2Oe12bJm7906 | process=None | command=None | parent=None | source=143.88.11.10:42402 | dest=143.88.11.11:7920 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002399@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4703"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "143.88.11.1",
+        "143.88.11.10",
+        "143.88.11.11",
+        "169.254.169.254"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_003",
+    "total_count": 112,
+    "time_range": {
+      "start": "2022-01-09T01:37:22.415Z",
+      "end": "2022-01-15T23:34:40.712Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E002502",
+        "timestamp": "2022-01-09T01:37:22.415Z",
+        "text": "At 2022-01-09T01:37:22.415Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CulDlh1w4tJttwcD22 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002502@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4806"
+      },
+      {
+        "log_id": "E002921",
+        "timestamp": "2022-01-09T05:11:59.669Z",
+        "text": "At 2022-01-09T05:11:59.669Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CZfO1wvvW2KSKqGOk | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:33689 | dest=2001:503:c27::2:30:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002921@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5225"
+      },
+      {
+        "log_id": "E002647",
+        "timestamp": "2022-01-09T06:37:42.015Z",
+        "text": "At 2022-01-09T06:37:42.015Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7CZvu4GDz5XNROHSi | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002647@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4951"
+      },
+      {
+        "log_id": "E002503",
+        "timestamp": "2022-01-09T07:19:47.226Z",
+        "text": "At 2022-01-09T07:19:47.226Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CR1UaQ1rQh0XrwJqCj | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002503@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4807"
+      },
+      {
+        "log_id": "E002504",
+        "timestamp": "2022-01-09T07:25:38.627Z",
+        "text": "At 2022-01-09T07:25:38.627Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CZnXWR3lcvZvW6dq52 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002504@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4808"
+      },
+      {
+        "log_id": "E002659",
+        "timestamp": "2022-01-09T09:49:52.805Z",
+        "text": "At 2022-01-09T09:49:52.805Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C2BVnx19TMubOfpG65 | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002659@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4963"
+      },
+      {
+        "log_id": "E002909",
+        "timestamp": "2022-01-10T00:15:17.914Z",
+        "text": "At 2022-01-10T00:15:17.914Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CJ5Xhw4s9QZIbl24O6 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:54505 | dest=2001:500:2f::f:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002909@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5213"
+      },
+      {
+        "log_id": "E002923",
+        "timestamp": "2022-01-10T01:15:27.117Z",
+        "text": "At 2022-01-10T01:15:27.117Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRaPW72ViP6qBlUtz1 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:42625 | dest=2001:7fd::1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002923@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5227"
+      },
+      {
+        "log_id": "E002641",
+        "timestamp": "2022-01-10T03:09:04.490Z",
+        "text": "At 2022-01-10T03:09:04.490Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7taTM1nuRG78oabLd | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002641@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4945"
+      },
+      {
+        "log_id": "E002506",
+        "timestamp": "2022-01-10T05:50:28.622Z",
+        "text": "At 2022-01-10T05:50:28.622Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cg8HfB4qs3lcRCT551 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002506@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4810"
+      },
+      {
+        "log_id": "E002931",
+        "timestamp": "2022-01-10T08:16:29.153Z",
+        "text": "At 2022-01-10T08:16:29.153Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CHTfpl3qgXcZcUam5l | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:37707 | dest=2001:7fe::53:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002931@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5235"
+      },
+      {
+        "log_id": "E002939",
+        "timestamp": "2022-01-10T15:08:53.913Z",
+        "text": "At 2022-01-10T15:08:53.913Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cgv1Ie4dHqEZyalje9 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:9068:5353 | dest=ff02::fb:5353 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002939@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5243"
+      },
+      {
+        "log_id": "E002915",
+        "timestamp": "2022-01-10T15:17:40.032Z",
+        "text": "At 2022-01-10T15:17:40.032Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CPV5qk4nsRJ15dGdd2 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:58356 | dest=2001:500:9f::42:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002915@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5219"
+      },
+      {
+        "log_id": "E002928",
+        "timestamp": "2022-01-10T17:18:07.290Z",
+        "text": "At 2022-01-10T17:18:07.290Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CaH4eM2KCUN7Xr4mW4 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:42920 | dest=2001:7fe::53:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002928@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5232"
+      },
+      {
+        "log_id": "E002507",
+        "timestamp": "2022-01-10T18:02:03.496Z",
+        "text": "At 2022-01-10T18:02:03.496Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CIuL6A25hALxE3bVJc | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002507@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4811"
+      },
+      {
+        "log_id": "E002889",
+        "timestamp": "2022-01-10T19:18:24.900Z",
+        "text": "At 2022-01-10T19:18:24.900Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CbKpCe4ebc8RJ4sUmi | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:48999 | dest=2001:500:12::d0d:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002889@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5193"
+      },
+      {
+        "log_id": "E002508",
+        "timestamp": "2022-01-10T19:30:29.999Z",
+        "text": "At 2022-01-10T19:30:29.999Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CbeXhD2Wr3nBozgqL8 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002508@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4812"
+      },
+      {
+        "log_id": "E002662",
+        "timestamp": "2022-01-10T19:38:26.709Z",
+        "text": "At 2022-01-10T19:38:26.709Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C8mkoxLk9zxglzfK9 | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002662@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4966"
+      },
+      {
+        "log_id": "E002904",
+        "timestamp": "2022-01-10T20:18:31.694Z",
+        "text": "At 2022-01-10T20:18:31.694Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CBw8vF3MySqrhDZsP9 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:43059 | dest=2001:500:2d::d:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002904@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5208"
+      },
+      {
+        "log_id": "E002900",
+        "timestamp": "2022-01-10T23:19:07.355Z",
+        "text": "At 2022-01-10T23:19:07.355Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CAO6Ad44lNiv1kSgl5 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:49839 | dest=2001:500:2::c:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002900@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5204"
+      },
+      {
+        "log_id": "E002509",
+        "timestamp": "2022-01-11T01:01:05.060Z",
+        "text": "At 2022-01-11T01:01:05.060Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CMCBZI2HNRAti5aB8e | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002509@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4813"
+      },
+      {
+        "log_id": "E002510",
+        "timestamp": "2022-01-11T01:28:31.321Z",
+        "text": "At 2022-01-11T01:28:31.321Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CwHClw34MZPUYhViO5 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002510@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4814"
+      },
+      {
+        "log_id": "E002898",
+        "timestamp": "2022-01-11T03:19:41.770Z",
+        "text": "At 2022-01-11T03:19:41.770Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=COhXQ94xF4XwXH1zsg | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:54328 | dest=2001:500:200::b:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002898@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5202"
+      },
+      {
+        "log_id": "E002511",
+        "timestamp": "2022-01-11T04:52:52.428Z",
+        "text": "At 2022-01-11T04:52:52.428Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRQ5B24Xu2G1glnvx6 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002511@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4815"
+      },
+      {
+        "log_id": "E002512",
+        "timestamp": "2022-01-11T05:56:00.780Z",
+        "text": "At 2022-01-11T05:56:00.780Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CTWYt31sOGz1Qyqimk | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002512@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4816"
+      },
+      {
+        "log_id": "E002513",
+        "timestamp": "2022-01-11T07:09:31.883Z",
+        "text": "At 2022-01-11T07:09:31.883Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CZDoA81suGSJPNCD27 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002513@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4817"
+      },
+      {
+        "log_id": "E002646",
+        "timestamp": "2022-01-11T10:51:34.018Z",
+        "text": "At 2022-01-11T10:51:34.018Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C4wWK3vLxcX4yAm09 | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002646@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4950"
+      },
+      {
+        "log_id": "E002922",
+        "timestamp": "2022-01-11T12:21:17.491Z",
+        "text": "At 2022-01-11T12:21:17.491Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CnykMejMovH2sUtDi | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:51319 | dest=2001:7fd::1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002922@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5226"
+      },
+      {
+        "log_id": "E002514",
+        "timestamp": "2022-01-11T13:02:52.794Z",
+        "text": "At 2022-01-11T13:02:52.794Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CHU25Bi549g3E5Ez3 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002514@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4818"
+      },
+      {
+        "log_id": "E002661",
+        "timestamp": "2022-01-11T14:46:27.206Z",
+        "text": "At 2022-01-11T14:46:27.206Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CJhC2I6rwc10iNCb3 | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002661@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4965"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "2001:500:12::d0d",
+        "2001:500:1::53",
+        "2001:500:200::b",
+        "2001:500:2::c",
+        "2001:500:2d::d",
+        "2001:500:2f::f",
+        "2001:500:9f::42",
+        "2001:500:a8::e",
+        "2001:503:ba3e::2:30",
+        "2001:503:c27::2:30",
+        "2001:7fd::1",
+        "2001:7fe::53",
+        "2001:dc3::35",
+        "fe80::143e:e94b:597c:a35b",
+        "fe80::250:56ff:fe9e:39e5",
+        "fe80::250:56ff:fe9e:5457",
+        "fe80::250:56ff:fe9e:9068",
+        "fe80::250:56ff:fe9e:f1c3",
+        "ff02::1:2",
+        "ff02::fb"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_004",
+    "total_count": 12,
+    "time_range": {
+      "start": "2022-01-09T14:25:12.409Z",
+      "end": "2022-01-15T01:44:06.535Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E002735",
+        "timestamp": "2022-01-09T14:25:12.409Z",
+        "text": "At 2022-01-09T14:25:12.409Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C1mj732Fp6CuirT4Q9 | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002735@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5039"
+      },
+      {
+        "log_id": "E002568",
+        "timestamp": "2022-01-09T17:27:37.489Z",
+        "text": "At 2022-01-09T17:27:37.489Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7e1pV2lLd0AP38mXf | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002568@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4872"
+      },
+      {
+        "log_id": "E002570",
+        "timestamp": "2022-01-10T04:32:38.883Z",
+        "text": "At 2022-01-10T04:32:38.883Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=ChZ8OA1ZwM9RZXSfsa | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002570@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4874"
+      },
+      {
+        "log_id": "E002617",
+        "timestamp": "2022-01-10T20:18:01.750Z",
+        "text": "At 2022-01-10T20:18:01.750Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CAwWb63UmHgwTpGNrg | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002617@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4921"
+      },
+      {
+        "log_id": "E002619",
+        "timestamp": "2022-01-11T04:45:40.809Z",
+        "text": "At 2022-01-11T04:45:40.809Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C94YAZHd281rZQW5b | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002619@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4923"
+      },
+      {
+        "log_id": "E002577",
+        "timestamp": "2022-01-11T06:47:55.159Z",
+        "text": "At 2022-01-11T06:47:55.159Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CeP94gK3vE5R3fmf4 | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002577@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4881"
+      },
+      {
+        "log_id": "E002579",
+        "timestamp": "2022-01-11T09:05:18.429Z",
+        "text": "At 2022-01-11T09:05:18.429Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CY0ESn38LpRsD0ENbl | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002579@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4883"
+      },
+      {
+        "log_id": "E002585",
+        "timestamp": "2022-01-12T09:09:09.417Z",
+        "text": "At 2022-01-12T09:09:09.417Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CtzR423Q0AL0G8lPld | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002585@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4889"
+      },
+      {
+        "log_id": "E002608",
+        "timestamp": "2022-01-13T07:03:22.890Z",
+        "text": "At 2022-01-13T07:03:22.890Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cu9aRT2Fz80sbTKVYg | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002608@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4912"
+      },
+      {
+        "log_id": "E002729",
+        "timestamp": "2022-01-13T13:32:25.213Z",
+        "text": "At 2022-01-13T13:32:25.213Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CzwVpX1XeyMMMzLdci | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002729@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5033"
+      },
+      {
+        "log_id": "E002720",
+        "timestamp": "2022-01-14T01:40:45.539Z",
+        "text": "At 2022-01-14T01:40:45.539Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CmYlqZ2xghDSw8VB4e | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002720@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5024"
+      },
+      {
+        "log_id": "E002600",
+        "timestamp": "2022-01-15T01:44:06.535Z",
+        "text": "At 2022-01-15T01:44:06.535Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CLbKVd1Z6bJ46xQ9Lj | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002600@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4904"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "143.88.11.1",
+        "143.88.11.10",
+        "143.88.11.14"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_005",
+    "total_count": 20,
+    "time_range": {
+      "start": "2022-01-10T03:01:57.422Z",
+      "end": "2022-01-15T20:19:15.813Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E002679",
+        "timestamp": "2022-01-10T03:01:57.422Z",
+        "text": "At 2022-01-10T03:01:57.422Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CnacLt4B18NZ8jsO99 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002679@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4983"
+      },
+      {
+        "log_id": "E002674",
+        "timestamp": "2022-01-10T06:56:50.612Z",
+        "text": "At 2022-01-10T06:56:50.612Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CGDX1WNJXBDLziV47 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002674@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4978"
+      },
+      {
+        "log_id": "E002639",
+        "timestamp": "2022-01-10T07:32:25.944Z",
+        "text": "At 2022-01-10T07:32:25.944Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CfQC9d1UCAOAp8ja0g | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002639@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4943"
+      },
+      {
+        "log_id": "E002666",
+        "timestamp": "2022-01-10T10:51:43.800Z",
+        "text": "At 2022-01-10T10:51:43.800Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cz0Q1w3PMvM2yBcLg6 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002666@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4970"
+      },
+      {
+        "log_id": "E002650",
+        "timestamp": "2022-01-10T17:58:47.780Z",
+        "text": "At 2022-01-10T17:58:47.780Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CFF4vE19fO9Oi4OWM5 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002650@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4954"
+      },
+      {
+        "log_id": "E002677",
+        "timestamp": "2022-01-11T09:54:37.487Z",
+        "text": "At 2022-01-11T09:54:37.487Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CR7a5h4sI1jHQWcwQ4 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002677@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4981"
+      },
+      {
+        "log_id": "E002676",
+        "timestamp": "2022-01-11T13:56:37.742Z",
+        "text": "At 2022-01-11T13:56:37.742Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CDYS1G30TXWX5087uc | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002676@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4980"
+      },
+      {
+        "log_id": "E002669",
+        "timestamp": "2022-01-11T17:30:09.732Z",
+        "text": "At 2022-01-11T17:30:09.732Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cc90xs8ZtbV0kRo88 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002669@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4973"
+      },
+      {
+        "log_id": "E002671",
+        "timestamp": "2022-01-11T22:50:27.732Z",
+        "text": "At 2022-01-11T22:50:27.732Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C590x22NRciHic799 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002671@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4975"
+      },
+      {
+        "log_id": "E002673",
+        "timestamp": "2022-01-12T02:52:27.987Z",
+        "text": "At 2022-01-12T02:52:27.987Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CQY2XiNedF4P3jds8 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002673@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4977"
+      },
+      {
+        "log_id": "E002675",
+        "timestamp": "2022-01-12T09:59:31.967Z",
+        "text": "At 2022-01-12T09:59:31.967Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CzNvC63WbCZUx2vnE3 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002675@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4979"
+      },
+      {
+        "log_id": "E002651",
+        "timestamp": "2022-01-12T11:24:56.763Z",
+        "text": "At 2022-01-12T11:24:56.763Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CCYq8n3g2wGsQYI3z8 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002651@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4955"
+      },
+      {
+        "log_id": "E002678",
+        "timestamp": "2022-01-12T13:18:49.824Z",
+        "text": "At 2022-01-12T13:18:49.824Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3R7eN1Y7wzZcZFbOe | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002678@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4982"
+      },
+      {
+        "log_id": "E002652",
+        "timestamp": "2022-01-13T02:36:01.253Z",
+        "text": "At 2022-01-13T02:36:01.253Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CGcS634Cp2z5Ln8rX8 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002652@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4956"
+      },
+      {
+        "log_id": "E002644",
+        "timestamp": "2022-01-13T19:19:37.606Z",
+        "text": "At 2022-01-13T19:19:37.606Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CqMa4d2cIh1EucOeul | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002644@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4948"
+      },
+      {
+        "log_id": "E002648",
+        "timestamp": "2022-01-13T22:38:55.463Z",
+        "text": "At 2022-01-13T22:38:55.463Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CicKqd4UkODvlabo4h | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002648@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4952"
+      },
+      {
+        "log_id": "E002672",
+        "timestamp": "2022-01-14T12:03:13.771Z",
+        "text": "At 2022-01-14T12:03:13.771Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7jMje3CLuA39ilb63 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002672@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4976"
+      },
+      {
+        "log_id": "E002665",
+        "timestamp": "2022-01-15T06:19:21.986Z",
+        "text": "At 2022-01-15T06:19:21.986Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C6vOv82017k8SoIqQd | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002665@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4969"
+      },
+      {
+        "log_id": "E002667",
+        "timestamp": "2022-01-15T14:58:57.828Z",
+        "text": "At 2022-01-15T14:58:57.828Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CvvTzD1Dwqcq8qe022 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002667@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4971"
+      },
+      {
+        "log_id": "E002658",
+        "timestamp": "2022-01-15T20:19:15.813Z",
+        "text": "At 2022-01-15T20:19:15.813Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CPcz531ie5fUuLtSB | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002658@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4962"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "fe80::f862:2895:ecac:131b",
+        "ff02::1:2"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  }
+]
