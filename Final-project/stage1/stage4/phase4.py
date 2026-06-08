@@ -1,0 +1,2952 @@
+# -*- coding: utf-8 -*-
+# @title
+import json
+import re
+import google.generativeai as genai
+
+# ⚠️ 替換點 1：填入你自己的 Gemini API key
+GEMINI_API_KEY = "AXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+genai.configure(api_key=GEMINI_API_KEY)
+
+print("套件載入與 API 設定完成")
+
+# 必要欄位 = 成員3確認固定輸出的欄位
+# Schema 完整性指標會逐一檢查報告有沒有這些欄位，缺一個就扣分
+REQUIRED_FIELDS = [
+    "incident_title",             # 事件標題：這份報告在講什麼攻擊
+    "risk_level",                 # 風險等級：嚴重程度（Critical/High...），SOC 排處理優先序用
+    "cluster_id",                 # 叢集編號：對應成員2的哪一群，路線B比對要靠它
+    "time_range",                 # 事件時間範圍：攻擊的起訖時間
+    "executive_summary",          # 摘要：整起事件的濃縮說明
+    "timeline",                   # 攻擊時間線：逐筆事件（核心，沒這個等於沒內容）
+    "mitre_attack_mapping",       # MITRE 對應：每個動作對應哪種已知攻擊手法
+    "attack_story",               # 完整攻擊故事：把事件串成可讀的敘事
+    "uncertainty",                # 不確定性說明：LLM 誠實標注它無法確定的部分
+    "recommended_triage_actions", # 處置建議：SOC 接下來該怎麼做
+    "indicators_of_compromise"    # 入侵指標：涉及的 IP、使用者、event id
+]
+
+print("必要欄位數:", len(REQUIRED_FIELDS))
+print(REQUIRED_FIELDS)
+
+# @title
+# ⚠️ 替換點2：六份報告各自貼進對應的 = {...}
+# 注意：report_000 = { 後面直接接 "incident_title"，不要多一個 {
+
+report_000 = {
+  "incident_title": "可疑的DNS連線嘗試與網路探測",
+  "risk_level": "Medium",
+  "cluster_id": "cluster_000",
+  "time_range": {
+    "start": "2022-01-09T00:00:37.204Z",
+    "end": "2022-02-10T03:59:50.080Z"
+  },
+  "executive_summary": {
+    "description": "多個內部IP位址（143.88.255.10、143.88.11.10、0.0.0.0）發起了可疑的UDP連線。這些連線主要針對內部DNS伺服器10.0.10.1:53和外部DNS伺服器8.8.8.8:53，以及一次DHCP廣播。所有觀察到的連線均處於S0狀態，表示連線嘗試失敗。",
+    "evidence": [
+      "E007018",
+      "E004958",
+      "E007021",
+      "E007269",
+      "E003624",
+      "E005431",
+      "E004493",
+      "E005043",
+      "E005751",
+      "E005917",
+      "E007125",
+      "E002959",
+      "E005928",
+      "E003848",
+      "E003976",
+      "E004560",
+      "E006789",
+      "E003704",
+      "E005481",
+      "E006123",
+      "E003232",
+      "E004735",
+      "E004443",
+      "E005401",
+      "E005828",
+      "E005593",
+      "E007516",
+      "E002743",
+      "E005999",
+      "E004218"
+    ]
+  },
+  "timeline": [
+    {
+      "time": "2022-01-09T00:00:37.204Z",
+      "summary": "內部主機143.88.255.10發起對內部DNS伺服器10.0.10.1:53的可疑UDP連線嘗試，連線狀態為S0 (SYN sent, no reply)。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E007018",
+        "log_text_excerpt": "source=143.88.255.10:46257 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:03:08.453Z",
+      "summary": "內部主機143.88.255.10再次嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E004958",
+        "log_text_excerpt": "source=143.88.255.10:37766 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:06:40.203Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E007021",
+        "log_text_excerpt": "source=143.88.255.10:47975 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:11:12.452Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E007269",
+        "log_text_excerpt": "source=143.88.255.10:40138 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:13:43.703Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E003624",
+        "log_text_excerpt": "source=143.88.255.10:53673 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:18:15.953Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005431",
+        "log_text_excerpt": "source=143.88.255.10:47680 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:21:17.453Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E004493",
+        "log_text_excerpt": "source=143.88.255.10:39553 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:22:48.204Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005043",
+        "log_text_excerpt": "source=143.88.255.10:42103 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:31:52.705Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005751",
+        "log_text_excerpt": "source=143.88.255.10:41514 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:32:22.953Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005917",
+        "log_text_excerpt": "source=143.88.255.10:33711 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:43:28.457Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E007125",
+        "log_text_excerpt": "source=143.88.255.10:56077 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T00:49:58.286Z",
+      "summary": "內部主機143.88.11.10發起對外部DNS伺服器8.8.8.8:53的可疑UDP連線嘗試，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E002959",
+        "log_text_excerpt": "source=143.88.11.10:46306 | dest=8.8.8.8:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:10:41.958Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005928",
+        "log_text_excerpt": "source=143.88.255.10:43288 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:14:43.958Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E003848",
+        "log_text_excerpt": "source=143.88.255.10:58931 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:24:18.708Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E003976",
+        "log_text_excerpt": "source=143.88.255.10:58352 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:24:48.959Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E004560",
+        "log_text_excerpt": "source=143.88.255.10:36536 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:28:20.706Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E006789",
+        "log_text_excerpt": "source=143.88.255.10:48381 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:33:23.207Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E003704",
+        "log_text_excerpt": "source=143.88.255.10:34067 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:34:23.709Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005481",
+        "log_text_excerpt": "source=143.88.255.10:37899 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:46:29.711Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E006123",
+        "log_text_excerpt": "source=143.88.255.10:58254 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:53:02.957Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E003232",
+        "log_text_excerpt": "source=143.88.255.10:38774 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T01:53:02.959Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E004735",
+        "log_text_excerpt": "source=143.88.255.10:43823 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T02:04:38.710Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E004443",
+        "log_text_excerpt": "source=143.88.255.10:34329 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T02:06:09.461Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005401",
+        "log_text_excerpt": "source=143.88.255.10:49378 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T02:23:48.210Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005828",
+        "log_text_excerpt": "source=143.88.255.10:35135 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T02:25:18.960Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005593",
+        "log_text_excerpt": "source=143.88.255.10:54082 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T02:28:20.462Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E007516",
+        "log_text_excerpt": "source=143.88.255.10:52084 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T02:40:56.338Z",
+      "summary": "主機0.0.0.0發起對255.255.255.255:67的可疑DHCP廣播連線嘗試，連線狀態為S0。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002743",
+        "log_text_excerpt": "source=0.0.0.0:68 | dest=255.255.255.255:67 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T02:53:02.713Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E005999",
+        "log_text_excerpt": "source=143.88.255.10:50591 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    },
+    {
+      "time": "2022-01-09T02:57:04.709Z",
+      "summary": "內部主機143.88.255.10持續嘗試對內部DNS伺服器10.0.10.1:53進行可疑UDP連線，連線狀態為S0。",
+      "mitre_tactic": "Command and Control",
+      "mitre_technique": "T1071.004",
+      "evidence": {
+        "log_id": "E004218",
+        "log_text_excerpt": "source=143.88.255.10:35185 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | event_type=suspicious_network_connection"
+      }
+    }
+  ],
+  "mitre_attack_mapping": [
+    {
+      "technique_id": "T1071.004",
+      "technique_name": "Application Layer Protocol: DNS",
+      "tactic": "Command and Control",
+      "observed_behavior": "內部主機143.88.255.10和143.88.11.10多次嘗試透過UDP協定連線至內部DNS伺服器10.0.10.1:53及外部DNS伺服器8.8.8.8:53，但連線狀態均為S0，顯示連線嘗試失敗。",
+      "evidence": [
+        "E007018",
+        "E004958",
+        "E007021",
+        "E007269",
+        "E003624",
+        "E005431",
+        "E004493",
+        "E005043",
+        "E005751",
+        "E005917",
+        "E007125",
+        "E002959",
+        "E005928",
+        "E003848",
+        "E003976",
+        "E004560",
+        "E006789",
+        "E003704",
+        "E005481",
+        "E006123",
+        "E003232",
+        "E004735",
+        "E004443",
+        "E005401",
+        "E005828",
+        "E005593",
+        "E007516",
+        "E005999",
+        "E004218"
+      ]
+    },
+    {
+      "technique_id": "T1046",
+      "technique_name": "Network Service Scanning",
+      "tactic": "Reconnaissance",
+      "observed_behavior": "主機0.0.0.0發起對255.255.255.255:67的可疑DHCP廣播連線嘗試，連線狀態為S0。",
+      "evidence": [
+        "E002743"
+      ]
+    }
+  ],
+  "attack_story": "此事件始於2022-01-09T00:00:37.204Z，內部主機143.88.255.10多次嘗試透過UDP協定連線至內部DNS伺服器10.0.10.1的53埠。這些嘗試的連線狀態均為S0，表示SYN封包已送出但未收到回應，暗示連線建立失敗。此模式持續了數小時。隨後，另一內部主機143.88.11.10也嘗試對外部DNS伺服器8.8.8.8的53埠進行可疑的UDP連線，同樣以S0狀態失敗。此外，還觀察到從0.0.0.0到255.255.255.255的DHCP廣播，也被標記為可疑並處於S0狀態。這些來自多個內部主機，針對內部和外部DNS伺服器的持續性、失敗的可疑DNS連線嘗試，可能暗示著基於DNS的命令與控制、資料外洩或偵察活動，這些活動可能被阻擋或配置錯誤。而DHCP廣播，如果來自未經授權的設備，則可能表示嘗試進行初始網路存取。",
+  "uncertainty": "1. 缺乏進一步的上下文資訊（例如DNS查詢內容、發起連線的程序），因此無法確定「可疑網路連線」的確切性質。2. 連線狀態為S0（連線失敗）的原因不明；可能是由於網路阻擋、伺服器無回應或刻意的探測行為。3. 這些活動的相關使用者未知。4. 未提供IP位址143.88.255.10和143.88.11.10的具體主機名稱。5. 無法確定DHCP廣播是惡意行為還是合法但配置錯誤的客戶端行為。",
+  "recommended_triage_actions": [
+    "調查主機143.88.255.10和143.88.11.10是否存在惡意軟體、配置錯誤或未經授權的程序嘗試DNS連線。",
+    "分析DNS伺服器10.0.10.1和8.8.8.8的DNS日誌（如果可用），以識別源IP位址發出的具體查詢。",
+    "檢查網路防火牆/入侵偵測系統日誌，以了解連線處於S0狀態的原因（例如，被防火牆阻擋、DNS伺服器故障）。",
+    "調查可疑的DHCP廣播（E002743），以確定是否有未經授權的設備嘗試加入網路。",
+    "實施DNS監控，以檢測異常查詢模式或DNS隧道嘗試。"
+  ],
+  "indicators_of_compromise": {
+    "ips": [
+      "143.88.255.10",
+      "10.0.10.1",
+      "143.88.11.10",
+      "8.8.8.8",
+      "0.0.0.0",
+      "255.255.255.255"
+    ],
+    "users": [],
+    "windows_event_ids": []
+  }
+}
+report_001 = {
+  "incident_title": "可疑網路連線嘗試",
+  "risk_level": "Medium",
+  "cluster_id": "cluster_001",
+  "time_range": {
+    "start": "2022-02-10T03:58:50.008Z",
+    "end": "2022-02-10T03:58:50.008Z"
+  },
+  "executive_summary": {
+    "description": "在 2022-02-10T03:58:50.008Z，偵測到來自 IP 位址 143.88.5.12 對 143.88.5.1 的可疑 UDP 網路連線嘗試，目標埠為 53。連線狀態 S0 表示已發送封包但未收到回應，可能為埠掃描或失敗的連線嘗試。",
+    "evidence": [
+      "E000513",
+      "E000514",
+      "E000515",
+      "E000516",
+      "E000517",
+      "E000518",
+      "E000519",
+      "E000520",
+      "E000521",
+      "E000522",
+      "E000523",
+      "E000524",
+      "E000525",
+      "E000526",
+      "E000527",
+      "E000528",
+      "E000529",
+      "E000530",
+      "E000531",
+      "E000532",
+      "E000533",
+      "E000534",
+      "E000535",
+      "E000536",
+      "E000537",
+      "E000538",
+      "E000539",
+      "E000540",
+      "E000541",
+      "E000542"
+    ]
+  },
+  "timeline": [
+    {
+      "time": "2022-02-10T03:58:50.008Z",
+      "summary": "偵測到來自 143.88.5.12 對 143.88.5.1 埠 53 的可疑 UDP 網路連線嘗試。連線狀態 S0 指示封包已發送但未收到回應 (E000513)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595.002",
+      "evidence": {
+        "log_id": "E000513",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0"
+      }
+    }
+  ],
+  "mitre_attack_mapping": [
+    {
+      "technique_id": "T1595.002",
+      "technique_name": "Active Scanning: Vulnerability Scanning",
+      "tactic": "Reconnaissance",
+      "observed_behavior": "偵測到多個來自 143.88.5.12 對 143.88.5.1 埠 53 的可疑 UDP 連線嘗試，連線狀態為 S0，表示可能正在進行漏洞掃描或服務探測。",
+      "evidence": [
+        "E000513",
+        "E000514",
+        "E000515",
+        "E000516",
+        "E000517",
+        "E000518",
+        "E000519",
+        "E000520",
+        "E000521",
+        "E000522",
+        "E000523",
+        "E000524",
+        "E000525",
+        "E000526",
+        "E000527",
+        "E000528",
+        "E000529",
+        "E000530",
+        "E000531",
+        "E000532",
+        "E000533",
+        "E000534",
+        "E000535",
+        "E000536",
+        "E000537",
+        "E000538",
+        "E000539",
+        "E000540",
+        "E000541",
+        "E000542"
+      ]
+    }
+  ],
+  "attack_story": "在 2022-02-10T03:58:50.008Z，系統偵測到一系列來自 IP 位址 143.88.5.12 的可疑網路連線嘗試。這些嘗試的目標是內部 IP 位址 143.88.5.1 的 UDP 埠 53 (通常用於 DNS 服務)。所有記錄的連線狀態均為 S0，這表示 143.88.5.12 發送了 UDP 封包，但未從 143.88.5.1 收到任何回應。這種行為模式可能表明攻擊者正在執行主動偵察，例如埠掃描或漏洞掃描，以識別目標系統上開放的服務或潛在的弱點。目前沒有證據表明連線成功建立或有進一步的惡意活動發生。",
+  "uncertainty": "無法確定 143.88.5.12 進行此連線嘗試的具體意圖 (例如，是惡意掃描、配置錯誤還是其他原因)。無法確定 143.88.5.1 主機的具體身份或其在網路中的角色。日誌中沒有提供涉及的使用者帳戶資訊。",
+  "recommended_triage_actions": [
+    "將來源 IP 143.88.5.12 列入黑名單，以阻止進一步的可疑連線嘗試。",
+    "調查目標 IP 143.88.5.1，確認其是否應在埠 53 上提供 UDP 服務，並檢查是否存在任何已知的漏洞。",
+    "檢查防火牆和網路設備日誌，以了解 143.88.5.12 是否有其他連線活動，並確認 S0 狀態是由於防火牆阻擋還是服務未回應。",
+    "監控 143.88.5.1 上的活動，以偵測任何後續的惡意行為。"
+  ],
+  "indicators_of_compromise": {
+    "ips": [
+      "143.88.5.12",
+      "143.88.5.1"
+    ],
+    "users": [],
+    "windows_event_ids": []
+  }
+}
+report_002 = {
+  "incident_title": "網路偵察與埠掃描事件",
+  "risk_level": "Medium",
+  "cluster_id": "cluster_002",
+  "time_range": {
+    "start": "2022-01-11T00:35:25.161Z",
+    "end": "2022-01-14T10:14:20.966Z"
+  },
+  "executive_summary": {
+    "description": "攻擊者IP位址 143.88.11.10 在 2022-01-11 至 2022-01-14 期間，對內部主機 143.88.11.1 和 143.88.11.11 執行了廣泛的埠掃描，並嘗試連接雲端服務中繼資料位址 169.254.169.254。所有觀察到的連接嘗試均未成功建立，表明攻擊者可能處於偵察階段。",
+    "evidence": [
+      "E002494",
+      "E002328",
+      "E002399"
+    ]
+  },
+  "timeline": [
+    {
+      "time": "2022-01-11T00:35:25.161Z",
+      "summary": "來源IP 143.88.11.10 嘗試連接 169.254.169.254 的 80 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1526",
+      "evidence": {
+        "log_id": "E002494",
+        "log_text_excerpt": "source=143.88.11.10:51750 | dest=169.254.169.254:80 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:05.039Z",
+      "summary": "來源IP 143.88.11.10 開始對 143.88.11.1 進行多埠掃描，嘗試連接 9500 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002328",
+        "log_text_excerpt": "source=143.88.11.10:38899 | dest=143.88.11.1:9500 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:05.339Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 3369 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002336",
+        "log_text_excerpt": "source=143.88.11.10:38900 | dest=143.88.11.1:3369 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:06.641Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 306 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002344",
+        "log_text_excerpt": "source=143.88.11.10:38899 | dest=143.88.11.1:306 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:07.142Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 1035 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002323",
+        "log_text_excerpt": "source=143.88.11.10:38900 | dest=143.88.11.1:1035 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:07.542Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 1805 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002329",
+        "log_text_excerpt": "source=143.88.11.10:38900 | dest=143.88.11.1:1805 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:09.045Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 1034 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002324",
+        "log_text_excerpt": "source=143.88.11.10:38899 | dest=143.88.11.1:1034 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:10.747Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 10215 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002332",
+        "log_text_excerpt": "source=143.88.11.10:38900 | dest=143.88.11.1:10215 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:11.348Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 1213 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002325",
+        "log_text_excerpt": "source=143.88.11.10:38900 | dest=143.88.11.1:1213 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:12.850Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 37 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002326",
+        "log_text_excerpt": "source=143.88.11.10:38899 | dest=143.88.11.1:37 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:12.950Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 79 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002346",
+        "log_text_excerpt": "source=143.88.11.10:38900 | dest=143.88.11.1:79 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:14.452Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 222 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002321",
+        "log_text_excerpt": "source=143.88.11.10:38899 | dest=143.88.11.1:222 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:16.855Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 5962 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002341",
+        "log_text_excerpt": "source=143.88.11.10:38899 | dest=143.88.11.1:5962 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:46:19.559Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 2119 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002338",
+        "log_text_excerpt": "source=143.88.11.10:38900 | dest=143.88.11.1:2119 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:47:55.282Z",
+      "summary": "來源IP 143.88.11.10 再次對 143.88.11.1 進行埠掃描，嘗試連接 7937 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002446",
+        "log_text_excerpt": "source=143.88.11.10:55184 | dest=143.88.11.1:7937 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:47:55.783Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 27353 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002427",
+        "log_text_excerpt": "source=143.88.11.10:47212 | dest=143.88.11.1:27353 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:47:56.383Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 8193 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002458",
+        "log_text_excerpt": "source=143.88.11.10:51438 | dest=143.88.11.1:8193 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:48:00.986Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 6009 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002448",
+        "log_text_excerpt": "source=143.88.11.10:39420 | dest=143.88.11.1:6009 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:48:05.888Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 8400 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002454",
+        "log_text_excerpt": "source=143.88.11.10:45544 | dest=143.88.11.1:8400 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:48:06.488Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 7000 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002452",
+        "log_text_excerpt": "source=143.88.11.10:42966 | dest=143.88.11.1:7000 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:48:07.489Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 7512 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002438",
+        "log_text_excerpt": "source=143.88.11.10:53150 | dest=143.88.11.1:7512 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:53:45.632Z",
+      "summary": "來源IP 143.88.11.10 再次對 143.88.11.1 進行埠掃描，嘗試連接 143 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002423",
+        "log_text_excerpt": "source=143.88.11.10:50916 | dest=143.88.11.1:143 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:53:47.033Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 2161 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002457",
+        "log_text_excerpt": "source=143.88.11.10:34536 | dest=143.88.11.1:2161 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:53:49.234Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 3322 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002455",
+        "log_text_excerpt": "source=143.88.11.10:59956 | dest=143.88.11.1:3322 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:53:49.834Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 2605 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002420",
+        "log_text_excerpt": "source=143.88.11.10:47456 | dest=143.88.11.1:2605 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:53:50.935Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 27000 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002447",
+        "log_text_excerpt": "source=143.88.11.10:32888 | dest=143.88.11.1:27000 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:53:53.837Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 3880 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002432",
+        "log_text_excerpt": "source=143.88.11.10:38230 | dest=143.88.11.1:3880 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:53:56.938Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 3689 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002440",
+        "log_text_excerpt": "source=143.88.11.10:40362 | dest=143.88.11.1:3689 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T10:53:58.039Z",
+      "summary": "來源IP 143.88.11.10 繼續對 143.88.11.1 進行埠掃描，嘗試連接 5060 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002414",
+        "log_text_excerpt": "source=143.88.11.10:56540 | dest=143.88.11.1:5060 | protocol=tcp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-14T08:44:55.109Z",
+      "summary": "來源IP 143.88.11.10 嘗試連接 143.88.11.11 的 7920 埠，但連接未建立 (conn_state=S0)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002399",
+        "log_text_excerpt": "source=143.88.11.10:42402 | dest=143.88.11.11:7920 | protocol=tcp | conn_state=S0"
+      }
+    }
+  ],
+  "mitre_attack_mapping": [
+    {
+      "technique_id": "T1526",
+      "technique_name": "Cloud Service Discovery",
+      "tactic": "Discovery",
+      "observed_behavior": "IP位址 143.88.11.10 嘗試連接雲端服務中繼資料位址 169.254.169.254 的 80 埠。",
+      "evidence": [
+        "E002494"
+      ]
+    },
+    {
+      "technique_id": "T1046",
+      "technique_name": "Network Service Discovery",
+      "tactic": "Discovery",
+      "observed_behavior": "IP位址 143.88.11.10 對內部主機 143.88.11.1 和 143.88.11.11 進行了廣泛的埠掃描，嘗試連接多個不同埠。",
+      "evidence": [
+        "E002328",
+        "E002336",
+        "E002344",
+        "E002323",
+        "E002329",
+        "E002324",
+        "E002332",
+        "E002325",
+        "E002326",
+        "E002346",
+        "E002321",
+        "E002341",
+        "E002338",
+        "E002446",
+        "E002427",
+        "E002458",
+        "E002448",
+        "E002454",
+        "E002452",
+        "E002438",
+        "E002423",
+        "E002457",
+        "E002455",
+        "E002420",
+        "E002447",
+        "E002432",
+        "E002440",
+        "E002414",
+        "E002399"
+      ]
+    }
+  ],
+  "attack_story": "攻擊始於 2022-01-11，IP 位址 143.88.11.10 首先嘗試連接 169.254.169.254 的 80 埠 (E002494)，這可能是一種雲端服務探索行為，旨在收集環境資訊。隨後，在同一天，143.88.11.10 對內部主機 143.88.11.1 進行了多次、持續的埠掃描，嘗試連接多個不同埠，以識別開放服務 (E002328, E002336, E002344, E002323, E002329, E002324, E002332, E002325, E002326, E002346, E002321, E002341, E002338, E002446, E002427, E002458, E002448, E002454, E002452, E002438, E002423, E002457, E002455, E002420, E002447, E002432, E002440, E002414)。這些掃描活動在 2022-01-11 期間多次發生。最後，在 2022-01-14，攻擊者將目標擴展到另一內部主機 143.88.11.11，嘗試連接其 7920 埠 (E002399)。所有這些連接嘗試的狀態均為 S0，表示連接未成功建立，這表明攻擊者可能正在進行偵察階段，試圖找出可利用的服務或漏洞。",
+  "uncertainty": "所有可疑網路連接的 conn_state 均為 S0，表示連接嘗試未成功建立。這可能意味著掃描被防火牆或其他安全設備阻止，或者目標主機上沒有開放這些埠。日誌中沒有提供任何使用者資訊，無法確定攻擊的來源使用者或目標使用者。無法確定 143.88.11.10 的性質（內部受感染主機或外部攻擊者）。無法確定 169.254.169.254 連接嘗試的具體意圖，儘管它通常與雲端中繼資料服務相關。",
+  "recommended_triage_actions": [
+    "立即隔離或封鎖來源 IP 143.88.11.10，以阻止進一步的偵察或攻擊嘗試。",
+    "檢查 143.88.11.10 是否為內部資產，如果是，則對其進行全面調查，以確定是否已被入侵。",
+    "檢查目標主機 143.88.11.1 和 143.88.11.11 的防火牆和入侵偵測系統 (IDS) 日誌，確認這些掃描嘗試是否被成功阻止。",
+    "審查 143.88.11.1 和 143.88.11.11 上開放的埠和服務，確保它們是必要的且已正確配置。",
+    "調查嘗試連接 169.254.169.254 的原因，以了解是否存在雲端環境配置錯誤或惡意活動。",
+    "監控所有涉及的 IP 位址，以發現任何後續的惡意活動。"
+  ],
+  "indicators_of_compromise": {
+    "ips": [
+      "143.88.11.1",
+      "143.88.11.10",
+      "143.88.11.11",
+      "169.254.169.254"
+    ],
+    "users": [],
+    "windows_event_ids": []
+  }
+}
+report_003 = {
+  "incident_title": "可疑網路連線偵察活動",
+  "risk_level": "Medium",
+  "cluster_id": "cluster_003",
+  "time_range": {
+    "start": "2022-01-09T01:37:22.415Z",
+    "end": "2022-01-15T23:34:40.712Z"
+  },
+  "executive_summary": {
+    "description": "在 2022-01-09T01:37:22.415Z 至 2022-01-11T14:46:27.206Z 期間，多個內部來源 IP 位址 (例如 fe80::250:56ff:fe9e:5457、fe80::143e:e94b:597c:a35b、fe80::250:56ff:fe9e:f1c3、fe80::250:56ff:fe9e:9068) 嘗試透過 UDP 協議建立可疑的網路連線。這些連線的目標包括多播位址 (ff02::1:2, ff02::fb) 和多個外部/內部 DNS 伺服器 (例如 2001:503:c27::2:30, 2001:7fd::1)，且連線狀態為 S0，表示連線嘗試未收到回應，可能代表內部網路偵察或掃描活動。",
+    "evidence": [
+      "E002502",
+      "E002921",
+      "E002647",
+      "E002503",
+      "E002504",
+      "E002659",
+      "E002909",
+      "E002923",
+      "E002641",
+      "E002506",
+      "E002931",
+      "E002939",
+      "E002915",
+      "E002928",
+      "E002507",
+      "E002889",
+      "E002508",
+      "E002662",
+      "E002904",
+      "E002900",
+      "E002509",
+      "E002510",
+      "E002898",
+      "E002511",
+      "E002512",
+      "E002513",
+      "E002646",
+      "E002922",
+      "E002514",
+      "E002661"
+    ]
+  },
+  "timeline": [
+    {
+      "time": "2022-01-09T01:37:22.415Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:5457 嘗試透過 UDP 協議連線至多播位址 ff02::1:2，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002502",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-09T05:11:59.669Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:503:c27::2:30，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002921",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:33689 | dest=2001:503:c27::2:30:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-09T06:37:42.015Z",
+      "summary": "來源 IP fe80::143e:e94b:597c:a35b 嘗試透過 UDP 協議連線至多播位址 ff02::1:2，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002647",
+        "log_text_excerpt": "source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T00:15:17.914Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:500:2f::f，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002909",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:54505 | dest=2001:500:2f::f:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T01:15:27.117Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:7fd::1，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002923",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:42625 | dest=2001:7fd::1:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T08:16:29.153Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:7fe::53，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002931",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:37707 | dest=2001:7fe::53:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T15:08:53.913Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:9068 嘗試透過 UDP 協議連線至多播位址 ff02::fb，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002939",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:9068:5353 | dest=ff02::fb:5353 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T15:17:40.032Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:500:9f::42，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002915",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:58356 | dest=2001:500:9f::42:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T19:18:24.900Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:500:12::d0d，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002889",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:48999 | dest=2001:500:12::d0d:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T20:18:31.694Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:500:2d::d，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002904",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:43059 | dest=2001:500:2d::d:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T23:19:07.355Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:500:2::c，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002900",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:49839 | dest=2001:500:2::c:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T03:19:41.770Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:500:200::b，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002898",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:54328 | dest=2001:500:200::b:53 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T12:21:17.491Z",
+      "summary": "來源 IP fe80::250:56ff:fe9e:f1c3 嘗試透過 UDP 協議連線至 2001:7fd::1，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002922",
+        "log_text_excerpt": "source=fe80::250:56ff:fe9e:f1c3:51319 | dest=2001:7fd::1:53 | protocol=udp | conn_state=S0"
+      }
+    }
+  ],
+  "mitre_attack_mapping": [
+    {
+      "technique_id": "T1046",
+      "technique_name": "Network Service Scanning",
+      "tactic": "Discovery",
+      "observed_behavior": "多個內部來源 IP 位址 (fe80::) 透過 UDP 協議嘗試連線至多播位址 (ff02::1:2, ff02::fb) 和多個 DNS 伺服器 (2001:503:c27::2:30, 2001:7fd::1 等)，且連線狀態為 S0，表明正在進行網路服務掃描或偵察活動。",
+      "evidence": [
+        "E002502",
+        "E002921",
+        "E002647",
+        "E002503",
+        "E002504",
+        "E002659",
+        "E002909",
+        "E002923",
+        "E002641",
+        "E002506",
+        "E002931",
+        "E002939",
+        "E002915",
+        "E002928",
+        "E002507",
+        "E002889",
+        "E002508",
+        "E002662",
+        "E002904",
+        "E002900",
+        "E002509",
+        "E002510",
+        "E002898",
+        "E002511",
+        "E002512",
+        "E002513",
+        "E002646",
+        "E002922",
+        "E002514",
+        "E002661"
+      ]
+    }
+  ],
+  "attack_story": "此事件集群顯示在 2022 年 1 月 9 日至 1 月 11 日期間，多個內部網路中的主機（由其鏈路本地 IPv6 位址 fe80:: 識別）持續發起可疑的 UDP 網路連線。這些連線的目標包括用於本地網路服務發現的多播位址 (ff02::1:2, ff02::fb) 以及多個潛在的內部或外部 DNS 伺服器 (例如 2001:503:c27::2:30, 2001:7fd::1)。所有記錄的連線狀態均為 'S0'，這表示這些連線嘗試未能收到回應，暗示攻擊者或惡意軟體正在積極地對網路進行掃描，以識別活動主機、開放服務或進行 DNS 查詢，作為其偵察階段的一部分。這種行為模式符合 MITRE ATT&CK 框架中的「網路服務掃描 (T1046)」技術，旨在收集有關目標環境的資訊。",
+  "uncertainty": "目前尚不清楚發起這些可疑連線的具體主機、使用者或程序。由於來源 IP 位址是鏈路本地的 (fe80::)，因此無法直接識別其在網路中的確切位置或關聯的設備。此外，無法確定這些掃描活動是否成功導致任何進一步的入侵、漏洞利用或資料外洩。日誌中缺乏關於主機、使用者或程序的詳細資訊，限制了對事件根本原因和影響的全面理解。",
+  "recommended_triage_actions": [
+    "識別與來源 IP 位址 fe80::250:56ff:fe9e:5457、fe80::143e:e94b:597c:a35b、fe80::250:56ff:fe9e:f1c3 和 fe80::250:56ff:fe9e:9068 相關聯的實際主機。",
+    "調查在事件發生時這些來源主機上運行的程序和活動，以確定發起這些可疑連線的應用程式或服務。",
+    "分析這些來源主機的網路流量日誌，以尋找任何成功的連線、異常的資料傳輸或後續的惡意活動。",
+    "檢查這些來源主機是否存在已知的漏洞或惡意軟體感染。",
+    "審查目標 DNS 伺服器 (例如 2001:503:c27::2:30, 2001:7fd::1) 的 DNS 查詢日誌，以識別任何異常或惡意的查詢模式。"
+  ],
+  "indicators_of_compromise": {
+    "ips": [
+      "2001:500:12::d0d",
+      "2001:500:1::53",
+      "2001:500:200::b",
+      "2001:500:2::c",
+      "2001:500:2d::d",
+      "2001:500:2f::f",
+      "2001:500:9f::42",
+      "2001:500:a8::e",
+      "2001:503:ba3e::2:30",
+      "2001:503:c27::2:30",
+      "2001:7fd::1",
+      "2001:7fe::53",
+      "2001:dc3::35",
+      "fe80::143e:e94b:597c:a35b",
+      "fe80::250:56ff:fe9e:39e5",
+      "fe80::250:56ff:fe9e:5457",
+      "fe80::250:56ff:fe9e:9068",
+      "fe80::250:56ff:fe9e:f1c3",
+      "ff02::1:2",
+      "ff02::fb"
+    ],
+    "users": [],
+    "windows_event_ids": []
+  }
+}
+report_004 = {
+  "incident_title": "可疑的 ICMP 網路連線活動",
+  "risk_level": "Medium",
+  "cluster_id": "cluster_004",
+  "time_range": {
+    "start": "2022-01-09T14:25:12.409Z",
+    "end": "2022-01-15T01:44:06.535Z"
+  },
+  "executive_summary": {
+    "description": "在 2022-01-09T14:25:12.409Z 至 2022-01-15T01:44:06.535Z 期間，偵測到多個內部 IP 位址 (143.88.11.14 和 143.88.11.10) 對 IP 位址 143.88.11.1 進行可疑的 ICMP 網路連線。這些連線被標記為可疑，可能表示偵察活動 (E002735, E002568, E002570, E002617, E002619, E002577, E002579, E002585, E002608, E002729, E002720, E002600)。",
+    "evidence": [
+      "E002735",
+      "E002568",
+      "E002570",
+      "E002617",
+      "E002619",
+      "E002577",
+      "E002579",
+      "E002585",
+      "E002608",
+      "E002729",
+      "E002720",
+      "E002600"
+    ]
+  },
+  "timeline": [
+    {
+      "time": "2022-01-09T14:25:12.409Z",
+      "summary": "IP 位址 143.88.11.14 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002735)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002735",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-09T17:27:37.489Z",
+      "summary": "IP 位址 143.88.11.10 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002568)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002568",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-10T04:32:38.883Z",
+      "summary": "IP 位址 143.88.11.10 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002570)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002570",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-10T20:18:01.750Z",
+      "summary": "IP 位址 143.88.11.14 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002617)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002617",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-11T04:45:40.809Z",
+      "summary": "IP 位址 143.88.11.14 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002619)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002619",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-11T06:47:55.159Z",
+      "summary": "IP 位址 143.88.11.10 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002577)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002577",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-11T09:05:18.429Z",
+      "summary": "IP 位址 143.88.11.10 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002579)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002579",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-12T09:09:09.417Z",
+      "summary": "IP 位址 143.88.11.10 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002585)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002585",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-13T07:03:22.890Z",
+      "summary": "IP 位址 143.88.11.14 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002608)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002608",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-13T13:32:25.213Z",
+      "summary": "IP 位址 143.88.11.14 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002729)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002729",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-14T01:40:45.539Z",
+      "summary": "IP 位址 143.88.11.14 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002720)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002720",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp"
+      }
+    },
+    {
+      "time": "2022-01-15T01:44:06.535Z",
+      "summary": "IP 位址 143.88.11.10 對 143.88.11.1 進行了可疑的 ICMP 網路連線 (E002600)。",
+      "mitre_tactic": "Reconnaissance",
+      "mitre_technique": "T1595",
+      "evidence": {
+        "log_id": "E002600",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp"
+      }
+    }
+  ],
+  "mitre_attack_mapping": [
+    {
+      "technique_id": "T1595",
+      "technique_name": "Active Scanning",
+      "tactic": "Reconnaissance",
+      "observed_behavior": "多個內部 IP 位址 (143.88.11.14 和 143.88.11.10) 對單一目標 IP 位址 (143.88.11.1) 進行了多次可疑的 ICMP 網路連線，這可能代表主動掃描以收集目標資訊 (E002735, E002568, E002570, E002617, E002619, E002577, E002579, E002585, E002608, E002729, E002720, E002600)。",
+      "evidence": [
+        "E002735",
+        "E002568",
+        "E002570",
+        "E002617",
+        "E002619",
+        "E002577",
+        "E002579",
+        "E002585",
+        "E002608",
+        "E002729",
+        "E002720",
+        "E002600"
+      ]
+    }
+  ],
+  "attack_story": "在 2022 年 1 月 9 日至 1 月 15 日期間，系統偵測到一系列可疑的 ICMP 網路連線。攻擊者（或內部惡意行為者）似乎利用 IP 位址 143.88.11.14 和 143.88.11.10，多次對目標 IP 位址 143.88.11.1 執行 ICMP 流量。這些連線被標記為「可疑」，表明可能正在進行偵察活動，試圖探測目標系統的網路可達性或收集其他網路資訊。這種持續性的可疑 ICMP 活動可能是一個更廣泛攻擊鏈的早期階段。",
+  "uncertainty": "日誌中未提供這些 ICMP 連線被標記為「可疑」的具體原因。無法確定這些連線是惡意偵察、內部配置錯誤、還是其他類型的異常行為。此外，日誌中沒有關於涉及的使用者或主機名稱的資訊。",
+  "recommended_triage_actions": [
+    "調查來源 IP (143.88.11.14, 143.88.11.10) 和目標 IP (143.88.11.1) 的所有者和用途。",
+    "檢查這些 IP 位址上的主機日誌，尋找是否有其他異常活動或惡意軟體跡象。",
+    "分析相關時間範圍內的完整封包擷取 (如果可用)，以了解 ICMP 流量的具體內容和模式。",
+    "評估網路配置和防火牆規則，確保 ICMP 流量受到適當的限制和監控。"
+  ],
+  "indicators_of_compromise": {
+    "ips": [
+      "143.88.11.1",
+      "143.88.11.10",
+      "143.88.11.14"
+    ],
+    "users": [],
+    "windows_event_ids": []
+  }
+}
+report_005 = {
+  "incident_title": "可疑 DHCPv6 服務探索活動",
+  "risk_level": "Medium",
+  "cluster_id": "cluster_005",
+  "time_range": {
+    "start": "2022-01-10T03:01:57.422Z",
+    "end": "2022-01-15T20:19:15.813Z"
+  },
+  "executive_summary": {
+    "description": "在 2022-01-10T03:01:57.422Z 至 2022-01-15T20:19:15.813Z 期間，內部 IP 位址 fe80::f862:2895:ecac:131b 反覆嘗試透過 UDP 協定連線至 DHCPv6 多播地址 ff02::1:2，但所有連線均未成功建立 (conn_state=S0)。此行為被系統標記為可疑網路連線，可能為內部網路服務探索或惡意偵察活動 (log_0001, log_0002, ..., log_0019)。",
+    "evidence": [
+      "E002679",
+      "E002674",
+      "E002639",
+      "E002666",
+      "E002650",
+      "E002677",
+      "E002676",
+      "E002669",
+      "E002671",
+      "E002673",
+      "E002675",
+      "E002651",
+      "E002678",
+      "E002652",
+      "E002644",
+      "E002648",
+      "E002672",
+      "E002665",
+      "E002667",
+      "E002658"
+    ]
+  },
+  "timeline": [
+    {
+      "time": "2022-01-10T03:01:57.422Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0 (SYN_SENT)。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002679",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T06:56:50.612Z",
+      "summary": "再次偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002674",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T07:32:25.944Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002639",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T10:51:43.800Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002666",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-10T17:58:47.780Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002650",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T09:54:37.487Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002677",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T13:56:37.742Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002676",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T17:30:09.732Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002669",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-11T22:50:27.732Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002671",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-12T02:52:27.987Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002673",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-12T09:59:31.967Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002675",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-12T11:24:56.763Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002651",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-12T13:18:49.824Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002678",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-13T02:36:01.253Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002652",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-13T19:19:37.606Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002644",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-13T22:38:55.463Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002648",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-14T12:03:13.771Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002672",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-15T06:19:21.986Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002665",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-15T14:58:57.828Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002667",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    },
+    {
+      "time": "2022-01-15T20:19:15.813Z",
+      "summary": "偵測到來自 fe80::f862:2895:ecac:131b:546 的可疑 UDP 網路連線嘗試，目標為 ff02::1:2:547，連線狀態為 S0。",
+      "mitre_tactic": "Discovery",
+      "mitre_technique": "T1046",
+      "evidence": {
+        "log_id": "E002658",
+        "log_text_excerpt": "event_type=suspicious_network_connection | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0"
+      }
+    }
+  ],
+  "mitre_attack_mapping": [
+    {
+      "technique_id": "T1046",
+      "technique_name": "Network Service Discovery",
+      "tactic": "Discovery",
+      "observed_behavior": "內部主機 fe80::f862:2895:ecac:131b 反覆嘗試透過 UDP 連接到 DHCPv6 多播地址 ff02::1:2，但連線狀態為 S0 (SYN_SENT)，表示連線未建立。此行為被標記為可疑網路連線 (E002679, E002674, E002639, E002666, E002650, E002677, E002676, E002669, E002671, E002673, E002675, E002651, E002678, E002652, E002644, E002648, E002672, E002665, E002667, E002658)。",
+      "evidence": [
+        "E002679",
+        "E002674",
+        "E002639",
+        "E002666",
+        "E002650",
+        "E002677",
+        "E002676",
+        "E002669",
+        "E002671",
+        "E002673",
+        "E002675",
+        "E002651",
+        "E002678",
+        "E002652",
+        "E002644",
+        "E002648",
+        "E002672",
+        "E002665",
+        "E002667",
+        "E002658"
+      ]
+    }
+  ],
+  "attack_story": "在 2022 年 1 月 10 日至 1 月 15 日期間，一個內部 IP 位址 fe80::f862:2895:ecac:131b 反覆發起可疑的 UDP 網路連線嘗試。這些嘗試的目標是 IPv6 的 DHCPv6 多播地址 ff02::1:2，通常用於發現網路中的 DHCPv6 伺服器或中繼代理。儘管連線嘗試持續了數天，但所有連線的狀態均為 S0 (SYN_SENT)，表示連線請求未收到任何回應，未能成功建立。此模式可能表明攻擊者或惡意軟體正在執行內部網路服務探索，試圖識別可用的 DHCPv6 服務，以便進一步的偵察或潛在的利用。由於沒有連線成功，目前無法確認是否發生了實際的入侵或資料洩露，但持續的可疑活動值得進一步調查。",
+  "uncertainty": "目前尚不清楚發起這些可疑連線的具體主機名稱或使用者。此外，無法確定這些連線嘗試的確切目的，例如是惡意探索、設定錯誤的 DHCPv6 用戶端行為，還是其他類型的網路活動。日誌中沒有提供關於這些連線嘗試是否導致任何實際影響或後續活動的資訊。",
+  "recommended_triage_actions": [
+    "隔離或限制來源 IP 位址 fe80::f862:2895:ecac:131b 的網路活動，直到調查完成。",
+    "識別並檢查與 fe80::f862:2895:ecac:131b 相關聯的實際主機或設備，以確定其用途和配置。",
+    "檢查該主機是否有惡意軟體感染或不當配置的 DHCPv6 用戶端。",
+    "分析網路流量日誌，尋找與 fe80::f862:2895:ecac:131b 相關的其他異常活動或連線。",
+    "評估 DHCPv6 服務的安全性配置，以防止潛在的利用。"
+  ],
+  "indicators_of_compromise": {
+    "ips": [
+      "fe80::f862:2895:ecac:131b",
+      "ff02::1:2"
+    ],
+    "users": [],
+    "windows_event_ids": [
+      "suspicious_network_connection"
+    ]
+  }
+}
+
+reports = [report_000, report_001, report_002, report_003, report_004, report_005]
+
+print(f"待評估報告數: {len(reports)}")
+for r in reports:
+    print(f"  - {r.get('cluster_id','?')}: {r.get('incident_title','')}")
+
+def evidence_to_text(evidence):
+    """把任何格式的 evidence 攤平成純文字，讓比對不依賴特定欄位名稱，跨資料集通用。"""
+    if isinstance(evidence, dict):
+        return " ".join(str(v) for k, v in evidence.items() if k not in ("event_id", "log_id"))
+    if isinstance(evidence, list):
+        return " ".join(str(x) for x in evidence)
+    return str(evidence)
+
+def extract_iocs(text):
+    """從文字抓出 IP 位址（含 IPv4），用於一致性與真實性比對。"""
+    return set(re.findall(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', str(text)))
+
+print("工具函數已定義")
+
+# @title
+# ⚠️ 替換點3：成員2的 clustered_events.json（那份含6個cluster的）整個貼進來
+# 還沒拿到就設 clustered_events = []，路線B會自動跳過
+
+clustered_events = [
+  {
+    "cluster_id": "cluster_000",
+    "total_count": 5311,
+    "time_range": {
+      "start": "2022-01-09T00:00:37.204Z",
+      "end": "2022-02-10T03:59:50.080Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E007018",
+        "timestamp": "2022-01-09T00:00:37.204Z",
+        "text": "At 2022-01-09T00:00:37.204Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Ck0yhW1hZfykPN1hRf | process=None | command=None | parent=None | source=143.88.255.10:46257 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007018@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9322"
+      },
+      {
+        "log_id": "E004958",
+        "timestamp": "2022-01-09T00:03:08.453Z",
+        "text": "At 2022-01-09T00:03:08.453Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CAhh7k3YIze9sTxtwj | process=None | command=None | parent=None | source=143.88.255.10:37766 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004958@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7262"
+      },
+      {
+        "log_id": "E007021",
+        "timestamp": "2022-01-09T00:06:40.203Z",
+        "text": "At 2022-01-09T00:06:40.203Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cx9hX42WE6L5h39gH5 | process=None | command=None | parent=None | source=143.88.255.10:47975 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007021@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9325"
+      },
+      {
+        "log_id": "E007269",
+        "timestamp": "2022-01-09T00:11:12.452Z",
+        "text": "At 2022-01-09T00:11:12.452Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cg1qczbO57PtgDgol | process=None | command=None | parent=None | source=143.88.255.10:40138 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007269@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9573"
+      },
+      {
+        "log_id": "E003624",
+        "timestamp": "2022-01-09T00:13:43.703Z",
+        "text": "At 2022-01-09T00:13:43.703Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CP0xVg1zK7mZGq60gc | process=None | command=None | parent=None | source=143.88.255.10:53673 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003624@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5928"
+      },
+      {
+        "log_id": "E005431",
+        "timestamp": "2022-01-09T00:18:15.953Z",
+        "text": "At 2022-01-09T00:18:15.953Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CZsEmc4y4ZhRUJDGJf | process=None | command=None | parent=None | source=143.88.255.10:47680 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005431@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7735"
+      },
+      {
+        "log_id": "E004493",
+        "timestamp": "2022-01-09T00:21:17.453Z",
+        "text": "At 2022-01-09T00:21:17.453Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CPHaNx3sR6YXMS8y5c | process=None | command=None | parent=None | source=143.88.255.10:39553 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004493@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6797"
+      },
+      {
+        "log_id": "E005043",
+        "timestamp": "2022-01-09T00:22:48.204Z",
+        "text": "At 2022-01-09T00:22:48.204Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CV4xVr4jx9xNn0cMX6 | process=None | command=None | parent=None | source=143.88.255.10:42103 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005043@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7347"
+      },
+      {
+        "log_id": "E005751",
+        "timestamp": "2022-01-09T00:31:52.705Z",
+        "text": "At 2022-01-09T00:31:52.705Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CT2mf63GXWiudK2E83 | process=None | command=None | parent=None | source=143.88.255.10:41514 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005751@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8055"
+      },
+      {
+        "log_id": "E005917",
+        "timestamp": "2022-01-09T00:32:22.953Z",
+        "text": "At 2022-01-09T00:32:22.953Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CPDTAFcbv9fEkjJX6 | process=None | command=None | parent=None | source=143.88.255.10:33711 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005917@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8221"
+      },
+      {
+        "log_id": "E007125",
+        "timestamp": "2022-01-09T00:43:28.457Z",
+        "text": "At 2022-01-09T00:43:28.457Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CCxZdB3jyl1KIitP8c | process=None | command=None | parent=None | source=143.88.255.10:56077 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007125@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9429"
+      },
+      {
+        "log_id": "E002959",
+        "timestamp": "2022-01-09T00:49:58.286Z",
+        "text": "At 2022-01-09T00:49:58.286Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CkUR8d3zdwQC3bru64 | process=None | command=None | parent=None | source=143.88.11.10:46306 | dest=8.8.8.8:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002959@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5263"
+      },
+      {
+        "log_id": "E005928",
+        "timestamp": "2022-01-09T01:10:41.958Z",
+        "text": "At 2022-01-09T01:10:41.958Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CDQOHB2D1eMSjQQyR6 | process=None | command=None | parent=None | source=143.88.255.10:43288 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005928@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8232"
+      },
+      {
+        "log_id": "E003848",
+        "timestamp": "2022-01-09T01:14:43.958Z",
+        "text": "At 2022-01-09T01:14:43.958Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3gI8qJpmToCDBjii | process=None | command=None | parent=None | source=143.88.255.10:58931 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003848@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6152"
+      },
+      {
+        "log_id": "E003976",
+        "timestamp": "2022-01-09T01:24:18.708Z",
+        "text": "At 2022-01-09T01:24:18.708Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3P7lp3gXZjbG69Mtl | process=None | command=None | parent=None | source=143.88.255.10:58352 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003976@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6280"
+      },
+      {
+        "log_id": "E004560",
+        "timestamp": "2022-01-09T01:24:48.959Z",
+        "text": "At 2022-01-09T01:24:48.959Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C74G464vYOD28lEk1b | process=None | command=None | parent=None | source=143.88.255.10:36536 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004560@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6864"
+      },
+      {
+        "log_id": "E006789",
+        "timestamp": "2022-01-09T01:28:20.706Z",
+        "text": "At 2022-01-09T01:28:20.706Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CK1CII3mNZyNOKJLOi | process=None | command=None | parent=None | source=143.88.255.10:48381 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E006789@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9093"
+      },
+      {
+        "log_id": "E003704",
+        "timestamp": "2022-01-09T01:33:23.207Z",
+        "text": "At 2022-01-09T01:33:23.207Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CAKlwg3g05J4kRST7d | process=None | command=None | parent=None | source=143.88.255.10:34067 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003704@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6008"
+      },
+      {
+        "log_id": "E005481",
+        "timestamp": "2022-01-09T01:34:23.709Z",
+        "text": "At 2022-01-09T01:34:23.709Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CkZEtc4IPCqrJVmbs6 | process=None | command=None | parent=None | source=143.88.255.10:37899 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005481@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7785"
+      },
+      {
+        "log_id": "E006123",
+        "timestamp": "2022-01-09T01:46:29.711Z",
+        "text": "At 2022-01-09T01:46:29.711Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CW4iqi2xskD1n79ZVc | process=None | command=None | parent=None | source=143.88.255.10:58254 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E006123@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8427"
+      },
+      {
+        "log_id": "E003232",
+        "timestamp": "2022-01-09T01:53:02.957Z",
+        "text": "At 2022-01-09T01:53:02.957Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CL2K2f3fvs7ZS8ZPM9 | process=None | command=None | parent=None | source=143.88.255.10:38774 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E003232@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5536"
+      },
+      {
+        "log_id": "E004735",
+        "timestamp": "2022-01-09T01:53:02.959Z",
+        "text": "At 2022-01-09T01:53:02.959Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C0LMlz3hyWO1VtWCjj | process=None | command=None | parent=None | source=143.88.255.10:43823 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004735@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7039"
+      },
+      {
+        "log_id": "E004443",
+        "timestamp": "2022-01-09T02:04:38.710Z",
+        "text": "At 2022-01-09T02:04:38.710Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CpC76F3iP3Lds5vD45 | process=None | command=None | parent=None | source=143.88.255.10:34329 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004443@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6747"
+      },
+      {
+        "log_id": "E005401",
+        "timestamp": "2022-01-09T02:06:09.461Z",
+        "text": "At 2022-01-09T02:06:09.461Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C0JY1Y2ZeKp7Lbs0Bj | process=None | command=None | parent=None | source=143.88.255.10:49378 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005401@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7705"
+      },
+      {
+        "log_id": "E005828",
+        "timestamp": "2022-01-09T02:23:48.210Z",
+        "text": "At 2022-01-09T02:23:48.210Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C89Fax1v9JpJIXUoWi | process=None | command=None | parent=None | source=143.88.255.10:35135 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005828@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8132"
+      },
+      {
+        "log_id": "E005593",
+        "timestamp": "2022-01-09T02:25:18.960Z",
+        "text": "At 2022-01-09T02:25:18.960Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CCr3iF3dlDqj7Yntr5 | process=None | command=None | parent=None | source=143.88.255.10:54082 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005593@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:7897"
+      },
+      {
+        "log_id": "E007516",
+        "timestamp": "2022-01-09T02:28:20.462Z",
+        "text": "At 2022-01-09T02:28:20.462Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CEEY6YbNOJ1sf3ev9 | process=None | command=None | parent=None | source=143.88.255.10:52084 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E007516@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:9820"
+      },
+      {
+        "log_id": "E002743",
+        "timestamp": "2022-01-09T02:40:56.338Z",
+        "text": "At 2022-01-09T02:40:56.338Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C2akGN2ZJQwY5gbA09 | process=None | command=None | parent=None | source=0.0.0.0:68 | dest=255.255.255.255:67 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002743@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5047"
+      },
+      {
+        "log_id": "E005999",
+        "timestamp": "2022-01-09T02:53:02.713Z",
+        "text": "At 2022-01-09T02:53:02.713Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CsLOLT2xo3udp4aBYg | process=None | command=None | parent=None | source=143.88.255.10:50591 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E005999@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:8303"
+      },
+      {
+        "log_id": "E004218",
+        "timestamp": "2022-01-09T02:57:04.709Z",
+        "text": "At 2022-01-09T02:57:04.709Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C9IoC5k0gFTLroATg | process=None | command=None | parent=None | source=143.88.255.10:35185 | dest=10.0.10.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E004218@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:6522"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "0.0.0.0",
+        "10.0.10.1",
+        "143.88.0.18",
+        "143.88.0.42",
+        "143.88.11.1",
+        "143.88.11.10",
+        "143.88.11.11",
+        "143.88.11.12",
+        "143.88.11.13",
+        "143.88.11.255",
+        "143.88.255.10",
+        "143.88.5.1",
+        "143.88.5.12",
+        "172.28.128.255",
+        "172.28.128.3",
+        "192.112.36.4",
+        "192.203.230.10",
+        "192.33.4.12",
+        "192.36.148.17",
+        "192.5.5.241",
+        "192.58.128.30",
+        "193.0.14.129",
+        "198.41.0.4",
+        "198.97.190.53",
+        "199.7.83.42",
+        "199.7.91.13",
+        "199.9.14.201",
+        "202.12.27.33",
+        "224.0.0.251",
+        "224.0.0.252",
+        "255.255.255.255",
+        "8.8.4.4",
+        "8.8.8.8"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_001",
+    "total_count": 256,
+    "time_range": {
+      "start": "2022-02-10T03:58:50.008Z",
+      "end": "2022-02-10T03:58:50.008Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E000513",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000513@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1281"
+      },
+      {
+        "log_id": "E000514",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000514@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1282"
+      },
+      {
+        "log_id": "E000515",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000515@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1283"
+      },
+      {
+        "log_id": "E000516",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000516@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1284"
+      },
+      {
+        "log_id": "E000517",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000517@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1285"
+      },
+      {
+        "log_id": "E000518",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000518@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1286"
+      },
+      {
+        "log_id": "E000519",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000519@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1287"
+      },
+      {
+        "log_id": "E000520",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000520@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1288"
+      },
+      {
+        "log_id": "E000521",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000521@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1289"
+      },
+      {
+        "log_id": "E000522",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000522@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1290"
+      },
+      {
+        "log_id": "E000523",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000523@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1291"
+      },
+      {
+        "log_id": "E000524",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000524@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1292"
+      },
+      {
+        "log_id": "E000525",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000525@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1293"
+      },
+      {
+        "log_id": "E000526",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000526@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1294"
+      },
+      {
+        "log_id": "E000527",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000527@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1295"
+      },
+      {
+        "log_id": "E000528",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000528@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1296"
+      },
+      {
+        "log_id": "E000529",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000529@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1297"
+      },
+      {
+        "log_id": "E000530",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000530@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1298"
+      },
+      {
+        "log_id": "E000531",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000531@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1299"
+      },
+      {
+        "log_id": "E000532",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000532@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1300"
+      },
+      {
+        "log_id": "E000533",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000533@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1301"
+      },
+      {
+        "log_id": "E000534",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000534@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1302"
+      },
+      {
+        "log_id": "E000535",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000535@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1303"
+      },
+      {
+        "log_id": "E000536",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000536@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1304"
+      },
+      {
+        "log_id": "E000537",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000537@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1305"
+      },
+      {
+        "log_id": "E000538",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000538@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1306"
+      },
+      {
+        "log_id": "E000539",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000539@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1307"
+      },
+      {
+        "log_id": "E000540",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000540@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1308"
+      },
+      {
+        "log_id": "E000541",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000541@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1309"
+      },
+      {
+        "log_id": "E000542",
+        "timestamp": "2022-02-10T03:58:50.008Z",
+        "text": "At 2022-02-10T03:58:50.008Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRN2u74QOvAjPDeKl2 | process=None | command=None | parent=None | source=143.88.5.12:59885 | dest=143.88.5.1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E000542@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:1310"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "143.88.5.1",
+        "143.88.5.12"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_002",
+    "total_count": 55,
+    "time_range": {
+      "start": "2022-01-11T00:35:25.161Z",
+      "end": "2022-01-14T10:14:20.966Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E002494",
+        "timestamp": "2022-01-11T00:35:25.161Z",
+        "text": "At 2022-01-11T00:35:25.161Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Csc8eG31QlhT0tEUxg | process=None | command=None | parent=None | source=143.88.11.10:51750 | dest=169.254.169.254:80 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002494@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4798"
+      },
+      {
+        "log_id": "E002328",
+        "timestamp": "2022-01-11T10:46:05.039Z",
+        "text": "At 2022-01-11T10:46:05.039Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CmdBJQ2f63ZluIZhw5 | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:9500 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002328@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4632"
+      },
+      {
+        "log_id": "E002336",
+        "timestamp": "2022-01-11T10:46:05.339Z",
+        "text": "At 2022-01-11T10:46:05.339Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CH6HZs3hAhfH5dTsX2 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:3369 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002336@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4640"
+      },
+      {
+        "log_id": "E002344",
+        "timestamp": "2022-01-11T10:46:06.641Z",
+        "text": "At 2022-01-11T10:46:06.641Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C9fLz14NmPi0IDZCk1 | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:306 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002344@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4648"
+      },
+      {
+        "log_id": "E002323",
+        "timestamp": "2022-01-11T10:46:07.142Z",
+        "text": "At 2022-01-11T10:46:07.142Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CHlYR04K6AyoJo0BM2 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:1035 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002323@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4627"
+      },
+      {
+        "log_id": "E002329",
+        "timestamp": "2022-01-11T10:46:07.542Z",
+        "text": "At 2022-01-11T10:46:07.542Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CM5Mtqrvn9s32Tn46 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:1805 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002329@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4633"
+      },
+      {
+        "log_id": "E002324",
+        "timestamp": "2022-01-11T10:46:09.045Z",
+        "text": "At 2022-01-11T10:46:09.045Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C4gjli1V7Zd9qlFvkk | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:1034 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002324@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4628"
+      },
+      {
+        "log_id": "E002332",
+        "timestamp": "2022-01-11T10:46:10.747Z",
+        "text": "At 2022-01-11T10:46:10.747Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Ck428E273DM86afS1k | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:10215 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002332@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4636"
+      },
+      {
+        "log_id": "E002325",
+        "timestamp": "2022-01-11T10:46:11.348Z",
+        "text": "At 2022-01-11T10:46:11.348Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CHfJm72DEsy9gzs1Qa | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:1213 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002325@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4629"
+      },
+      {
+        "log_id": "E002326",
+        "timestamp": "2022-01-11T10:46:12.850Z",
+        "text": "At 2022-01-11T10:46:12.850Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cu6ofM1FtpM595Jag | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:37 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002326@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4630"
+      },
+      {
+        "log_id": "E002346",
+        "timestamp": "2022-01-11T10:46:12.950Z",
+        "text": "At 2022-01-11T10:46:12.950Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CkJX4C4Zw7LGXLNF83 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:79 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002346@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4650"
+      },
+      {
+        "log_id": "E002321",
+        "timestamp": "2022-01-11T10:46:14.452Z",
+        "text": "At 2022-01-11T10:46:14.452Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C8C1p13HHevK3Ju4w4 | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:222 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002321@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4625"
+      },
+      {
+        "log_id": "E002341",
+        "timestamp": "2022-01-11T10:46:16.855Z",
+        "text": "At 2022-01-11T10:46:16.855Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C6Th5FQTusKjdS67k | process=None | command=None | parent=None | source=143.88.11.10:38899 | dest=143.88.11.1:5962 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002341@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4645"
+      },
+      {
+        "log_id": "E002338",
+        "timestamp": "2022-01-11T10:46:19.559Z",
+        "text": "At 2022-01-11T10:46:19.559Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cx6aJK1YqseFL0g8T8 | process=None | command=None | parent=None | source=143.88.11.10:38900 | dest=143.88.11.1:2119 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002338@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4642"
+      },
+      {
+        "log_id": "E002446",
+        "timestamp": "2022-01-11T10:47:55.282Z",
+        "text": "At 2022-01-11T10:47:55.282Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CQA1pr4WPhKMf4mAre | process=None | command=None | parent=None | source=143.88.11.10:55184 | dest=143.88.11.1:7937 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002446@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4750"
+      },
+      {
+        "log_id": "E002427",
+        "timestamp": "2022-01-11T10:47:55.783Z",
+        "text": "At 2022-01-11T10:47:55.783Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CYCjfhqDF06gJ8X8k | process=None | command=None | parent=None | source=143.88.11.10:47212 | dest=143.88.11.1:27353 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002427@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4731"
+      },
+      {
+        "log_id": "E002458",
+        "timestamp": "2022-01-11T10:47:56.383Z",
+        "text": "At 2022-01-11T10:47:56.383Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cdv5Si1ryX4ZiyQqAg | process=None | command=None | parent=None | source=143.88.11.10:51438 | dest=143.88.11.1:8193 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002458@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4762"
+      },
+      {
+        "log_id": "E002448",
+        "timestamp": "2022-01-11T10:48:00.986Z",
+        "text": "At 2022-01-11T10:48:00.986Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CzWY723z4USUCTEAEd | process=None | command=None | parent=None | source=143.88.11.10:39420 | dest=143.88.11.1:6009 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002448@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4752"
+      },
+      {
+        "log_id": "E002454",
+        "timestamp": "2022-01-11T10:48:05.888Z",
+        "text": "At 2022-01-11T10:48:05.888Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CbMJNGa0VC6kNzc91 | process=None | command=None | parent=None | source=143.88.11.10:45544 | dest=143.88.11.1:8400 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002454@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4758"
+      },
+      {
+        "log_id": "E002452",
+        "timestamp": "2022-01-11T10:48:06.488Z",
+        "text": "At 2022-01-11T10:48:06.488Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C90VUN1Gdtkjo8TDtj | process=None | command=None | parent=None | source=143.88.11.10:42966 | dest=143.88.11.1:7000 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002452@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4756"
+      },
+      {
+        "log_id": "E002438",
+        "timestamp": "2022-01-11T10:48:07.489Z",
+        "text": "At 2022-01-11T10:48:07.489Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C4QzjB4zxCZUAlwJ0g | process=None | command=None | parent=None | source=143.88.11.10:53150 | dest=143.88.11.1:7512 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002438@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4742"
+      },
+      {
+        "log_id": "E002423",
+        "timestamp": "2022-01-11T10:53:45.632Z",
+        "text": "At 2022-01-11T10:53:45.632Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3b7ye2KwggIV6BgKg | process=None | command=None | parent=None | source=143.88.11.10:50916 | dest=143.88.11.1:143 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002423@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4727"
+      },
+      {
+        "log_id": "E002457",
+        "timestamp": "2022-01-11T10:53:47.033Z",
+        "text": "At 2022-01-11T10:53:47.033Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CFYOn710b8YXaS6Y6f | process=None | command=None | parent=None | source=143.88.11.10:34536 | dest=143.88.11.1:2161 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002457@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4761"
+      },
+      {
+        "log_id": "E002455",
+        "timestamp": "2022-01-11T10:53:49.234Z",
+        "text": "At 2022-01-11T10:53:49.234Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3JmGW3K9fOvmwPMc3 | process=None | command=None | parent=None | source=143.88.11.10:59956 | dest=143.88.11.1:3322 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002455@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4759"
+      },
+      {
+        "log_id": "E002420",
+        "timestamp": "2022-01-11T10:53:49.834Z",
+        "text": "At 2022-01-11T10:53:49.834Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CM95xU2NdESRiqbNRa | process=None | command=None | parent=None | source=143.88.11.10:47456 | dest=143.88.11.1:2605 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002420@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4724"
+      },
+      {
+        "log_id": "E002447",
+        "timestamp": "2022-01-11T10:53:50.935Z",
+        "text": "At 2022-01-11T10:53:50.935Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CcZj9rhIGlXTqejkl | process=None | command=None | parent=None | source=143.88.11.10:32888 | dest=143.88.11.1:27000 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002447@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4751"
+      },
+      {
+        "log_id": "E002432",
+        "timestamp": "2022-01-11T10:53:53.837Z",
+        "text": "At 2022-01-11T10:53:53.837Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7b6Xt490Tvb0Y9ki2 | process=None | command=None | parent=None | source=143.88.11.10:38230 | dest=143.88.11.1:3880 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002432@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4736"
+      },
+      {
+        "log_id": "E002440",
+        "timestamp": "2022-01-11T10:53:56.938Z",
+        "text": "At 2022-01-11T10:53:56.938Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CN6pRt3mS8QWDrfCHh | process=None | command=None | parent=None | source=143.88.11.10:40362 | dest=143.88.11.1:3689 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002440@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4744"
+      },
+      {
+        "log_id": "E002414",
+        "timestamp": "2022-01-11T10:53:58.039Z",
+        "text": "At 2022-01-11T10:53:58.039Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CyfOBF8j9OX73eu7e | process=None | command=None | parent=None | source=143.88.11.10:56540 | dest=143.88.11.1:5060 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002414@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4718"
+      },
+      {
+        "log_id": "E002399",
+        "timestamp": "2022-01-14T08:44:55.109Z",
+        "text": "At 2022-01-14T08:44:55.109Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C8fa5K2Oe12bJm7906 | process=None | command=None | parent=None | source=143.88.11.10:42402 | dest=143.88.11.11:7920 | protocol=tcp | conn_state=S0 | tactic=None | evidence=E002399@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4703"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "143.88.11.1",
+        "143.88.11.10",
+        "143.88.11.11",
+        "169.254.169.254"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_003",
+    "total_count": 112,
+    "time_range": {
+      "start": "2022-01-09T01:37:22.415Z",
+      "end": "2022-01-15T23:34:40.712Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E002502",
+        "timestamp": "2022-01-09T01:37:22.415Z",
+        "text": "At 2022-01-09T01:37:22.415Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CulDlh1w4tJttwcD22 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002502@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4806"
+      },
+      {
+        "log_id": "E002921",
+        "timestamp": "2022-01-09T05:11:59.669Z",
+        "text": "At 2022-01-09T05:11:59.669Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CZfO1wvvW2KSKqGOk | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:33689 | dest=2001:503:c27::2:30:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002921@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5225"
+      },
+      {
+        "log_id": "E002647",
+        "timestamp": "2022-01-09T06:37:42.015Z",
+        "text": "At 2022-01-09T06:37:42.015Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7CZvu4GDz5XNROHSi | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002647@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4951"
+      },
+      {
+        "log_id": "E002503",
+        "timestamp": "2022-01-09T07:19:47.226Z",
+        "text": "At 2022-01-09T07:19:47.226Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CR1UaQ1rQh0XrwJqCj | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002503@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4807"
+      },
+      {
+        "log_id": "E002504",
+        "timestamp": "2022-01-09T07:25:38.627Z",
+        "text": "At 2022-01-09T07:25:38.627Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CZnXWR3lcvZvW6dq52 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002504@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4808"
+      },
+      {
+        "log_id": "E002659",
+        "timestamp": "2022-01-09T09:49:52.805Z",
+        "text": "At 2022-01-09T09:49:52.805Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C2BVnx19TMubOfpG65 | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002659@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4963"
+      },
+      {
+        "log_id": "E002909",
+        "timestamp": "2022-01-10T00:15:17.914Z",
+        "text": "At 2022-01-10T00:15:17.914Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CJ5Xhw4s9QZIbl24O6 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:54505 | dest=2001:500:2f::f:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002909@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5213"
+      },
+      {
+        "log_id": "E002923",
+        "timestamp": "2022-01-10T01:15:27.117Z",
+        "text": "At 2022-01-10T01:15:27.117Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRaPW72ViP6qBlUtz1 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:42625 | dest=2001:7fd::1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002923@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5227"
+      },
+      {
+        "log_id": "E002641",
+        "timestamp": "2022-01-10T03:09:04.490Z",
+        "text": "At 2022-01-10T03:09:04.490Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7taTM1nuRG78oabLd | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002641@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4945"
+      },
+      {
+        "log_id": "E002506",
+        "timestamp": "2022-01-10T05:50:28.622Z",
+        "text": "At 2022-01-10T05:50:28.622Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cg8HfB4qs3lcRCT551 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002506@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4810"
+      },
+      {
+        "log_id": "E002931",
+        "timestamp": "2022-01-10T08:16:29.153Z",
+        "text": "At 2022-01-10T08:16:29.153Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CHTfpl3qgXcZcUam5l | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:37707 | dest=2001:7fe::53:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002931@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5235"
+      },
+      {
+        "log_id": "E002939",
+        "timestamp": "2022-01-10T15:08:53.913Z",
+        "text": "At 2022-01-10T15:08:53.913Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cgv1Ie4dHqEZyalje9 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:9068:5353 | dest=ff02::fb:5353 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002939@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5243"
+      },
+      {
+        "log_id": "E002915",
+        "timestamp": "2022-01-10T15:17:40.032Z",
+        "text": "At 2022-01-10T15:17:40.032Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CPV5qk4nsRJ15dGdd2 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:58356 | dest=2001:500:9f::42:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002915@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5219"
+      },
+      {
+        "log_id": "E002928",
+        "timestamp": "2022-01-10T17:18:07.290Z",
+        "text": "At 2022-01-10T17:18:07.290Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CaH4eM2KCUN7Xr4mW4 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:42920 | dest=2001:7fe::53:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002928@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5232"
+      },
+      {
+        "log_id": "E002507",
+        "timestamp": "2022-01-10T18:02:03.496Z",
+        "text": "At 2022-01-10T18:02:03.496Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CIuL6A25hALxE3bVJc | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002507@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4811"
+      },
+      {
+        "log_id": "E002889",
+        "timestamp": "2022-01-10T19:18:24.900Z",
+        "text": "At 2022-01-10T19:18:24.900Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CbKpCe4ebc8RJ4sUmi | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:48999 | dest=2001:500:12::d0d:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002889@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5193"
+      },
+      {
+        "log_id": "E002508",
+        "timestamp": "2022-01-10T19:30:29.999Z",
+        "text": "At 2022-01-10T19:30:29.999Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CbeXhD2Wr3nBozgqL8 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002508@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4812"
+      },
+      {
+        "log_id": "E002662",
+        "timestamp": "2022-01-10T19:38:26.709Z",
+        "text": "At 2022-01-10T19:38:26.709Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C8mkoxLk9zxglzfK9 | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002662@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4966"
+      },
+      {
+        "log_id": "E002904",
+        "timestamp": "2022-01-10T20:18:31.694Z",
+        "text": "At 2022-01-10T20:18:31.694Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CBw8vF3MySqrhDZsP9 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:43059 | dest=2001:500:2d::d:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002904@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5208"
+      },
+      {
+        "log_id": "E002900",
+        "timestamp": "2022-01-10T23:19:07.355Z",
+        "text": "At 2022-01-10T23:19:07.355Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CAO6Ad44lNiv1kSgl5 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:49839 | dest=2001:500:2::c:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002900@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5204"
+      },
+      {
+        "log_id": "E002509",
+        "timestamp": "2022-01-11T01:01:05.060Z",
+        "text": "At 2022-01-11T01:01:05.060Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CMCBZI2HNRAti5aB8e | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002509@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4813"
+      },
+      {
+        "log_id": "E002510",
+        "timestamp": "2022-01-11T01:28:31.321Z",
+        "text": "At 2022-01-11T01:28:31.321Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CwHClw34MZPUYhViO5 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002510@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4814"
+      },
+      {
+        "log_id": "E002898",
+        "timestamp": "2022-01-11T03:19:41.770Z",
+        "text": "At 2022-01-11T03:19:41.770Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=COhXQ94xF4XwXH1zsg | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:54328 | dest=2001:500:200::b:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002898@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5202"
+      },
+      {
+        "log_id": "E002511",
+        "timestamp": "2022-01-11T04:52:52.428Z",
+        "text": "At 2022-01-11T04:52:52.428Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CRQ5B24Xu2G1glnvx6 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002511@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4815"
+      },
+      {
+        "log_id": "E002512",
+        "timestamp": "2022-01-11T05:56:00.780Z",
+        "text": "At 2022-01-11T05:56:00.780Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CTWYt31sOGz1Qyqimk | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002512@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4816"
+      },
+      {
+        "log_id": "E002513",
+        "timestamp": "2022-01-11T07:09:31.883Z",
+        "text": "At 2022-01-11T07:09:31.883Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CZDoA81suGSJPNCD27 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002513@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4817"
+      },
+      {
+        "log_id": "E002646",
+        "timestamp": "2022-01-11T10:51:34.018Z",
+        "text": "At 2022-01-11T10:51:34.018Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C4wWK3vLxcX4yAm09 | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002646@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4950"
+      },
+      {
+        "log_id": "E002922",
+        "timestamp": "2022-01-11T12:21:17.491Z",
+        "text": "At 2022-01-11T12:21:17.491Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CnykMejMovH2sUtDi | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:f1c3:51319 | dest=2001:7fd::1:53 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002922@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5226"
+      },
+      {
+        "log_id": "E002514",
+        "timestamp": "2022-01-11T13:02:52.794Z",
+        "text": "At 2022-01-11T13:02:52.794Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CHU25Bi549g3E5Ez3 | process=None | command=None | parent=None | source=fe80::250:56ff:fe9e:5457:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002514@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4818"
+      },
+      {
+        "log_id": "E002661",
+        "timestamp": "2022-01-11T14:46:27.206Z",
+        "text": "At 2022-01-11T14:46:27.206Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CJhC2I6rwc10iNCb3 | process=None | command=None | parent=None | source=fe80::143e:e94b:597c:a35b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002661@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4965"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "2001:500:12::d0d",
+        "2001:500:1::53",
+        "2001:500:200::b",
+        "2001:500:2::c",
+        "2001:500:2d::d",
+        "2001:500:2f::f",
+        "2001:500:9f::42",
+        "2001:500:a8::e",
+        "2001:503:ba3e::2:30",
+        "2001:503:c27::2:30",
+        "2001:7fd::1",
+        "2001:7fe::53",
+        "2001:dc3::35",
+        "fe80::143e:e94b:597c:a35b",
+        "fe80::250:56ff:fe9e:39e5",
+        "fe80::250:56ff:fe9e:5457",
+        "fe80::250:56ff:fe9e:9068",
+        "fe80::250:56ff:fe9e:f1c3",
+        "ff02::1:2",
+        "ff02::fb"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_004",
+    "total_count": 12,
+    "time_range": {
+      "start": "2022-01-09T14:25:12.409Z",
+      "end": "2022-01-15T01:44:06.535Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E002735",
+        "timestamp": "2022-01-09T14:25:12.409Z",
+        "text": "At 2022-01-09T14:25:12.409Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C1mj732Fp6CuirT4Q9 | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002735@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5039"
+      },
+      {
+        "log_id": "E002568",
+        "timestamp": "2022-01-09T17:27:37.489Z",
+        "text": "At 2022-01-09T17:27:37.489Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7e1pV2lLd0AP38mXf | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002568@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4872"
+      },
+      {
+        "log_id": "E002570",
+        "timestamp": "2022-01-10T04:32:38.883Z",
+        "text": "At 2022-01-10T04:32:38.883Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=ChZ8OA1ZwM9RZXSfsa | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002570@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4874"
+      },
+      {
+        "log_id": "E002617",
+        "timestamp": "2022-01-10T20:18:01.750Z",
+        "text": "At 2022-01-10T20:18:01.750Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CAwWb63UmHgwTpGNrg | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002617@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4921"
+      },
+      {
+        "log_id": "E002619",
+        "timestamp": "2022-01-11T04:45:40.809Z",
+        "text": "At 2022-01-11T04:45:40.809Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C94YAZHd281rZQW5b | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002619@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4923"
+      },
+      {
+        "log_id": "E002577",
+        "timestamp": "2022-01-11T06:47:55.159Z",
+        "text": "At 2022-01-11T06:47:55.159Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CeP94gK3vE5R3fmf4 | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002577@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4881"
+      },
+      {
+        "log_id": "E002579",
+        "timestamp": "2022-01-11T09:05:18.429Z",
+        "text": "At 2022-01-11T09:05:18.429Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CY0ESn38LpRsD0ENbl | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002579@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4883"
+      },
+      {
+        "log_id": "E002585",
+        "timestamp": "2022-01-12T09:09:09.417Z",
+        "text": "At 2022-01-12T09:09:09.417Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CtzR423Q0AL0G8lPld | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002585@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4889"
+      },
+      {
+        "log_id": "E002608",
+        "timestamp": "2022-01-13T07:03:22.890Z",
+        "text": "At 2022-01-13T07:03:22.890Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cu9aRT2Fz80sbTKVYg | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002608@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4912"
+      },
+      {
+        "log_id": "E002729",
+        "timestamp": "2022-01-13T13:32:25.213Z",
+        "text": "At 2022-01-13T13:32:25.213Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CzwVpX1XeyMMMzLdci | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002729@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5033"
+      },
+      {
+        "log_id": "E002720",
+        "timestamp": "2022-01-14T01:40:45.539Z",
+        "text": "At 2022-01-14T01:40:45.539Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CmYlqZ2xghDSw8VB4e | process=None | command=None | parent=None | source=143.88.11.14:3 | dest=143.88.11.1:3 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002720@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:5024"
+      },
+      {
+        "log_id": "E002600",
+        "timestamp": "2022-01-15T01:44:06.535Z",
+        "text": "At 2022-01-15T01:44:06.535Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CLbKVd1Z6bJ46xQ9Lj | process=None | command=None | parent=None | source=143.88.11.10:3 | dest=143.88.11.1:10 | protocol=icmp | conn_state=OTH | tactic=None | evidence=E002600@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4904"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "143.88.11.1",
+        "143.88.11.10",
+        "143.88.11.14"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  },
+  {
+    "cluster_id": "cluster_005",
+    "total_count": 20,
+    "time_range": {
+      "start": "2022-01-10T03:01:57.422Z",
+      "end": "2022-01-15T20:19:15.813Z"
+    },
+    "representative_logs": [
+      {
+        "log_id": "E002679",
+        "timestamp": "2022-01-10T03:01:57.422Z",
+        "text": "At 2022-01-10T03:01:57.422Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CnacLt4B18NZ8jsO99 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002679@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4983"
+      },
+      {
+        "log_id": "E002674",
+        "timestamp": "2022-01-10T06:56:50.612Z",
+        "text": "At 2022-01-10T06:56:50.612Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CGDX1WNJXBDLziV47 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002674@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4978"
+      },
+      {
+        "log_id": "E002639",
+        "timestamp": "2022-01-10T07:32:25.944Z",
+        "text": "At 2022-01-10T07:32:25.944Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CfQC9d1UCAOAp8ja0g | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002639@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4943"
+      },
+      {
+        "log_id": "E002666",
+        "timestamp": "2022-01-10T10:51:43.800Z",
+        "text": "At 2022-01-10T10:51:43.800Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cz0Q1w3PMvM2yBcLg6 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002666@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4970"
+      },
+      {
+        "log_id": "E002650",
+        "timestamp": "2022-01-10T17:58:47.780Z",
+        "text": "At 2022-01-10T17:58:47.780Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CFF4vE19fO9Oi4OWM5 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002650@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4954"
+      },
+      {
+        "log_id": "E002677",
+        "timestamp": "2022-01-11T09:54:37.487Z",
+        "text": "At 2022-01-11T09:54:37.487Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CR7a5h4sI1jHQWcwQ4 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002677@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4981"
+      },
+      {
+        "log_id": "E002676",
+        "timestamp": "2022-01-11T13:56:37.742Z",
+        "text": "At 2022-01-11T13:56:37.742Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CDYS1G30TXWX5087uc | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002676@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4980"
+      },
+      {
+        "log_id": "E002669",
+        "timestamp": "2022-01-11T17:30:09.732Z",
+        "text": "At 2022-01-11T17:30:09.732Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=Cc90xs8ZtbV0kRo88 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002669@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4973"
+      },
+      {
+        "log_id": "E002671",
+        "timestamp": "2022-01-11T22:50:27.732Z",
+        "text": "At 2022-01-11T22:50:27.732Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C590x22NRciHic799 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002671@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4975"
+      },
+      {
+        "log_id": "E002673",
+        "timestamp": "2022-01-12T02:52:27.987Z",
+        "text": "At 2022-01-12T02:52:27.987Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CQY2XiNedF4P3jds8 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002673@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4977"
+      },
+      {
+        "log_id": "E002675",
+        "timestamp": "2022-01-12T09:59:31.967Z",
+        "text": "At 2022-01-12T09:59:31.967Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CzNvC63WbCZUx2vnE3 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002675@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4979"
+      },
+      {
+        "log_id": "E002651",
+        "timestamp": "2022-01-12T11:24:56.763Z",
+        "text": "At 2022-01-12T11:24:56.763Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CCYq8n3g2wGsQYI3z8 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002651@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4955"
+      },
+      {
+        "log_id": "E002678",
+        "timestamp": "2022-01-12T13:18:49.824Z",
+        "text": "At 2022-01-12T13:18:49.824Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C3R7eN1Y7wzZcZFbOe | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002678@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4982"
+      },
+      {
+        "log_id": "E002652",
+        "timestamp": "2022-01-13T02:36:01.253Z",
+        "text": "At 2022-01-13T02:36:01.253Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CGcS634Cp2z5Ln8rX8 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002652@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4956"
+      },
+      {
+        "log_id": "E002644",
+        "timestamp": "2022-01-13T19:19:37.606Z",
+        "text": "At 2022-01-13T19:19:37.606Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CqMa4d2cIh1EucOeul | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002644@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4948"
+      },
+      {
+        "log_id": "E002648",
+        "timestamp": "2022-01-13T22:38:55.463Z",
+        "text": "At 2022-01-13T22:38:55.463Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CicKqd4UkODvlabo4h | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002648@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4952"
+      },
+      {
+        "log_id": "E002672",
+        "timestamp": "2022-01-14T12:03:13.771Z",
+        "text": "At 2022-01-14T12:03:13.771Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C7jMje3CLuA39ilb63 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002672@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4976"
+      },
+      {
+        "log_id": "E002665",
+        "timestamp": "2022-01-15T06:19:21.986Z",
+        "text": "At 2022-01-15T06:19:21.986Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=C6vOv82017k8SoIqQd | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002665@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4969"
+      },
+      {
+        "log_id": "E002667",
+        "timestamp": "2022-01-15T14:58:57.828Z",
+        "text": "At 2022-01-15T14:58:57.828Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CvvTzD1Dwqcq8qe022 | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002667@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4971"
+      },
+      {
+        "log_id": "E002658",
+        "timestamp": "2022-01-15T20:19:15.813Z",
+        "text": "At 2022-01-15T20:19:15.813Z | dataset=uwf_zeekdata22_csv_all_no_mitre | scenario=None | host=None | user=None | event_type=suspicious_network_connection | event_id=None | source_event_id=CPcz531ie5fUuLtSB | process=None | command=None | parent=None | source=fe80::f862:2895:ecac:131b:546 | dest=ff02::1:2:547 | protocol=udp | conn_state=S0 | tactic=None | evidence=E002658@data/uwf-zeekdata22/uwf_zeekdata22_csv_all_no_mitre.jsonl:4962"
+      }
+    ],
+    "involved_entities": {
+      "ips": [
+        "fe80::f862:2895:ecac:131b",
+        "ff02::1:2"
+      ],
+      "users": [],
+      "event_ids": [
+        "suspicious_network_connection"
+      ]
+    },
+    "metadata": {
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "clustering_algorithm": "DBSCAN"
+    }
+  }
+
+]
+
+cluster_lookup = {c.get("cluster_id"): c for c in clustered_events}
+print("載入分群數:", len(clustered_events))
+for c in clustered_events:
+    ie = c.get("involved_entities", {})
+    print(f"  {c.get('cluster_id')}: {len(ie.get('ips',[]))} IP")
+
+def check_objective_metrics(report, cluster=None):
+    result = {}
+
+    # 指標1：Schema 完整性
+    present = sum(1 for f in REQUIRED_FIELDS if f in report)
+    result["schema"] = present / len(REQUIRED_FIELDS)
+    result["missing_fields"] = [f for f in REQUIRED_FIELDS if f not in report]
+
+    # 指標2：Evidence 自我一致性
+    total, consistent = 0, 0
+    for ev in report.get("timeline", []):
+        summary_ips = extract_iocs(ev.get("summary", ""))
+        evidence_text = evidence_to_text(ev.get("evidence", {}))
+        for ip in summary_ips:
+            total += 1
+            if ip in evidence_text:
+                consistent += 1
+    result["self_consistency"] = consistent / total if total else 1.0
+    result["consistency_checked"] = total
+
+    # 指標3：Evidence ID 一致性
+    # 檢查報告引用的所有 event ID，是否都真實存在於該 cluster（以成員2的 representative_logs 為基準）
+    referenced = set()
+    for ev in report.get("timeline", []):
+        eid = ev.get("evidence", {}).get("log_id") or ev.get("evidence", {}).get("event_id")
+        if eid:
+            referenced.add(eid)
+    referenced |= set(report.get("executive_summary", {}).get("evidence", []))
+    for m in report.get("mitre_attack_mapping", []):
+        referenced.update(m.get("evidence", []))
+
+    if cluster:
+        cluster_ids = set(log.get("log_id") for log in cluster.get("representative_logs", []))
+        cluster_ids.discard(None)
+        valid = referenced & cluster_ids
+        result["id_consistency"] = len(valid) / len(referenced) if referenced else 1.0
+        result["invalid_refs"] = sorted(referenced - cluster_ids)
+    else:
+        internal_ids = set()
+        for ev in report.get("timeline", []):
+            eid = ev.get("evidence", {}).get("log_id") or ev.get("evidence", {}).get("event_id")
+            if eid:
+                internal_ids.add(eid)
+        internal_ids |= set(report.get("executive_summary", {}).get("evidence", []))
+        valid = referenced & internal_ids
+        result["id_consistency"] = len(valid) / len(referenced) if referenced else 1.0
+        result["invalid_refs"] = sorted(referenced - internal_ids)
+
+    return result
+
+t = check_objective_metrics(reports[0], cluster_lookup.get(reports[0].get("cluster_id")))
+print(f"指標1 Schema 完整性      : {t['schema']:.2%}")
+print(f"指標2 Evidence 自我一致性 : {t['self_consistency']:.2%}")
+print(f"指標3 Evidence ID 一致性  : {t['id_consistency']:.2%}  無效引用數: {len(t['invalid_refs'])}")
+
+def rubric_evaluation(report):
+    model = genai.GenerativeModel(
+        model_name='gemini-2.5-flash',
+        generation_config=genai.GenerationConfig(temperature=0.2, response_mime_type="application/json")
+    )
+    full = f"""你是一位嚴格的 SOC 資安評審。請以挑錯心態審查報告，不要因為看起來完整就給高分。
+對三個面向各給 1-5 分，先列出發現的問題再給分。
+
+1. evidence_grounding：每條 summary 的關鍵資訊是否都能在它的 evidence 找到。5分=每條都有佐證,3分=部分缺,1分=大多無法對應。
+2. timeline_coherence：事件因果與時序是否合理。5分=因果清晰時序完整,3分=有跳躍,1分=混亂。
+3. hallucination_control：逐項檢查(a)是否捏造不存在的主機/漏洞/工具(b)宣稱的事件類型是否與實際命令矛盾，特別注意 Windows Event ID（如4688）若配 Linux 命令（sudo等）即為矛盾(c)mitre_technique 是否與行為相符。發現任一項即扣分。5分=全通過,3分=1項可疑,1分=多項矛盾。
+
+待評估報告：
+{json.dumps(report, indent=2, ensure_ascii=False)}
+
+只回傳 JSON：
+{{
+  "evidence_grounding": {{"score": <1-5>, "reason": "<理由>"}},
+  "timeline_coherence": {{"score": <1-5>, "reason": "<理由>"}},
+  "hallucination_control": {{"score": <1-5>, "reason": "<列出(a)(b)(c)檢查結果>"}}
+}}"""
+    resp = model.generate_content(full)
+    return json.loads(resp.text)
+
+print("路線A Rubric 函數已定義")
+
+def external_verification(report, cluster):
+    fact_text = " ".join(log.get("text", "") for log in cluster.get("representative_logs", []))
+
+    # 指標7：實體真實性 — 報告的 IP 是否都在原始 log 找得到（抓無中生有）
+    report_ips = set()
+    for ev in report.get("timeline", []):
+        report_ips |= extract_iocs(ev.get("summary", ""))
+        report_ips |= extract_iocs(evidence_to_text(ev.get("evidence", {})))
+    grounded = {ip for ip in report_ips if ip in fact_text}
+    ungrounded = report_ips - grounded
+    entity_grounding = len(grounded) / len(report_ips) if report_ips else 1.0
+
+    # 指標8：IP 覆蓋率 — cluster 涉及的 IP，報告 timeline 提到幾個（抓遺漏）
+    cluster_ips = set(cluster.get("involved_entities", {}).get("ips", []))
+    timeline_text = ""
+    for ev in report.get("timeline", []):
+        timeline_text += ev.get("summary", "") + " " + evidence_to_text(ev.get("evidence", {})) + " "
+    mentioned_ips = {ip for ip in cluster_ips if ip in timeline_text}
+    ip_coverage = len(mentioned_ips) / len(cluster_ips) if cluster_ips else 1.0
+
+    return {
+        "entity_grounding": entity_grounding,
+        "ungrounded_ips": sorted(ungrounded),
+        "ip_coverage": ip_coverage,
+        "covered_ips_count": len(mentioned_ips),
+        "total_cluster_ips": len(cluster_ips)
+    }
+
+print("路線B 函數已定義（指標8為 IP 覆蓋率）")
+
+all_results = []
+
+for report in reports:
+    cid = report.get("cluster_id", "unknown")
+    print(f"評估中: {cid} ...")
+
+    cluster = cluster_lookup.get(report.get("cluster_id"))
+    obj = check_objective_metrics(report, cluster)
+    rub = rubric_evaluation(report)
+
+    row = {
+        "cluster_id": cid,
+        "title": report.get("incident_title", ""),
+        "schema": obj["schema"],
+        "self_consistency": obj["self_consistency"],
+        "id_consistency": obj["id_consistency"],
+        "invalid_refs": obj["invalid_refs"],
+        "evidence_grounding": rub["evidence_grounding"]["score"],
+        "timeline_coherence": rub["timeline_coherence"]["score"],
+        "hallucination_control": rub["hallucination_control"]["score"],
+        "reasons": {k: v["reason"] for k, v in rub.items()}
+    }
+
+    cluster = cluster_lookup.get(cid)
+    if cluster:
+        ext = external_verification(report, cluster)
+        row.update({
+            "entity_grounding": ext["entity_grounding"],
+            "ungrounded_ips": ext["ungrounded_ips"],
+            "ip_coverage": ext["ip_coverage"],
+            "covered_ips_count": ext["covered_ips_count"],
+            "total_cluster_ips": ext["total_cluster_ips"],
+            "route_b": True
+        })
+    else:
+        row["route_b"] = False
+
+    all_results.append(row)
+    print(f"  {cid} 完成（路線B: {'有跑' if row['route_b'] else '待串接'}）\n")
+
+print("全部評估完成")
+
+print("="*72)
+print("                W16 Member 4 評估結果總覽（六群逐份）")
+print("="*72)
+
+for r in all_results:
+    print(f"\n■ {r['cluster_id']}｜{r['title']}")
+    print("  ── 路線A 內部驗證 ──")
+    print(f"  指標1 Schema 完整性        : {r['schema']:.2%}")
+    print(f"  指標2 Evidence 自我一致性   : {r['self_consistency']:.2%}")
+    print(f"  指標3 Evidence ID 一致性    : {r['id_consistency']:.2%}" +
+          (f"  無效引用:{r['invalid_refs']}" if r['invalid_refs'] else ""))
+    print(f"  指標4 Evidence Grounding    : {r['evidence_grounding']}/5")
+    print(f"  指標5 Timeline Coherence    : {r['timeline_coherence']}/5")
+    print(f"  指標6 Hallucination Control : {r['hallucination_control']}/5")
+    print("  ── 路線B 外部比對 ──")
+    if r["route_b"]:
+        print(f"  指標7 實體真實性(Entity)    : {r['entity_grounding']:.2%}" +
+              (f"  無中生有IP:{r['ungrounded_ips']}" if r['ungrounded_ips'] else "  (無無中生有)"))
+        print(f"  指標8 IP覆蓋率(Coverage)    : {r['ip_coverage']:.2%}" +
+              f"  ({r['covered_ips_count']}/{r['total_cluster_ips']} 個IP)")
+    else:
+        print("  指標7、8：待串接（無對應 cluster 資料）")
+
+print("\n" + "="*72)
+
+# ── 驗證格1：單元測試（純程式指標 1,2,3,7,8 正確性）──
+# 方法：餵入「已知答案」的假報告，確認指標分數符合預期
+print("="*60)
+print("驗證一：純程式指標單元測試（已知答案比對）")
+print("="*60)
+
+# 測試A：缺欄位的報告 → 指標1 應低於 100%
+test_a = {"incident_title": "x", "cluster_id": "t", "timeline": []}
+ra = check_objective_metrics(test_a, None)
+print(f"\n[測試A] 故意缺 9 個欄位的報告")
+print(f"  指標1 Schema 預期 ≈18% (2/11)，實際 {ra['schema']:.1%}  "
+      f"→ {'PASS' if ra['schema'] < 0.3 else 'FAIL'}")
+
+# 測試B：summary 的 IP 與 evidence 不符 → 指標2 應 < 100%
+test_b = {"timeline": [{"summary": "來源 1.1.1.1 連線",
+          "evidence": {"log_id": "X", "log_text_excerpt": "source=9.9.9.9"}}]}
+rb = check_objective_metrics(test_b, None)
+print(f"\n[測試B] summary 說 1.1.1.1，evidence 卻是 9.9.9.9（自相矛盾）")
+print(f"  指標2 自我一致 預期 0%，實際 {rb['self_consistency']:.0%}  "
+      f"→ {'PASS' if rb['self_consistency'] == 0 else 'FAIL'}")
+
+# 測試C：引用不存在的 log_id → 指標3 應抓到無效引用
+fake_cluster = {"representative_logs": [{"log_id": "E001"}],
+                "involved_entities": {"ips": ["1.1.1.1"]}}
+test_c = {"timeline": [{"summary": "x", "evidence": {"log_id": "E999"}}],
+          "mitre_attack_mapping": [{"evidence": ["E999"]}]}
+rc = check_objective_metrics(test_c, fake_cluster)
+print(f"\n[測試C] 報告引用 E999，但該 cluster 只有 E001（捏造引用）")
+print(f"  指標3 ID一致 預期 0%，實際 {rc['id_consistency']:.0%}  "
+      f"→ {'PASS' if rc['id_consistency'] == 0 else 'FAIL'}")
+
+# 測試D：捏造一個原始 log 沒有的 IP → 指標7 應抓到無中生有
+test_d = {"timeline": [{"summary": "來源 8.8.8.8 連線",
+          "evidence": {"log_id": "E001", "log_text_excerpt": "source=8.8.8.8"}}]}
+fake_cluster_d = {"representative_logs": [{"text": "source=1.1.1.1 dest=2.2.2.2"}],
+                  "involved_entities": {"ips": ["1.1.1.1"]}}
+rd = external_verification(test_d, fake_cluster_d)
+print(f"\n[測試D] 報告寫 8.8.8.8，但原始 log 只有 1.1.1.1（無中生有）")
+print(f"  指標7 實體真實 預期 0%，實際 {rd['entity_grounding']:.0%}  "
+      f"→ {'PASS' if rd['entity_grounding'] == 0 else 'FAIL'}")
+
+print(f"\n結論：純程式指標能正確偵測 缺欄位／自相矛盾／捏造引用／無中生有 四類問題。")
+
+# ── 驗證格2：鑑別力測試（Gemini 指標6 能抓矛盾）──
+# 方法：餵一份「Linux指令卻標成Windows事件4688」的矛盾報告，應得低分
+print("="*60)
+print("驗證二：Hallucination Control 鑑別力測試")
+print("="*60)
+
+contradiction_report = {
+  "incident_title": "測試案例：Linux命令誤標為Windows事件",
+  "risk_level": "Critical", "cluster_id": "test_case",
+  "time_range": {"start": "2026-01-01T00:00:00Z", "end": "2026-01-01T00:00:05Z"},
+  "executive_summary": {"description": "測試矛盾偵測", "evidence": ["log_t01"]},
+  "timeline": [{
+    "time": "2026-01-01T00:00:01Z",
+    "summary": "使用者 admin 執行 sudo useradd 建立帳號。",
+    "mitre_tactic": "Persistence", "mitre_technique": "T1136.001",
+    "evidence": {"log_id": "log_t01",
+      "log_text_excerpt": "user admin triggered Windows Event 4688: sudo useradd attacker"}
+  }],
+  "mitre_attack_mapping": [{"technique_id": "T1136.001",
+    "technique_name": "Create Account", "tactic": "Persistence",
+    "observed_behavior": "sudo useradd", "evidence": ["log_t01"]}],
+  "attack_story": "admin 用 sudo 建立帳號，但證據宣稱是 Windows Event 4688，與 Linux 命令矛盾。",
+  "uncertainty": "測試案例。", "recommended_triage_actions": ["隔離主機。"],
+  "indicators_of_compromise": {"ips": ["192.168.1.50"], "users": ["admin"],
+    "windows_event_ids": ["4688"]}
+}
+
+rub_bad = rubric_evaluation(contradiction_report)
+bad_score = rub_bad["hallucination_control"]["score"]
+normal_avg = sum(r["hallucination_control"] for r in all_results) / len(all_results)
+
+print(f"\n矛盾報告（Linux sudo 標成 Windows 4688）:")
+print(f"  指標6 Hallucination Control = {bad_score}/5")
+print(f"  評審理由: {rub_bad['hallucination_control']['reason'][:80]}...")
+print(f"\n六份正常報告平均 = {normal_avg:.1f}/5")
+print(f"\n結論：矛盾報告({bad_score}/5) 明顯低於正常報告均值({normal_avg:.1f}/5)，"
+      f"→ {'PASS 指標具鑑別力' if bad_score < normal_avg else 'FAIL'}")
+
+# ── 驗證格3：穩定性測試（Gemini 評分可重現性）──
+# 方法：同一份報告連跑3次，看三項評審分數的變異（temp=0.2 應穩定）
+print("="*60)
+print("驗證三：Gemini 評審穩定性測試（同報告重跑3次）")
+print("="*60)
+
+sample = reports[2]  # 取 cluster_002（一份完整正常報告）
+runs = []
+print(f"\n受測報告: {sample.get('cluster_id')} | {sample.get('incident_title')}")
+print(f"連續評分 3 次（temperature=0.2）:\n")
+for i in range(3):
+    r = rubric_evaluation(sample)
+    row = (r["evidence_grounding"]["score"],
+           r["timeline_coherence"]["score"],
+           r["hallucination_control"]["score"])
+    runs.append(row)
+    print(f"  第{i+1}次: Grounding={row[0]}/5  Coherence={row[1]}/5  Halluc={row[2]}/5")
+
+# 計算各指標的最大-最小差距
+def spread(idx):
+    vals = [r[idx] for r in runs]
+    return max(vals) - min(vals)
+
+print(f"\n三次評分的變異幅度（max - min）:")
+print(f"  Evidence Grounding   : {spread(0)} 分")
+print(f"  Timeline Coherence   : {spread(1)} 分")
+print(f"  Hallucination Control: {spread(2)} 分")
+max_spread = max(spread(0), spread(1), spread(2))
+print(f"\n結論：最大變異 {max_spread} 分，"
+      f"→ {'PASS 評分穩定可重現' if max_spread <= 1 else '變異較大，建議多次取平均'}")
