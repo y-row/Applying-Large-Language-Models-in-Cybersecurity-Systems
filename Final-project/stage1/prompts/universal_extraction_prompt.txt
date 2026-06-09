@@ -40,7 +40,7 @@ IDENTITY FIELD SEMANTICS
 - source_event_id is the source log record, session, request, or connection identifier, such as Zeek uid, cloud request_id, or record_id.
 - Do not put Zeek uid, connection uid, request_id, or record_id into event_id unless the task explicitly says that field is the event type ID.
 - If the source record only has a record/session/request identifier and no event type ID, emit source_event_id and set event_id to null.
-- Preserve event-type-specific fields from the task and samples, including source_port, protocol, service, conn_state, mitre_attack_tactics, source_process_*, target_process_*, and granted_access when present.
+- Preserve event-type-specific fields from the task and samples, including source_port, protocol, service, conn_state, source_process_*, target_process_*, and granted_access when present.
 - For network connection aliases, map src_ip to source_ip, src_port to source_port, and uid/request_id/record_id to source_event_id.
 
 EVENT-TYPE FIELD SEMANTICS

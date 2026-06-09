@@ -191,6 +191,7 @@ extract_powershell_activity.json
 extract_process_access.json
 extract_process_creation.json
 extract_registry_modification.json
+extract_suspicious_network_connection.json
 extract_suspicious_powershell.json
 ```
 
@@ -216,6 +217,10 @@ extract_process_access
 
 extract_network_connection
   Network connection events，例如 Zeek conn-like logs。
+
+extract_suspicious_network_connection
+  Suspicious or timeline-relevant network connection candidates。這個 task 會嘗試過濾，
+  不應輸出每一筆 network connection。
 
 extract_registry_modification
   Registry modification events。
